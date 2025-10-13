@@ -1,0 +1,587 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "Sui Generis Technologies" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img "Sui Generis Technologies" [ref=e7] [cursor=pointer]
+      - navigation [ref=e8]:
+        - link "Home" [ref=e9] [cursor=pointer]:
+          - /url: /
+        - link "Products" [ref=e10] [cursor=pointer]:
+          - /url: /products
+        - link "Collections" [ref=e11] [cursor=pointer]:
+          - /url: /collections
+        - link "Trending" [ref=e12] [cursor=pointer]:
+          - /url: /trending
+        - link "Contact" [ref=e13] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e15]:
+        - img [ref=e16]
+        - textbox "Search products..." [ref=e19]
+      - generic [ref=e20]:
+        - button "0" [ref=e21] [cursor=pointer]:
+          - img [ref=e22] [cursor=pointer]
+          - generic [ref=e24] [cursor=pointer]: "0"
+        - button "0" [ref=e25] [cursor=pointer]:
+          - img [ref=e26] [cursor=pointer]
+          - generic [ref=e30] [cursor=pointer]: "0"
+        - button [ref=e31] [cursor=pointer]:
+          - img [ref=e32] [cursor=pointer]
+  - main [ref=e35]:
+    - main [ref=e36]:
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - img "Sui Generis Technologies" [ref=e43]
+            - generic [ref=e44]: SUI GENERIS
+          - generic [ref=e45]:
+            - img [ref=e46]
+            - generic [ref=e49]: "🔥 SALE: Up to 50% OFF Premium Tech!"
+          - generic [ref=e50]:
+            - heading "Premium Tech Store" [level=1] [ref=e51]:
+              - text: Premium
+              - generic [ref=e52]: Tech Store
+            - paragraph [ref=e53]: Get the Latest Gadgets at Unbeatable Prices!
+            - paragraph [ref=e54]:
+              - text: ✅ Free Shipping on Orders $50+
+              - text: ✅ 30-Day Money Back Guarantee
+              - text: ✅ 24/7 Customer Support
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: 50K+
+              - generic [ref=e58]: Happy Customers
+            - generic [ref=e59]:
+              - generic [ref=e60]:
+                - generic [ref=e61]: "4.9"
+                - img [ref=e62]
+              - generic [ref=e64]: Customer Rating
+            - generic [ref=e65]:
+              - generic [ref=e66]: 24/7
+              - generic [ref=e67]: Support
+          - generic [ref=e68]:
+            - link "🛒 SHOP NOW - Save Big!" [ref=e69] [cursor=pointer]:
+              - /url: /products
+              - text: 🛒 SHOP NOW - Save Big!
+              - img [ref=e70] [cursor=pointer]
+            - link "Browse Categories" [ref=e73] [cursor=pointer]:
+              - /url: /categories
+              - text: Browse Categories
+              - img [ref=e74] [cursor=pointer]
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - img [ref=e78]
+              - generic [ref=e80]: Secure Payment
+            - generic [ref=e81]:
+              - img [ref=e82]
+              - generic [ref=e84]: Fast Delivery
+            - generic [ref=e85]:
+              - img [ref=e86]
+              - generic [ref=e89]: Premium Quality
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - heading "🔥 HOT DEALS TODAY!" [level=2] [ref=e92]
+            - paragraph [ref=e93]: Limited Time Offers - Don't Miss Out!
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - generic [ref=e96]:
+                - img "Premium Headphones" [ref=e97]
+                - generic [ref=e98]: 50% OFF
+              - heading "Premium Wireless Headphones" [level=3] [ref=e99]
+              - generic [ref=e100]:
+                - generic [ref=e101]:
+                  - generic [ref=e102]: $199
+                  - generic [ref=e103]: $399
+                - generic [ref=e104]:
+                  - img [ref=e105]
+                  - generic [ref=e107]: "4.9"
+              - button "🛒 Add to Cart - Save $200!" [ref=e108] [cursor=pointer]
+            - generic [ref=e109]:
+              - generic [ref=e110]:
+                - img "Smart Watch" [ref=e111]
+                - heading "Smart Watch" [level=4] [ref=e112]
+                - generic [ref=e113]:
+                  - generic [ref=e114]: $149
+                  - generic [ref=e115]: $299
+              - generic [ref=e116]:
+                - img "Wireless Earbuds" [ref=e117]
+                - heading "Wireless Earbuds" [level=4] [ref=e118]
+                - generic [ref=e119]:
+                  - generic [ref=e120]: $79
+                  - generic [ref=e121]: $159
+          - paragraph [ref=e123]: ⏰ Sale ends in 24 hours! Order now!
+      - generic [ref=e126]:
+        - generic [ref=e127]:
+          - heading "Featured Products" [level=2] [ref=e128]
+          - paragraph [ref=e129]: Discover our handpicked selection of premium products that combine quality, style, and innovation.
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]:
+              - img "Premium Wireless Headphones" [ref=e133]
+              - generic [ref=e135]: Best Seller
+            - generic [ref=e136]:
+              - heading "Premium Wireless Headphones" [level=3] [ref=e137]
+              - generic [ref=e138]:
+                - generic [ref=e139]:
+                  - img [ref=e140]
+                  - img [ref=e142]
+                  - img [ref=e144]
+                  - img [ref=e146]
+                  - img [ref=e148]
+                - generic [ref=e150]: (124)
+              - generic [ref=e152]:
+                - generic [ref=e153]: $299.99
+                - generic [ref=e154]: $399.99
+              - button "Add to Cart" [ref=e155] [cursor=pointer]:
+                - text: Add to Cart
+                - img [ref=e156] [cursor=pointer]
+          - generic [ref=e160]:
+            - generic [ref=e161]:
+              - img "Smart Fitness Watch" [ref=e162]
+              - generic [ref=e164]: New
+            - generic [ref=e165]:
+              - heading "Smart Fitness Watch" [level=3] [ref=e166]
+              - generic [ref=e167]:
+                - generic [ref=e168]:
+                  - img [ref=e169]
+                  - img [ref=e171]
+                  - img [ref=e173]
+                  - img [ref=e175]
+                  - img [ref=e177]
+                - generic [ref=e179]: (89)
+              - generic [ref=e182]: $199.99
+              - button "Add to Cart" [ref=e183] [cursor=pointer]:
+                - text: Add to Cart
+                - img [ref=e184] [cursor=pointer]
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - img "Minimalist Backpack" [ref=e190]
+              - generic [ref=e192]: Popular
+            - generic [ref=e193]:
+              - heading "Minimalist Backpack" [level=3] [ref=e194]
+              - generic [ref=e195]:
+                - generic [ref=e196]:
+                  - img [ref=e197]
+                  - img [ref=e199]
+                  - img [ref=e201]
+                  - img [ref=e203]
+                  - img [ref=e205]
+                - generic [ref=e207]: (156)
+              - generic [ref=e210]: $89.99
+              - button "Add to Cart" [ref=e211] [cursor=pointer]:
+                - text: Add to Cart
+                - img [ref=e212] [cursor=pointer]
+          - generic [ref=e216]:
+            - generic [ref=e217]:
+              - img "Ergonomic Office Chair" [ref=e218]
+              - generic [ref=e220]: Sale
+            - generic [ref=e221]:
+              - heading "Ergonomic Office Chair" [level=3] [ref=e222]
+              - generic [ref=e223]:
+                - generic [ref=e224]:
+                  - img [ref=e225]
+                  - img [ref=e227]
+                  - img [ref=e229]
+                  - img [ref=e231]
+                  - img [ref=e233]
+                - generic [ref=e235]: (67)
+              - generic [ref=e237]:
+                - generic [ref=e238]: $449.99
+                - generic [ref=e239]: $599.99
+              - button "Add to Cart" [ref=e240] [cursor=pointer]:
+                - text: Add to Cart
+                - img [ref=e241] [cursor=pointer]
+        - link "View All Products" [ref=e246] [cursor=pointer]:
+          - /url: /products
+      - generic [ref=e248]:
+        - generic [ref=e249]:
+          - heading "Shop by Category" [level=2] [ref=e250]
+          - paragraph [ref=e251]: Discover premium products across our curated categories, each featuring the latest innovations and trending items.
+        - generic [ref=e252]:
+          - link "Electronics 245 items Electronics Latest gadgets and tech essentials iPhone 15 Pro MacBook Air Starting from $1,199 Premium Quality Explore" [ref=e253] [cursor=pointer]:
+            - /url: /categories/electronics
+            - generic [ref=e254] [cursor=pointer]:
+              - img "Electronics" [ref=e255] [cursor=pointer]
+              - generic [ref=e258] [cursor=pointer]: 245 items
+            - generic [ref=e259] [cursor=pointer]:
+              - generic [ref=e260] [cursor=pointer]:
+                - heading "Electronics" [level=3] [ref=e261] [cursor=pointer]
+                - paragraph [ref=e262] [cursor=pointer]: Latest gadgets and tech essentials
+              - generic [ref=e263] [cursor=pointer]:
+                - generic [ref=e264] [cursor=pointer]:
+                  - img "iPhone 15 Pro" [ref=e266] [cursor=pointer]
+                  - img "MacBook Air" [ref=e268] [cursor=pointer]
+                - generic [ref=e269] [cursor=pointer]:
+                  - paragraph [ref=e270] [cursor=pointer]: Starting from
+                  - paragraph [ref=e271] [cursor=pointer]: $1,199
+              - generic [ref=e272] [cursor=pointer]:
+                - generic [ref=e273] [cursor=pointer]:
+                  - img [ref=e274] [cursor=pointer]
+                  - generic [ref=e276] [cursor=pointer]: Premium Quality
+                - generic [ref=e277] [cursor=pointer]:
+                  - generic [ref=e278] [cursor=pointer]: Explore
+                  - img [ref=e279] [cursor=pointer]
+          - link "Audio 89 items Audio Premium sound experience AirPods Pro Sony WH-1000XM5 Starting from $399 Premium Quality Explore" [ref=e281] [cursor=pointer]:
+            - /url: /categories/audio
+            - generic [ref=e282] [cursor=pointer]:
+              - img "Audio" [ref=e283] [cursor=pointer]
+              - generic [ref=e286] [cursor=pointer]: 89 items
+            - generic [ref=e287] [cursor=pointer]:
+              - generic [ref=e288] [cursor=pointer]:
+                - heading "Audio" [level=3] [ref=e289] [cursor=pointer]
+                - paragraph [ref=e290] [cursor=pointer]: Premium sound experience
+              - generic [ref=e291] [cursor=pointer]:
+                - generic [ref=e292] [cursor=pointer]:
+                  - img "AirPods Pro" [ref=e294] [cursor=pointer]
+                  - img "Sony WH-1000XM5" [ref=e296] [cursor=pointer]
+                - generic [ref=e297] [cursor=pointer]:
+                  - paragraph [ref=e298] [cursor=pointer]: Starting from
+                  - paragraph [ref=e299] [cursor=pointer]: $399
+              - generic [ref=e300] [cursor=pointer]:
+                - generic [ref=e301] [cursor=pointer]:
+                  - img [ref=e302] [cursor=pointer]
+                  - generic [ref=e304] [cursor=pointer]: Premium Quality
+                - generic [ref=e305] [cursor=pointer]:
+                  - generic [ref=e306] [cursor=pointer]: Explore
+                  - img [ref=e307] [cursor=pointer]
+          - link "Wearables 156 items Wearables Smart watches and fitness trackers Apple Watch Ultra Fitbit Versa Starting from $199 Premium Quality Explore" [ref=e309] [cursor=pointer]:
+            - /url: /categories/wearables
+            - generic [ref=e310] [cursor=pointer]:
+              - img "Wearables" [ref=e311] [cursor=pointer]
+              - generic [ref=e314] [cursor=pointer]: 156 items
+            - generic [ref=e315] [cursor=pointer]:
+              - generic [ref=e316] [cursor=pointer]:
+                - heading "Wearables" [level=3] [ref=e317] [cursor=pointer]
+                - paragraph [ref=e318] [cursor=pointer]: Smart watches and fitness trackers
+              - generic [ref=e319] [cursor=pointer]:
+                - generic [ref=e320] [cursor=pointer]:
+                  - img "Apple Watch Ultra" [ref=e322] [cursor=pointer]
+                  - img "Fitbit Versa" [ref=e324] [cursor=pointer]
+                - generic [ref=e325] [cursor=pointer]:
+                  - paragraph [ref=e326] [cursor=pointer]: Starting from
+                  - paragraph [ref=e327] [cursor=pointer]: $199
+              - generic [ref=e328] [cursor=pointer]:
+                - generic [ref=e329] [cursor=pointer]:
+                  - img [ref=e330] [cursor=pointer]
+                  - generic [ref=e332] [cursor=pointer]: Premium Quality
+                - generic [ref=e333] [cursor=pointer]:
+                  - generic [ref=e334] [cursor=pointer]: Explore
+                  - img [ref=e335] [cursor=pointer]
+          - link "Fashion 324 items Fashion Style and comfort essentials Premium Jacket Designer Sneakers Starting from $89 Premium Quality Explore" [ref=e337] [cursor=pointer]:
+            - /url: /categories/fashion
+            - generic [ref=e338] [cursor=pointer]:
+              - img "Fashion" [ref=e339] [cursor=pointer]
+              - generic [ref=e342] [cursor=pointer]: 324 items
+            - generic [ref=e343] [cursor=pointer]:
+              - generic [ref=e344] [cursor=pointer]:
+                - heading "Fashion" [level=3] [ref=e345] [cursor=pointer]
+                - paragraph [ref=e346] [cursor=pointer]: Style and comfort essentials
+              - generic [ref=e347] [cursor=pointer]:
+                - generic [ref=e348] [cursor=pointer]:
+                  - img "Premium Jacket" [ref=e350] [cursor=pointer]
+                  - img "Designer Sneakers" [ref=e352] [cursor=pointer]
+                - generic [ref=e353] [cursor=pointer]:
+                  - paragraph [ref=e354] [cursor=pointer]: Starting from
+                  - paragraph [ref=e355] [cursor=pointer]: $89
+              - generic [ref=e356] [cursor=pointer]:
+                - generic [ref=e357] [cursor=pointer]:
+                  - img [ref=e358] [cursor=pointer]
+                  - generic [ref=e360] [cursor=pointer]: Premium Quality
+                - generic [ref=e361] [cursor=pointer]:
+                  - generic [ref=e362] [cursor=pointer]: Explore
+                  - img [ref=e363] [cursor=pointer]
+          - link "Home & Living 178 items Home & Living Comfort and functionality Smart Lamp Ergonomic Chair Starting from $299 Premium Quality Explore" [ref=e365] [cursor=pointer]:
+            - /url: /categories/home
+            - generic [ref=e366] [cursor=pointer]:
+              - img "Home & Living" [ref=e367] [cursor=pointer]
+              - generic [ref=e370] [cursor=pointer]: 178 items
+            - generic [ref=e371] [cursor=pointer]:
+              - generic [ref=e372] [cursor=pointer]:
+                - heading "Home & Living" [level=3] [ref=e373] [cursor=pointer]
+                - paragraph [ref=e374] [cursor=pointer]: Comfort and functionality
+              - generic [ref=e375] [cursor=pointer]:
+                - generic [ref=e376] [cursor=pointer]:
+                  - img "Smart Lamp" [ref=e378] [cursor=pointer]
+                  - img "Ergonomic Chair" [ref=e380] [cursor=pointer]
+                - generic [ref=e381] [cursor=pointer]:
+                  - paragraph [ref=e382] [cursor=pointer]: Starting from
+                  - paragraph [ref=e383] [cursor=pointer]: $299
+              - generic [ref=e384] [cursor=pointer]:
+                - generic [ref=e385] [cursor=pointer]:
+                  - img [ref=e386] [cursor=pointer]
+                  - generic [ref=e388] [cursor=pointer]: Premium Quality
+                - generic [ref=e389] [cursor=pointer]:
+                  - generic [ref=e390] [cursor=pointer]: Explore
+                  - img [ref=e391] [cursor=pointer]
+          - link "Photography 92 items Photography Capture every moment perfectly Canon EOS R5 Sony A7 IV Starting from $2,499 Premium Quality Explore" [ref=e393] [cursor=pointer]:
+            - /url: /categories/photography
+            - generic [ref=e394] [cursor=pointer]:
+              - img "Photography" [ref=e395] [cursor=pointer]
+              - generic [ref=e398] [cursor=pointer]: 92 items
+            - generic [ref=e399] [cursor=pointer]:
+              - generic [ref=e400] [cursor=pointer]:
+                - heading "Photography" [level=3] [ref=e401] [cursor=pointer]
+                - paragraph [ref=e402] [cursor=pointer]: Capture every moment perfectly
+              - generic [ref=e403] [cursor=pointer]:
+                - generic [ref=e404] [cursor=pointer]:
+                  - img "Canon EOS R5" [ref=e406] [cursor=pointer]
+                  - img "Sony A7 IV" [ref=e408] [cursor=pointer]
+                - generic [ref=e409] [cursor=pointer]:
+                  - paragraph [ref=e410] [cursor=pointer]: Starting from
+                  - paragraph [ref=e411] [cursor=pointer]: $2,499
+              - generic [ref=e412] [cursor=pointer]:
+                - generic [ref=e413] [cursor=pointer]:
+                  - img [ref=e414] [cursor=pointer]
+                  - generic [ref=e416] [cursor=pointer]: Premium Quality
+                - generic [ref=e417] [cursor=pointer]:
+                  - generic [ref=e418] [cursor=pointer]: Explore
+                  - img [ref=e419] [cursor=pointer]
+        - link "View All Categories" [ref=e422] [cursor=pointer]:
+          - /url: /categories
+          - text: View All Categories
+          - img [ref=e423] [cursor=pointer]
+      - generic [ref=e426]:
+        - generic [ref=e427]:
+          - img [ref=e428]
+          - heading "Trending Now" [level=2] [ref=e431]
+        - generic [ref=e432]:
+          - generic [ref=e433]:
+            - generic [ref=e434]:
+              - img "Wireless Charging Pad" [ref=e435]
+              - generic [ref=e436]:
+                - img [ref=e437]
+                - text: +25%
+            - generic [ref=e440]:
+              - heading "Wireless Charging Pad" [level=3] [ref=e441]
+              - generic [ref=e442]:
+                - generic [ref=e443]:
+                  - img [ref=e444]
+                  - img [ref=e446]
+                  - img [ref=e448]
+                  - img [ref=e450]
+                  - img [ref=e452]
+                - generic [ref=e454]: 4.7 (203)
+              - generic [ref=e455]:
+                - generic [ref=e456]: $49.99
+                - button [ref=e457] [cursor=pointer]:
+                  - img [ref=e458] [cursor=pointer]
+          - generic [ref=e462]:
+            - generic [ref=e463]:
+              - img "Bluetooth Speaker" [ref=e464]
+              - generic [ref=e465]:
+                - img [ref=e466]
+                - text: +18%
+            - generic [ref=e469]:
+              - heading "Bluetooth Speaker" [level=3] [ref=e470]
+              - generic [ref=e471]:
+                - generic [ref=e472]:
+                  - img [ref=e473]
+                  - img [ref=e475]
+                  - img [ref=e477]
+                  - img [ref=e479]
+                  - img [ref=e481]
+                - generic [ref=e483]: 4.8 (167)
+              - generic [ref=e484]:
+                - generic [ref=e485]: $129.99
+                - button [ref=e486] [cursor=pointer]:
+                  - img [ref=e487] [cursor=pointer]
+          - generic [ref=e491]:
+            - generic [ref=e492]:
+              - img "Smart Home Hub" [ref=e493]
+              - generic [ref=e494]:
+                - img [ref=e495]
+                - text: +32%
+            - generic [ref=e498]:
+              - heading "Smart Home Hub" [level=3] [ref=e499]
+              - generic [ref=e500]:
+                - generic [ref=e501]:
+                  - img [ref=e502]
+                  - img [ref=e504]
+                  - img [ref=e506]
+                  - img [ref=e508]
+                  - img [ref=e510]
+                - generic [ref=e512]: 4.6 (89)
+              - generic [ref=e513]:
+                - generic [ref=e514]: $199.99
+                - button [ref=e515] [cursor=pointer]:
+                  - img [ref=e516] [cursor=pointer]
+          - generic [ref=e520]:
+            - generic [ref=e521]:
+              - img "Gaming Mouse" [ref=e522]
+              - generic [ref=e523]:
+                - img [ref=e524]
+                - text: +15%
+            - generic [ref=e527]:
+              - heading "Gaming Mouse" [level=3] [ref=e528]
+              - generic [ref=e529]:
+                - generic [ref=e530]:
+                  - img [ref=e531]
+                  - img [ref=e533]
+                  - img [ref=e535]
+                  - img [ref=e537]
+                  - img [ref=e539]
+                - generic [ref=e541]: 4.9 (245)
+              - generic [ref=e542]:
+                - generic [ref=e543]: $79.99
+                - button [ref=e544] [cursor=pointer]:
+                  - img [ref=e545] [cursor=pointer]
+          - generic [ref=e549]:
+            - generic [ref=e550]:
+              - img "Portable Monitor" [ref=e551]
+              - generic [ref=e552]:
+                - img [ref=e553]
+                - text: +28%
+            - generic [ref=e556]:
+              - heading "Portable Monitor" [level=3] [ref=e557]
+              - generic [ref=e558]:
+                - generic [ref=e559]:
+                  - img [ref=e560]
+                  - img [ref=e562]
+                  - img [ref=e564]
+                  - img [ref=e566]
+                  - img [ref=e568]
+                - generic [ref=e570]: 4.5 (134)
+              - generic [ref=e571]:
+                - generic [ref=e572]: $299.99
+                - button [ref=e573] [cursor=pointer]:
+                  - img [ref=e574] [cursor=pointer]
+          - generic [ref=e578]:
+            - generic [ref=e579]:
+              - img "Wireless Earbuds" [ref=e580]
+              - generic [ref=e581]:
+                - img [ref=e582]
+                - text: +41%
+            - generic [ref=e585]:
+              - heading "Wireless Earbuds" [level=3] [ref=e586]
+              - generic [ref=e587]:
+                - generic [ref=e588]:
+                  - img [ref=e589]
+                  - img [ref=e591]
+                  - img [ref=e593]
+                  - img [ref=e595]
+                  - img [ref=e597]
+                - generic [ref=e599]: 4.8 (312)
+              - generic [ref=e600]:
+                - generic [ref=e601]: $159.99
+                - button [ref=e602] [cursor=pointer]:
+                  - img [ref=e603] [cursor=pointer]
+        - link "View All Trending" [ref=e608] [cursor=pointer]:
+          - /url: /trending
+          - img [ref=e609] [cursor=pointer]
+          - text: View All Trending
+      - generic [ref=e614]:
+        - heading "Stay in the Loop" [level=2] [ref=e615]
+        - paragraph [ref=e616]: Subscribe to our newsletter for exclusive deals, new arrivals, and insider updates.
+        - generic [ref=e617]:
+          - textbox "Enter your email" [ref=e618]
+          - button "Subscribe" [ref=e619] [cursor=pointer]:
+            - img [ref=e620] [cursor=pointer]
+            - text: Subscribe
+        - generic [ref=e623]:
+          - generic [ref=e624]:
+            - img [ref=e626]
+            - heading "Exclusive Offers" [level=3] [ref=e630]
+            - paragraph [ref=e631]: Get access to subscriber-only deals and early bird discounts.
+          - generic [ref=e632]:
+            - img [ref=e634]
+            - heading "Free Shipping" [level=3] [ref=e639]
+            - paragraph [ref=e640]: Enjoy free shipping on orders over $50 for newsletter subscribers.
+          - generic [ref=e641]:
+            - img [ref=e643]
+            - heading "Privacy Protected" [level=3] [ref=e645]
+            - paragraph [ref=e646]: Your information is secure. We never share your data with third parties.
+  - contentinfo [ref=e647]:
+    - generic [ref=e648]:
+      - generic [ref=e649]:
+        - generic [ref=e650]:
+          - link "Sui Generis Technologies" [ref=e651] [cursor=pointer]:
+            - /url: /
+            - img "Sui Generis Technologies" [ref=e653] [cursor=pointer]
+          - paragraph [ref=e654]: Sui Generis Technologies delivers premium products that combine innovation, quality, and style. Discover unique solutions for your modern lifestyle.
+          - generic [ref=e655]:
+            - link [ref=e656] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e657] [cursor=pointer]
+            - link [ref=e659] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e660] [cursor=pointer]
+            - link [ref=e662] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e663] [cursor=pointer]
+            - link [ref=e666] [cursor=pointer]:
+              - /url: "#"
+              - img [ref=e667] [cursor=pointer]
+        - generic [ref=e671]:
+          - heading "Shop" [level=3] [ref=e672]
+          - list [ref=e673]:
+            - listitem [ref=e674]:
+              - link "All Products" [ref=e675] [cursor=pointer]:
+                - /url: /products
+            - listitem [ref=e676]:
+              - link "Collections" [ref=e677] [cursor=pointer]:
+                - /url: /collections
+            - listitem [ref=e678]:
+              - link "Trending" [ref=e679] [cursor=pointer]:
+                - /url: /trending
+            - listitem [ref=e680]:
+              - link "New Arrivals" [ref=e681] [cursor=pointer]:
+                - /url: /products?filter=new
+        - generic [ref=e682]:
+          - heading "Support" [level=3] [ref=e683]
+          - list [ref=e684]:
+            - listitem [ref=e685]:
+              - link "Contact Us" [ref=e686] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e687]:
+              - link "FAQ" [ref=e688] [cursor=pointer]:
+                - /url: /faq
+            - listitem [ref=e689]:
+              - link "Shipping Info" [ref=e690] [cursor=pointer]:
+                - /url: /shipping
+            - listitem [ref=e691]:
+              - link "Returns" [ref=e692] [cursor=pointer]:
+                - /url: /returns
+        - generic [ref=e693]:
+          - heading "Company" [level=3] [ref=e694]
+          - list [ref=e695]:
+            - listitem [ref=e696]:
+              - link "About Us" [ref=e697] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e698]:
+              - link "Careers" [ref=e699] [cursor=pointer]:
+                - /url: /careers
+            - listitem [ref=e700]:
+              - link "Press" [ref=e701] [cursor=pointer]:
+                - /url: /press
+            - listitem [ref=e702]:
+              - link "Blog" [ref=e703] [cursor=pointer]:
+                - /url: /blog
+        - generic [ref=e704]:
+          - heading "Legal" [level=3] [ref=e705]
+          - list [ref=e706]:
+            - listitem [ref=e707]:
+              - link "Privacy Policy" [ref=e708] [cursor=pointer]:
+                - /url: /privacy
+            - listitem [ref=e709]:
+              - link "Terms of Service" [ref=e710] [cursor=pointer]:
+                - /url: /terms
+            - listitem [ref=e711]:
+              - link "Cookie Policy" [ref=e712] [cursor=pointer]:
+                - /url: /cookies
+            - listitem [ref=e713]:
+              - link "Accessibility" [ref=e714] [cursor=pointer]:
+                - /url: /accessibility
+      - generic [ref=e716]:
+        - generic [ref=e717]:
+          - img [ref=e718]
+          - generic [ref=e721]: support@suigeneris.com
+        - generic [ref=e722]:
+          - img [ref=e723]
+          - generic [ref=e725]: +1 (555) 123-4567
+        - generic [ref=e726]:
+          - img [ref=e727]
+          - generic [ref=e730]: San Francisco, CA
+      - paragraph [ref=e732]: © 2025 Sui Generis Technologies. All rights reserved.
+```

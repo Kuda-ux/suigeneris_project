@@ -1,0 +1,807 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\playwright.config.ts",
+    "rootDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\setup\\global-setup.ts",
+    "globalTeardown": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\setup\\global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ],
+      [
+        "list",
+        null
+      ],
+      [
+        "github",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "C:/Users/S.G.T ZW/Desktop/suigeneris_project/temp-app/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "url": "http://localhost:3001",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "e2e\\homepage.spec.ts",
+      "file": "e2e/homepage.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Homepage E2E Tests",
+          "file": "e2e/homepage.spec.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load homepage successfully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 53839,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 24,
+                            "line": 10
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Sui Generis/i\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\n\n   8 |   test('should load homepage successfully', async ({ page }) => {\n   9 |     // Check page title\n> 10 |     await expect(page).toHaveTitle(/Sui Generis/i);\n     |                        ^\n  11 |     \n  12 |     // Check hero section is visible\n  13 |     await expect(page.getByText('Premium Tech Store')).toBeVisible();\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:10:24"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:12:06.345Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--f31a3--load-homepage-successfully-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-305fb311fbede97195a8",
+              "file": "e2e/homepage.spec.ts",
+              "line": 8,
+              "column": 7
+            },
+            {
+              "title": "should display hero section with sale banner",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 53679,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 74,
+                            "line": 19
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  getByText('🔥 SALE: Up to 50% OFF Premium Tech!')\nExpected: visible\nReceived: undefined\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔥 SALE: Up to 50% OFF Premium Tech!')\u001b[22m\n\n\n  17 |   test('should display hero section with sale banner', async ({ page }) => {\n  18 |     // Check sale banner\n> 19 |     await expect(page.getByText('🔥 SALE: Up to 50% OFF Premium Tech!')).toBeVisible();\n     |                                                                          ^\n  20 |     \n  21 |     // Check CTA buttons\n  22 |     await expect(page.getByRole('link', { name: /shop now/i })).toBeVisible();\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:19:74"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:12:06.389Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--c41bd-ro-section-with-sale-banner-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-5c5206200414a424f206",
+              "file": "e2e/homepage.spec.ts",
+              "line": 17,
+              "column": 7
+            },
+            {
+              "title": "should display product showcase in hero section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 53683,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 57,
+                            "line": 28
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m()\u001b[22m failed\n\nLocator:  getByText('🔥 HOT DEALS TODAY!')\nExpected: visible\nReceived: undefined\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByText('🔥 HOT DEALS TODAY!')\u001b[22m\n\n\n  26 |   test('should display product showcase in hero section', async ({ page }) => {\n  27 |     // Check hot deals banner\n> 28 |     await expect(page.getByText('🔥 HOT DEALS TODAY!')).toBeVisible();\n     |                                                         ^\n  29 |     \n  30 |     // Check featured product in hero\n  31 |     await expect(page.getByText('Premium Wireless Headphones')).toBeVisible();\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:28:57"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:12:06.429Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--990fa-ct-showcase-in-hero-section-chromium\\video.webm"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-356873e6a573c09241c6",
+              "file": "e2e/homepage.spec.ts",
+              "line": 26,
+              "column": 7
+            },
+            {
+              "title": "should display product pricing and offers",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "timedOut",
+                      "duration": 52130,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8",
+                        "location": {
+                          "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                          "column": 8,
+                          "line": 4
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 2 |\u001b[39m\n \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Homepage E2E Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 6 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 7 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 8,
+                            "line": 4
+                          },
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n  2 |\n  3 | test.describe('Homepage E2E Tests', () => {\n> 4 |   test.beforeEach(async ({ page }) => {\n    |        ^\n  5 |     await page.goto('/');\n  6 |   });\n  7 |\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:12:06.344Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--b59d8--product-pricing-and-offers-chromium\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                        "column": 8,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-48995c1754dcb07a8de0",
+              "file": "e2e/homepage.spec.ts",
+              "line": 36,
+              "column": 7
+            },
+            {
+              "title": "should display shop by category section",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "timedOut",
+                      "duration": 45254,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8",
+                        "location": {
+                          "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                          "column": 8,
+                          "line": 4
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 2 |\u001b[39m\n \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Homepage E2E Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 6 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 7 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 8,
+                            "line": 4
+                          },
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n  2 |\n  3 | test.describe('Homepage E2E Tests', () => {\n> 4 |   test.beforeEach(async ({ page }) => {\n    |        ^\n  5 |     await page.goto('/');\n  6 |   });\n  7 |\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Homepage E2E Tests', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should load homepage successfully', async ({ page }) => {\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:13:15.185Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                        "column": 8,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-f1b91c68cd28093f0add",
+              "file": "e2e/homepage.spec.ts",
+              "line": 46,
+              "column": 7
+            },
+            {
+              "title": "should have clickable CTA buttons",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 45392,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8",
+                        "location": {
+                          "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                          "column": 8,
+                          "line": 4
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 2 |\u001b[39m\n \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Homepage E2E Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 6 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 7 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 8,
+                            "line": 4
+                          },
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n  2 |\n  3 | test.describe('Homepage E2E Tests', () => {\n> 4 |   test.beforeEach(async ({ page }) => {\n    |        ^\n  5 |     await page.goto('/');\n  6 |   });\n  7 |\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Homepage E2E Tests', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should load homepage successfully', async ({ page }) => {\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:13:15.207Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                        "column": 8,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-efc38c07001ea9d9e69b",
+              "file": "e2e/homepage.spec.ts",
+              "line": 56,
+              "column": 7
+            },
+            {
+              "title": "should display urgency messaging",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 45089,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8",
+                        "location": {
+                          "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                          "column": 8,
+                          "line": 4
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 2 |\u001b[39m\n \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Homepage E2E Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 6 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 7 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 8,
+                            "line": 4
+                          },
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n  2 |\n  3 | test.describe('Homepage E2E Tests', () => {\n> 4 |   test.beforeEach(async ({ page }) => {\n    |        ^\n  5 |     await page.goto('/');\n  6 |   });\n  7 |\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Homepage E2E Tests', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should load homepage successfully', async ({ page }) => {\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:13:15.250Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--19f0c-d-display-urgency-messaging-chromium\\video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                        "column": 8,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-a2b2ee866fdfa10852e2",
+              "file": "e2e/homepage.spec.ts",
+              "line": 68,
+              "column": 7
+            },
+            {
+              "title": "should be responsive on mobile",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 45460,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8",
+                        "location": {
+                          "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                          "column": 8,
+                          "line": 4
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 2 |\u001b[39m\n \u001b[90m 3 |\u001b[39m test\u001b[33m.\u001b[39mdescribe(\u001b[32m'Homepage E2E Tests'\u001b[39m\u001b[33m,\u001b[39m () \u001b[33m=>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 4 |\u001b[39m   test\u001b[33m.\u001b[39mbeforeEach(\u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\n \u001b[90m   |\u001b[39m        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 5 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 6 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 7 |\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 8,
+                            "line": 4
+                          },
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded while running \"beforeEach\" hook.\u001b[39m\n\n  2 |\n  3 | test.describe('Homepage E2E Tests', () => {\n> 4 |   test.beforeEach(async ({ page }) => {\n    |        ^\n  5 |     await page.goto('/');\n  6 |   });\n  7 |\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:4:8"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                            "column": 16,
+                            "line": 5
+                          },
+                          "message": "Error: page.goto: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3001/\", waiting until \"load\"\u001b[22m\n\n\n  3 | test.describe('Homepage E2E Tests', () => {\n  4 |   test.beforeEach(async ({ page }) => {\n> 5 |     await page.goto('/');\n    |                ^\n  6 |   });\n  7 |\n  8 |   test('should load homepage successfully', async ({ page }) => {\n    at C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts:5:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:13:15.215Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\test-results\\e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\\error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\Users\\S.G.T ZW\\Desktop\\suigeneris_project\\temp-app\\tests\\e2e\\homepage.spec.ts",
+                        "column": 8,
+                        "line": 4
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-e6ad8f5318d62dc99e00",
+              "file": "e2e/homepage.spec.ts",
+              "line": 76,
+              "column": 7
+            },
+            {
+              "title": "should load all images successfully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5724,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:14:04.483Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-3278b40801a76419bc0c",
+              "file": "e2e/homepage.spec.ts",
+              "line": 85,
+              "column": 7
+            },
+            {
+              "title": "should display trust indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 8586,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-14T07:14:04.604Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "16f603ea19510c43cb6a-776eb787ddc95678cfd4",
+              "file": "e2e/homepage.spec.ts",
+              "line": 94,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-14T07:11:36.848Z",
+    "duration": 157504.34399999998,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

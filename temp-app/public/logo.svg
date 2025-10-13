@@ -1,0 +1,42 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Lion Head -->
+  <g transform="translate(200, 80)">
+    <!-- Main head shape -->
+    <path d="M-40,-30 Q-50,-40 -45,-50 Q-30,-60 0,-55 Q30,-60 45,-50 Q50,-40 40,-30 Q45,-20 35,-10 Q30,0 20,5 Q10,10 0,8 Q-10,10 -20,5 Q-30,0 -35,-10 Q-45,-20 -40,-30 Z" fill="#E91E63"/>
+    
+    <!-- Mane -->
+    <path d="M-45,-50 Q-60,-45 -65,-30 Q-70,-15 -60,0 Q-50,10 -35,5" fill="#E91E63" opacity="0.8"/>
+    <path d="M45,-50 Q60,-45 65,-30 Q70,-15 60,0 Q50,10 35,5" fill="#E91E63" opacity="0.8"/>
+    <path d="M-30,-60 Q-40,-70 -25,-75 Q-10,-80 5,-75 Q20,-80 35,-75 Q50,-70 40,-60" fill="#E91E63" opacity="0.9"/>
+    
+    <!-- Mane details -->
+    <path d="M-55,-35 Q-65,-25 -60,-10 Q-55,5 -45,0" fill="#C2185B"/>
+    <path d="M55,-35 Q65,-25 60,-10 Q55,5 45,0" fill="#C2185B"/>
+    <path d="M-20,-70 Q-30,-80 -15,-85 Q0,-90 15,-85 Q30,-80 20,-70" fill="#C2185B"/>
+    
+    <!-- Eyes -->
+    <circle cx="-15" cy="-25" r="3" fill="#1A1A1A"/>
+    <circle cx="15" cy="-25" r="3" fill="#1A1A1A"/>
+    <circle cx="-15" cy="-26" r="1" fill="white"/>
+    <circle cx="15" cy="-26" r="1" fill="white"/>
+    
+    <!-- Nose -->
+    <path d="M-3,-15 Q0,-18 3,-15 Q2,-12 0,-12 Q-2,-12 -3,-15 Z" fill="#1A1A1A"/>
+    
+    <!-- Mouth -->
+    <path d="M0,-12 Q-8,-8 -12,-5 M0,-12 Q8,-8 12,-5" stroke="#1A1A1A" stroke-width="2" fill="none"/>
+    
+    <!-- Roar/teeth -->
+    <path d="M-8,-8 L-6,-5 L-10,-3 M8,-8 L6,-5 L10,-3" stroke="white" stroke-width="1.5" fill="none"/>
+  </g>
+  
+  <!-- Text -->
+  <g transform="translate(200, 180)">
+    <text x="0" y="0" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#1A1A1A" letter-spacing="8px">
+      SUI GENERIS
+    </text>
+    <text x="0" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="300" fill="#4ECDC4" letter-spacing="4px">
+      TECHNOLOGIES
+    </text>
+  </g>
+</svg>

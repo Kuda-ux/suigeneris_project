@@ -1,0 +1,315 @@
+<testsuites id="" name="" tests="10" failures="8" skipped="0" errors="0" time="157.50434399999997">
+<testsuite name="e2e\homepage.spec.ts" timestamp="2025-09-14T07:12:03.557Z" hostname="chromium" tests="10" failures="8" skipped="0" time="408.836" errors="0">
+<testcase name="Homepage E2E Tests › should load homepage successfully" classname="e2e\homepage.spec.ts" time="53.839">
+<failure message="homepage.spec.ts:8:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:8:7 › Homepage E2E Tests › should load homepage successfully ───
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(page).toHaveTitle(expected) failed
+
+    Expected pattern: /Sui Generis/i
+    Received string:  ""
+
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+
+
+       8 |   test('should load homepage successfully', async ({ page }) => {
+       9 |     // Check page title
+    > 10 |     await expect(page).toHaveTitle(/Sui Generis/i);
+         |                        ^
+      11 |     
+      12 |     // Check hero section is visible
+      13 |     await expect(page.getByText('Premium Tech Store')).toBeVisible();
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:10:24
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--f31a3--load-homepage-successfully-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--f31a3--load-homepage-successfully-chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should display hero section with sale banner" classname="e2e\homepage.spec.ts" time="53.679">
+<failure message="homepage.spec.ts:17:7 should display hero section with sale banner" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:17:7 › Homepage E2E Tests › should display hero section with sale banner 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByText('🔥 SALE: Up to 50% OFF Premium Tech!')
+    Expected: visible
+    Received: undefined
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('🔥 SALE: Up to 50% OFF Premium Tech!')
+
+
+      17 |   test('should display hero section with sale banner', async ({ page }) => {
+      18 |     // Check sale banner
+    > 19 |     await expect(page.getByText('🔥 SALE: Up to 50% OFF Premium Tech!')).toBeVisible();
+         |                                                                          ^
+      20 |     
+      21 |     // Check CTA buttons
+      22 |     await expect(page.getByRole('link', { name: /shop now/i })).toBeVisible();
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:19:74
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--c41bd-ro-section-with-sale-banner-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--c41bd-ro-section-with-sale-banner-chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should display product showcase in hero section" classname="e2e\homepage.spec.ts" time="53.683">
+<failure message="homepage.spec.ts:26:7 should display product showcase in hero section" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:26:7 › Homepage E2E Tests › should display product showcase in hero section 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByText('🔥 HOT DEALS TODAY!')
+    Expected: visible
+    Received: undefined
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText('🔥 HOT DEALS TODAY!')
+
+
+      26 |   test('should display product showcase in hero section', async ({ page }) => {
+      27 |     // Check hot deals banner
+    > 28 |     await expect(page.getByText('🔥 HOT DEALS TODAY!')).toBeVisible();
+         |                                                         ^
+      29 |     
+      30 |     // Check featured product in hero
+      31 |     await expect(page.getByText('Premium Wireless Headphones')).toBeVisible();
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:28:57
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--990fa-ct-showcase-in-hero-section-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--990fa-ct-showcase-in-hero-section-chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should display product pricing and offers" classname="e2e\homepage.spec.ts" time="52.13">
+<failure message="homepage.spec.ts:36:7 should display product pricing and offers" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:36:7 › Homepage E2E Tests › should display product pricing and offers 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+      2 |
+      3 | test.describe('Homepage E2E Tests', () => {
+    > 4 |   test.beforeEach(async ({ page }) => {
+        |        ^
+      5 |     await page.goto('/');
+      6 |   });
+      7 |
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:4:8
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--b59d8--product-pricing-and-offers-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--b59d8--product-pricing-and-offers-chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should display shop by category section" classname="e2e\homepage.spec.ts" time="45.254">
+<failure message="homepage.spec.ts:46:7 should display shop by category section" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:46:7 › Homepage E2E Tests › should display shop by category section 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+      2 |
+      3 | test.describe('Homepage E2E Tests', () => {
+    > 4 |   test.beforeEach(async ({ page }) => {
+        |        ^
+      5 |     await page.goto('/');
+      6 |   });
+      7 |
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:4:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3001/", waiting until "load"
+
+
+      3 | test.describe('Homepage E2E Tests', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |   });
+      7 |
+      8 |   test('should load homepage successfully', async ({ page }) => {
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:5:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\video.webm]]
+
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--d6e4f-ay-shop-by-category-section-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should have clickable CTA buttons" classname="e2e\homepage.spec.ts" time="45.392">
+<failure message="homepage.spec.ts:56:7 should have clickable CTA buttons" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:56:7 › Homepage E2E Tests › should have clickable CTA buttons ──
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+      2 |
+      3 | test.describe('Homepage E2E Tests', () => {
+    > 4 |   test.beforeEach(async ({ page }) => {
+        |        ^
+      5 |     await page.goto('/');
+      6 |   });
+      7 |
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:4:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3001/", waiting until "load"
+
+
+      3 | test.describe('Homepage E2E Tests', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |   });
+      7 |
+      8 |   test('should load homepage successfully', async ({ page }) => {
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:5:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\video.webm]]
+
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--9722e--have-clickable-CTA-buttons-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should display urgency messaging" classname="e2e\homepage.spec.ts" time="45.089">
+<failure message="homepage.spec.ts:68:7 should display urgency messaging" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:68:7 › Homepage E2E Tests › should display urgency messaging ───
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+      2 |
+      3 | test.describe('Homepage E2E Tests', () => {
+    > 4 |   test.beforeEach(async ({ page }) => {
+        |        ^
+      5 |     await page.goto('/');
+      6 |   });
+      7 |
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:4:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3001/", waiting until "load"
+
+
+      3 | test.describe('Homepage E2E Tests', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |   });
+      7 |
+      8 |   test('should load homepage successfully', async ({ page }) => {
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:5:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--19f0c-d-display-urgency-messaging-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--19f0c-d-display-urgency-messaging-chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should be responsive on mobile" classname="e2e\homepage.spec.ts" time="45.46">
+<failure message="homepage.spec.ts:76:7 should be responsive on mobile" type="FAILURE">
+<![CDATA[  [chromium] › e2e\homepage.spec.ts:76:7 › Homepage E2E Tests › should be responsive on mobile ─────
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+      2 |
+      3 | test.describe('Homepage E2E Tests', () => {
+    > 4 |   test.beforeEach(async ({ page }) => {
+        |        ^
+      5 |     await page.goto('/');
+      6 |   });
+      7 |
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:4:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3001/", waiting until "load"
+
+
+      3 | test.describe('Homepage E2E Tests', () => {
+      4 |   test.beforeEach(async ({ page }) => {
+    > 5 |     await page.goto('/');
+        |                ^
+      6 |   });
+      7 |
+      8 |   test('should load homepage successfully', async ({ page }) => {
+        at C:\Users\S.G.T ZW\Desktop\suigeneris_project\temp-app\tests\e2e\homepage.spec.ts:5:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\test-results\e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\test-results\e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\video.webm]]
+
+[[ATTACHMENT|e2e-homepage-Homepage-E2E--19cb3-uld-be-responsive-on-mobile-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Homepage E2E Tests › should load all images successfully" classname="e2e\homepage.spec.ts" time="5.724">
+</testcase>
+<testcase name="Homepage E2E Tests › should display trust indicators" classname="e2e\homepage.spec.ts" time="8.586">
+</testcase>
+</testsuite>
+</testsuites>
