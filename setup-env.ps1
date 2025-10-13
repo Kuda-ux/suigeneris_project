@@ -9,9 +9,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzd
 # Database Connection (for backend/API)
 DATABASE_URL=postgresql://postgres:Marcus24#@db.dtdpxfqepyjiyhejrcsl.supabase.co:5432/postgres
 DIRECT_URL=postgresql://postgres:Marcus24#@db.dtdpxfqepyjiyhejrcsl.supabase.co:5432/postgres
-
-# API Configuration (optional - for separate backend deployment)
-NEXT_PUBLIC_API_URL=http://localhost:3001
 "@
 
 # Create .env.local file in temp-app directory
