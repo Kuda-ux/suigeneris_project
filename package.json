@@ -1,0 +1,56 @@
+{
+  "name": "sui-generis-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Modern e-commerce platform for laptops, phones, printers, and accessories",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "temp-app"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "test:install": "pnpm --filter @sui-generis/temp-app test:install",
+    "test:e2e": "pnpm --filter @sui-generis/temp-app test:e2e",
+    "test:api": "pnpm --filter @sui-generis/temp-app test:api",
+    "test:component": "pnpm --filter @sui-generis/temp-app test:component",
+    "test:accessibility": "pnpm --filter @sui-generis/temp-app test:accessibility",
+    "test:performance": "pnpm --filter @sui-generis/temp-app test:performance",
+    "test:visual": "pnpm --filter @sui-generis/temp-app test:visual",
+    "test:headed": "pnpm --filter @sui-generis/temp-app test:headed",
+    "test:ui": "pnpm --filter @sui-generis/temp-app test:ui",
+    "test:debug": "pnpm --filter @sui-generis/temp-app test:debug",
+    "test:report": "pnpm --filter @sui-generis/temp-app test:report",
+    "db:migrate": "pnpm --filter @sui-generis/api db:migrate",
+    "db:seed": "pnpm --filter @sui-generis/api db:seed",
+    "db:studio": "pnpm --filter @sui-generis/api db:studio",
+    "docker:up": "docker-compose -f infra/docker-compose.yaml up -d",
+    "docker:down": "docker-compose -f infra/docker-compose.yaml down",
+    "docker:reset": "docker-compose -f infra/docker-compose.yaml down -v && docker-compose -f infra/docker-compose.yaml up -d",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "prettier": "^3.0.0",
+    "turbo": "^1.10.16",
+    "typescript": "^5.1.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.14.0",
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}
