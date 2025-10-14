@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Vercel deployment configuration
 const nextConfig = {
   // Remove 'output: export' for Vercel deployment (supports dynamic features)
   images: {
