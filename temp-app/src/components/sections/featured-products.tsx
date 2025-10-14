@@ -12,7 +12,7 @@ const featuredProducts = [
   products.find(p => p.id === 6), // Apple MacBook Pro 2017
   products.find(p => p.id === 201), // Samsung Galaxy A05
   products.find(p => p.id === 102), // Dell Vostro 3888 Desktop
-].filter(Boolean); // Remove any undefined products
+].filter((p): p is NonNullable<typeof p> => p !== undefined); // Remove any undefined products
 
 export function FeaturedProducts() {
   const addItem = useCartStore((state) => state.addItem);
