@@ -68,7 +68,7 @@ export async function fetchProducts(): Promise<Product[]> {
     return [];
   }
 
-  return (data || []).map(mapDatabaseProductToProduct);
+  return ((data as any[]) || []).map(mapDatabaseProductToProduct);
 }
 
 /**
@@ -86,7 +86,7 @@ export async function fetchProductById(id: number): Promise<Product | null> {
     return null;
   }
 
-  return data ? mapDatabaseProductToProduct(data) : null;
+  return data ? mapDatabaseProductToProduct(data as any) : null;
 }
 
 /**
@@ -104,7 +104,7 @@ export async function fetchProductsByCategory(category: string): Promise<Product
     return [];
   }
 
-  return (data || []).map(mapDatabaseProductToProduct);
+  return ((data as any[]) || []).map(mapDatabaseProductToProduct);
 }
 
 /**
@@ -122,7 +122,7 @@ export async function searchProducts(query: string): Promise<Product[]> {
     return [];
   }
 
-  return (data || []).map(mapDatabaseProductToProduct);
+  return ((data as any[]) || []).map(mapDatabaseProductToProduct);
 }
 
 /**

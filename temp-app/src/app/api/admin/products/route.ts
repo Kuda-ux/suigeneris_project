@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     
     const { data, error } = await supabase
       .from('products')
-      .insert({
+      .insert([{
         name: productData.name,
         description: productData.description,
         category: productData.category,
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
         features: [],
         specifications: {},
         warranty: false
-      })
+      }] as any)
       .select()
       .single();
 
