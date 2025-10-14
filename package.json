@@ -30,8 +30,7 @@
     "db:studio": "pnpm --filter @sui-generis/api db:studio",
     "docker:up": "docker-compose -f infra/docker-compose.yaml up -d",
     "docker:down": "docker-compose -f infra/docker-compose.yaml down",
-    "docker:reset": "docker-compose -f infra/docker-compose.yaml down -v && docker-compose -f infra/docker-compose.yaml up -d",
-    "prepare": "husky install"
+    "docker:reset": "docker-compose -f infra/docker-compose.yaml down -v && docker-compose -f infra/docker-compose.yaml up -d"
   },
   "devDependencies": {
     "@types/node": "^20.3.1",
