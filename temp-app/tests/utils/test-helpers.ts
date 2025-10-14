@@ -312,12 +312,26 @@ export class MockDataGenerator {
  */
 export class APITestHelpers {
   static async makeRequest(page: Page, method: string, url: string, data?: any) {
-    const response = await page.request[method.toLowerCase() as keyof typeof page.request](url, {
-      data: data ? JSON.stringify(data) : undefined,
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    });
+    const methodLower = method.toLowerCase();
+    let response;
+    
+    if (methodLower === 'get') {
+      response = await page.request.get(url);
+    } else if (methodLower === 'post') {
+      response = await page.request.post(url, {
+        data: data ? JSON.stringify(data) : undefined,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } else if (methodLower === 'put') {
+      response = await page.request.put(url, {
+        data: data ? JSON.stringify(data) : undefined,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } else if (methodLower === 'delete') {
+      response = await page.request.delete(url);
+    } else {
+      throw new Error(`Unsupported HTTP method: ${method}`);
+    }
 
     return {
       status: response.status(),
