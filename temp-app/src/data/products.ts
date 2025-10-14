@@ -15,6 +15,7 @@ export interface Product {
   features: string[];
   specifications: Record<string, string>;
   warranty: boolean;
+  badge?: string;
 }
 
 export const products: Product[] = [
