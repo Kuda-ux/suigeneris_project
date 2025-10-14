@@ -1,78 +1,78 @@
 import { NextResponse } from 'next/server';
-
-const mockProducts = [
-  {
-    id: '1',
-    name: 'Premium Wireless Headphones',
-    description: 'High-quality wireless headphones with noise cancellation',
-    category: 'Audio',
-    price: 299.99,
-    sku: 'PWH-001',
-    openingStock: 100,
-    currentStock: 45,
-    stockIssued: 55,
-    stockReceived: 0,
-    stockReturns: 0,
-    stockExchanges: 0,
-    reorderLevel: 20,
-    status: 'active' as const,
-    images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500'],
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-25T00:00:00Z'
-  },
-  {
-    id: '2',
-    name: 'Smart Fitness Watch',
-    description: 'Advanced fitness tracking with heart rate monitor',
-    category: 'Wearables',
-    price: 199.99,
-    sku: 'SFW-002',
-    openingStock: 75,
-    currentStock: 8,
-    stockIssued: 67,
-    stockReceived: 0,
-    stockReturns: 0,
-    stockExchanges: 0,
-    reorderLevel: 15,
-    status: 'low-stock' as const,
-    images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'],
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-25T00:00:00Z'
-  },
-  {
-    id: '3',
-    name: 'Gaming Mouse Pro',
-    description: 'Professional gaming mouse with RGB lighting',
-    category: 'Electronics',
-    price: 79.99,
-    sku: 'GMP-003',
-    openingStock: 50,
-    currentStock: 0,
-    stockIssued: 50,
-    stockReceived: 0,
-    stockReturns: 0,
-    stockExchanges: 0,
-    reorderLevel: 10,
-    status: 'out-of-stock' as const,
-    images: ['https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500'],
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-25T00:00:00Z'
-  }
-];
+import { supabase } from '@/lib/supabase';
 
 export async function GET() {
-  return NextResponse.json(mockProducts);
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    // Map database fields to admin format
+    const adminProducts = (data || []).map(product => ({
+      id: product.id.toString(),
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      sku: product.sku || `SKU-${product.id.toString().padStart(5, '0')}`,
+      openingStock: product.stock_count,
+      currentStock: product.stock_count,
+      stockIssued: 0,
+      stockReceived: 0,
+      stockReturns: 0,
+      stockExchanges: 0,
+      reorderLevel: Math.max(5, Math.floor(product.stock_count * 0.2)),
+      status: product.stock_count === 0 ? 'out-of-stock' : 
+              product.stock_count <= 5 ? 'low-stock' : 
+              product.in_stock ? 'active' : 'inactive',
+      images: product.images || [product.image],
+      createdAt: product.created_at || new Date().toISOString(),
+      updatedAt: product.updated_at || new Date().toISOString()
+    }));
+
+    return NextResponse.json(adminProducts);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const productData = await request.json();
-  
-  const newProduct = {
-    id: Date.now().toString(),
-    ...productData,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-  
-  return NextResponse.json(newProduct);
+  try {
+    const productData = await request.json();
+    
+    const { data, error } = await supabase
+      .from('products')
+      .insert({
+        name: productData.name,
+        description: productData.description,
+        category: productData.category,
+        price: productData.price,
+        sku: productData.sku,
+        stock_count: productData.currentStock,
+        in_stock: productData.currentStock > 0,
+        images: productData.images || [],
+        image: productData.images?.[0] || '',
+        brand: productData.brand || 'Generic',
+        rating: 4.5,
+        reviews: 0,
+        features: [],
+        specifications: {},
+        warranty: false
+      })
+      .select()
+      .single();
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json(data);
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
