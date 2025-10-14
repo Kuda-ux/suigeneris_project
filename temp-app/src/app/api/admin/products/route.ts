@@ -13,7 +13,7 @@ export async function GET() {
     }
 
     // Map database fields to admin format
-    const adminProducts = (data || []).map(product => ({
+    const adminProducts = (data || []).map((product: any) => ({
       id: product.id.toString(),
       name: product.name,
       description: product.description,
