@@ -286,7 +286,7 @@ export function CategoryPage({ category }: CategoryPageProps) {
                             <span className="text-xl font-bold text-sg-black">
                               ${product.price}
                             </span>
-                            {product.originalPrice && (
+                            {'originalPrice' in product && product.originalPrice && (
                               <span className="text-sm text-sg-gray-500 line-through">
                                 ${product.originalPrice}
                               </span>
