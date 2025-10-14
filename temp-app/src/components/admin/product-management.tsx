@@ -139,7 +139,7 @@ export function ProductManagement() {
   };
 
   // Handle product deletion
-  const handleDeleteProduct = async (productId: string) => {
+  const handleDeleteProduct = async (productId: number) => {
     const success = await deleteProduct(productId);
     if (success) {
       setProducts(products.filter(product => product.id !== productId));
