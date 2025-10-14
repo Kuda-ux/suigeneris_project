@@ -1,27 +1,26 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { checkDatabaseConnection, fetchProducts } from '@/lib/database';
 
 export async function GET() {
   try {
-    // Test database connection by querying a simple table
-    const { data, error } = await supabase
-      .from('products')
-      .select('count')
-      .limit(1);
-
-    if (error) {
+    const isConnected = await checkDatabaseConnection();
+    
+    if (!isConnected) {
       return NextResponse.json({
         status: 'error',
         message: 'Database connection failed',
-        error: error.message,
         supabaseConfigured: !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
       }, { status: 500 });
     }
+
+    // Try to fetch products to verify full functionality
+    const products = await fetchProducts();
 
     return NextResponse.json({
       status: 'ok',
       message: 'Database connected successfully',
       supabaseConfigured: true,
+      productsCount: products.length,
       timestamp: new Date().toISOString()
     });
   } catch (error: any) {
