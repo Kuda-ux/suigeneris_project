@@ -132,7 +132,7 @@ export function ProductManagement() {
     return statusConfig[status as keyof typeof statusConfig] || 'bg-gray-100 text-gray-800';
   };
 
-  const getStockIcon = (product: Product) => {
+  const getStockIcon = (product: AdminProduct) => {
     if (product.currentStock === 0) return <AlertTriangle className="h-4 w-4 text-red-500" />;
     if (product.currentStock <= product.reorderLevel) return <TrendingDown className="h-4 w-4 text-yellow-500" />;
     return <TrendingUp className="h-4 w-4 text-green-500" />;
