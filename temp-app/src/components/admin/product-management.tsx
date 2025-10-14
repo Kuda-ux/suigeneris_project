@@ -152,12 +152,24 @@ export function ProductManagement() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     
+    const imageUrl = formData.get('image') as string || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop';
+    
     const productData = {
       name: formData.get('name') as string,
       sku: formData.get('sku') as string,
       category: formData.get('category') as string,
       price: parseFloat(formData.get('price') as string),
       description: formData.get('description') as string || '',
+      image: imageUrl,
+      images: [imageUrl],
+      rating: 0,
+      reviews: 0,
+      brand: formData.get('brand') as string || 'Generic',
+      inStock: parseInt(formData.get('currentStock') as string) > 0,
+      stockCount: parseInt(formData.get('currentStock') as string),
+      features: [],
+      specifications: {},
+      warranty: false,
       openingStock: parseInt(formData.get('currentStock') as string),
       currentStock: parseInt(formData.get('currentStock') as string),
       stockIssued: 0,
@@ -166,7 +178,6 @@ export function ProductManagement() {
       stockExchanges: 0,
       reorderLevel: parseInt(formData.get('reorderLevel') as string),
       status: formData.get('status') as 'active' | 'inactive' | 'low-stock' | 'out-of-stock',
-      images: formData.get('image') ? [formData.get('image') as string] : [],
     };
 
     const newProduct = await createProduct(productData);
