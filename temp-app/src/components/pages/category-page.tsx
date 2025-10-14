@@ -242,7 +242,7 @@ export function CategoryPage({ category }: CategoryPageProps) {
                           alt={product.name}
                           className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                         />
-                        {product.badge && (
+                        {'badge' in product && product.badge && (
                           <div className="absolute top-4 left-4">
                             <span className="px-3 py-1 bg-sg-red text-white text-sm font-semibold rounded-full">
                               {product.badge}
