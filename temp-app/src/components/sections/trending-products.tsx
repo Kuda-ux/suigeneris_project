@@ -8,12 +8,12 @@ import { products } from '@/data/products';
 
 // Get trending products from our real product data
 const trendingProducts = [
-  { ...products.find(p => p.id === 7), trend: '+32%' }, // MSI GF63 Gaming
-  { ...products.find(p => p.id === 8), trend: '+28%' }, // Asus ZenBook 14
-  { ...products.find(p => p.id === 203), trend: '+41%' }, // Samsung Galaxy A51
-  { ...products.find(p => p.id === 205), trend: '+25%' }, // Xiaomi Redmi 13
-  { ...products.find(p => p.id === 2), trend: '+18%' }, // HP 250 G10 (i5)
-  { ...products.find(p => p.id === 4), trend: '+15%' }, // Dell Latitude 5410
+  { ...products.find(p => p.id === 7)!, trend: '+32%' }, // MSI GF63 Gaming
+  { ...products.find(p => p.id === 8)!, trend: '+28%' }, // Asus ZenBook 14
+  { ...products.find(p => p.id === 203)!, trend: '+41%' }, // Samsung Galaxy A51
+  { ...products.find(p => p.id === 205)!, trend: '+25%' }, // Xiaomi Redmi 13
+  { ...products.find(p => p.id === 2)!, trend: '+18%' }, // HP 250 G10 (i5)
+  { ...products.find(p => p.id === 4)!, trend: '+15%' }, // Dell Latitude 5410
 ].filter(p => p.id); // Remove any undefined products
 
 export function TrendingProducts() {

@@ -9,49 +9,49 @@ import { useState } from 'react';
 // Select trending products from real Sui Generis inventory
 const trendingProducts = [
   {
-    ...products.find(p => p.id === 14), // Dell Latitude 5430 Rugged
+    ...products.find(p => p.id === 14)!, // Dell Latitude 5430 Rugged
     trend: '+45%',
     badge: 'Hot',
     rank: 1
   },
   {
-    ...products.find(p => p.id === 3), // HP 250 G10 (i7)
+    ...products.find(p => p.id === 3)!, // HP 250 G10 (i7)
     trend: '+38%',
     badge: 'Trending',
     rank: 2
   },
   {
-    ...products.find(p => p.id === 6), // Apple MacBook Pro 2017
+    ...products.find(p => p.id === 6)!, // Apple MacBook Pro 2017
     trend: '+35%',
     badge: 'Premium',
     rank: 3
   },
   {
-    ...products.find(p => p.id === 7), // MSI GF63 Gaming
+    ...products.find(p => p.id === 7)!, // MSI GF63 Gaming
     trend: '+32%',
     badge: 'Gaming',
     rank: 4
   },
   {
-    ...products.find(p => p.id === 203), // Samsung Galaxy A51
+    ...products.find(p => p.id === 203)!, // Samsung Galaxy A51
     trend: '+28%',
     badge: 'Popular',
     rank: 5
   },
   {
-    ...products.find(p => p.id === 205), // Xiaomi Redmi 13
+    ...products.find(p => p.id === 205)!, // Xiaomi Redmi 13
     trend: '+25%',
     badge: 'Rising',
     rank: 6
   },
   {
-    ...products.find(p => p.id === 8), // Asus ZenBook 14
+    ...products.find(p => p.id === 8)!, // Asus ZenBook 14
     trend: '+22%',
     badge: 'New',
     rank: 7
   },
   {
-    ...products.find(p => p.id === 102), // Dell Vostro 3888
+    ...products.find(p => p.id === 102)!, // Dell Vostro 3888
     trend: '+18%',
     badge: 'Value',
     rank: 8
