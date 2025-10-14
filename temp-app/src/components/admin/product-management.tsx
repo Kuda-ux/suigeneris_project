@@ -191,7 +191,7 @@ export function ProductManagement() {
   };
 
   // Handle product creation/update
-  const handleSaveProduct = async (productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const handleSaveProduct = async (productData: Omit<AdminProduct, 'id' | 'createdAt' | 'updatedAt'>) => {
     const result = await createProduct(productData);
     if (result) {
       setProducts([...products, result]);
