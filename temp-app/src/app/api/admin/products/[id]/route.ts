@@ -23,9 +23,10 @@ export async function PUT(
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await (supabase
+    // @ts-ignore - Supabase type inference issue with dynamic updates
+    const { data, error } = await supabase
       .from('products')
-      .update(updateData) as any)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
