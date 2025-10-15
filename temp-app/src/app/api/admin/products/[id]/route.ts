@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
-import type { Database } from '@/types/database.types';
+import { createClient } from '@supabase/supabase-js';
 
-type ProductUpdate = Database['public']['Tables']['products']['Update'];
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function PUT(
   request: Request,
@@ -12,7 +12,10 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
-    const updatePayload: ProductUpdate = {
+    // Create untyped client to avoid type inference issues
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const updatePayload = {
       name: productData.name,
       description: productData.description,
       category: productData.category,
@@ -49,6 +52,9 @@ export async function DELETE(
 ) {
   try {
     const id = parseInt(params.id);
+
+    // Create untyped client to avoid type inference issues
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { error } = await supabase
       .from('products')
