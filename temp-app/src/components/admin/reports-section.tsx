@@ -1,567 +1,456 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Download, Filter, TrendingUp, TrendingDown, Package, AlertTriangle, BarChart3, FileText, Printer, RefreshCw, DollarSign, ShoppingCart, Boxes, Activity } from 'lucide-react';
-
-interface ReportData {
-  id: string;
-  name: string;
-  type: 'stock-movement' | 'top-selling' | 'dead-stock' | 'sales-summary';
-  period: string;
-  generatedAt: string;
-  status: 'ready' | 'generating' | 'failed';
-}
-
-// Fetch real analytics from API
-const fetchAnalytics = async (type: string = 'all') => {
-  try {
-    const res = await fetch(`/api/admin/reports?type=${type}`);
-    if (!res.ok) throw new Error('Failed to fetch analytics');
-    return await res.json();
-  } catch (error) {
-    console.error('Error fetching analytics:', error);
-    return null;
-  }
-};
-
-
-const generatePDFReport = (reportData: any, reportType: string) => {
-  // Create comprehensive PDF content
-  const reportContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Sui Generis Store - ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
-        .header { text-align: center; border-bottom: 2px solid #1e40af; padding-bottom: 20px; margin-bottom: 30px; }
-        .logo { font-size: 24px; font-weight: bold; color: #1e40af; }
-        .report-title { font-size: 20px; margin: 10px 0; }
-        .date { color: #666; }
-        .section { margin: 30px 0; }
-        .section h2 { color: #1e40af; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
-        .stat-card { border: 1px solid #e5e7eb; padding: 15px; border-radius: 8px; text-align: center; }
-        .stat-value { font-size: 24px; font-weight: bold; color: #1e40af; }
-        .stat-label { color: #666; font-size: 14px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        th { background-color: #f9fafb; font-weight: bold; color: #374151; }
-        .footer { margin-top: 50px; text-align: center; color: #666; font-size: 12px; border-top: 1px solid #e5e7eb; padding-top: 20px; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <div class="logo">SUI GENERIS STORE</div>
-        <div class="report-title">${reportType.toUpperCase().replace('-', ' ')} REPORT</div>
-        <div class="date">Generated on ${new Date().toLocaleDateString()}</div>
-    </div>
-
-    <div class="section">
-        <h2>Executive Summary</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">${reportData.totalProducts || 108}</div>
-                <div class="stat-label">Total Products</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">$${(reportData.totalStockValue || 120000).toLocaleString()}</div>
-                <div class="stat-label">Total Stock Value</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">${reportData.lowStockProducts || 15}</div>
-                <div class="stat-label">Low Stock Items</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">${reportData.outOfStockProducts || 3}</div>
-                <div class="stat-label">Out of Stock</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Category Breakdown</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Product Count</th>
-                    <th>Percentage</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>💻 Laptops</td><td>67</td><td>62%</td></tr>
-                <tr><td>🖥️ Desktops</td><td>20</td><td>19%</td></tr>
-                <tr><td>📱 Smartphones</td><td>11</td><td>10%</td></tr>
-                <tr><td>🖥️ Monitors</td><td>9</td><td>8%</td></tr>
-                <tr><td>🖨️ Printers</td><td>1</td><td>1%</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    ${reportType === 'top-selling' ? `
-    <div class="section">
-        <h2>Top Selling Products</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Units Sold</th>
-                    <th>Revenue</th>
-                    <th>Growth</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${reportData.topProducts ? reportData.topProducts.map((product: any) => `
-                <tr>
-                    <td>${product.name}</td>
-                    <td>${product.sales}</td>
-                    <td>${product.revenue}</td>
-                    <td>${product.growth}</td>
-                </tr>
-                `).join('') : ''}
-            </tbody>
-        </table>
-    </div>
-    ` : ''}
-
-    <div class="footer">
-        <p>This report was generated automatically by the Sui Generis Store Admin System</p>
-        <p>For questions or support, contact admin@suigeneris.com</p>
-    </div>
-</body>
-</html>
-  `;
-
-  // Create and download PDF
-  const blob = new Blob([reportContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `sui-generis-${reportType}-report-${new Date().toISOString().split('T')[0]}.html`;
-  link.click();
-  URL.revokeObjectURL(url);
-};
-
-const generateReport = async (type: string, period: string): Promise<ReportData | null> => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  return {
-    id: `RPT-${Date.now()}`,
-    name: `${type.charAt(0).toUpperCase() + type.slice(1)} Report`,
-    type: type as any,
-    period,
-    generatedAt: new Date().toISOString(),
-    status: 'ready'
-  };
-};
+import { 
+  Download, TrendingUp, TrendingDown, Package, AlertTriangle, 
+  BarChart3, RefreshCw, DollarSign, ShoppingCart, Boxes, 
+  Activity, FileText, Calendar, ArrowUpRight, ArrowDownRight
+} from 'lucide-react';
 
 export function ReportsSection() {
-  const [selectedPeriod, setSelectedPeriod] = useState('today');
-  const [selectedReportType, setSelectedReportType] = useState('all');
-  const [activeTab, setActiveTab] = useState<'overview' | 'stock-movement' | 'top-selling' | 'dead-stock'>('overview');
-  const [reports, setReports] = useState<ReportData[]>([]);
-  const [stockMovementSummary, setStockMovementSummary] = useState<any>({});
-  const [topSellingProducts, setTopSellingProducts] = useState<any[]>([]);
-  const [deadStockItems, setDeadStockItems] = useState<any[]>([]);
+  const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'stock' | 'sales' | 'deadstock'>('overview');
 
-  const periods = ['today', 'week', 'month', 'quarter', 'year'];
-  const reportTypes = ['all', 'stock-movement', 'top-selling', 'dead-stock', 'sales-summary'];
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/admin/reports?type=all');
+      const data = await res.json();
+      setAnalytics(data);
+    } catch (err) {
+      console.error('Error loading analytics:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadReportsData = async () => {
-      setLoading(true);
-      try {
-        const [reportsData, summaryData, topProductsData, deadStockData] = await Promise.all([
-          fetchReports(),
-          fetchStockMovementSummary(),
-          fetchTopSellingProducts(),
-          fetchDeadStockItems()
-        ]);
-        
-        setReports(reportsData);
-        setStockMovementSummary(summaryData);
-        setTopSellingProducts(topProductsData);
-        setDeadStockItems(deadStockData);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load reports data');
-        console.error('Error loading reports data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadReportsData();
+    loadData();
   }, []);
 
-  const handleGenerateReport = async (type: string) => {
-    const result = await generateReport(type, selectedPeriod);
-    if (result) {
-      setReports([result, ...reports]);
-    } else {
-      setError('Failed to generate report');
+  const handleDownloadReport = (reportType: string) => {
+    let csvContent = '';
+    let filename = '';
+
+    if (reportType === 'overview' && analytics?.overview) {
+      csvContent = `Sui Generis Store - Overview Report\nGenerated: ${new Date().toLocaleString()}\n\n`;
+      csvContent += `Metric,Value\n`;
+      csvContent += `Total Products,${analytics.overview.totalProducts}\n`;
+      csvContent += `Total Stock Value,$${analytics.overview.totalStockValue.toLocaleString()}\n`;
+      csvContent += `Low Stock Products,${analytics.overview.lowStockProducts}\n`;
+      csvContent += `Out of Stock,${analytics.overview.outOfStockProducts}\n`;
+      csvContent += `Total Orders,${analytics.overview.totalOrders}\n`;
+      csvContent += `Total Revenue,$${analytics.overview.totalRevenue.toLocaleString()}\n`;
+      csvContent += `Pending Orders,${analytics.overview.pendingOrders}\n`;
+      csvContent += `Delivered Orders,${analytics.overview.deliveredOrders}\n`;
+      filename = 'overview-report';
+    } else if (reportType === 'stock' && analytics?.stockMovement) {
+      csvContent = `Sui Generis Store - Stock Movement Report\nGenerated: ${new Date().toLocaleString()}\n\n`;
+      csvContent += `Total Issued,${analytics.stockMovement.totalIssued}\n`;
+      csvContent += `Total Received,${analytics.stockMovement.totalReceived}\n`;
+      csvContent += `Total Returns,${analytics.stockMovement.totalReturns}\n\n`;
+      csvContent += `Recent Movements:\nProduct,Type,Quantity,Date\n`;
+      analytics.stockMovement.recentMovements?.forEach((m: any) => {
+        csvContent += `"${m.product_name}",${m.type},${m.quantity},${new Date(m.date).toLocaleDateString()}\n`;
+      });
+      filename = 'stock-movement-report';
+    } else if (reportType === 'sales' && analytics?.topSelling) {
+      csvContent = `Sui Generis Store - Top Selling Products Report\nGenerated: ${new Date().toLocaleString()}\n\n`;
+      csvContent += `Product,Quantity Sold,Revenue,Orders\n`;
+      analytics.topSelling.forEach((p: any) => {
+        csvContent += `"${p.product_name}",${p.quantity},$${p.revenue.toLocaleString()},${p.orders}\n`;
+      });
+      filename = 'top-selling-report';
+    } else if (reportType === 'deadstock' && analytics?.deadStock) {
+      csvContent = `Sui Generis Store - Dead Stock Report\nGenerated: ${new Date().toLocaleString()}\n\n`;
+      csvContent += `Product,Current Stock,Days Since Last Sale,Value,Category\n`;
+      analytics.deadStock.forEach((p: any) => {
+        csvContent += `"${p.name}",${p.currentStock},${p.daysSinceLastSale},$${p.value.toLocaleString()},"${p.category}"\n`;
+      });
+      filename = 'dead-stock-report';
     }
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${filename}-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
-  const handleDownloadReport = async (reportType: string) => {
-    try {
-      let reportData: any = {};
-      
-      switch (reportType) {
-        case 'stock-movement':
-          reportData = { ...stockMovementSummary, reportType: 'Stock Movement' };
-          break;
-        case 'top-selling':
-          reportData = { topProducts: topSellingProducts, reportType: 'Top Selling Products' };
-          break;
-        case 'dead-stock':
-          reportData = { deadStockItems, reportType: 'Dead Stock Analysis' };
-          break;
-        case 'sales-summary':
-          reportData = { 
-            ...generateSuiGenerisReportData(), 
-            topProducts: topSellingProducts,
-            totalProducts: 100,
-            totalStockValue: 100000,
-            lowStockProducts: 10,
-            outOfStockProducts: 2,
-            reportType: 'Sales Summary' 
-          };
-          break;
-        default:
-          setError('Unknown report type');
-          return;
-      }
-      
-      generatePDFReport(reportData, reportType);
-    } catch (err) {
-      setError('Failed to download report');
-      console.error('Error downloading report:', err);
-    }
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading analytics...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const handleExportAll = async () => {
-    try {
-      // Generate all reports
-      await handleDownloadReport('stock-movement');
-      await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between downloads
-      await handleDownloadReport('top-selling');
-      await new Promise(resolve => setTimeout(resolve, 500));
-      await handleDownloadReport('dead-stock');
-      await new Promise(resolve => setTimeout(resolve, 500));
-      await handleDownloadReport('sales-summary');
-    } catch (err) {
-      setError('Failed to export all reports');
-      console.error('Error exporting all reports:', err);
-    }
-  };
+  const overview = analytics?.overview || {};
+  const stockMovement = analytics?.stockMovement || {};
+  const topSelling = analytics?.topSelling || [];
+  const deadStock = analytics?.deadStock || [];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-sg-black">Reports & Analytics</h2>
-          <p className="text-sg-gray-600">Generate and view detailed business reports</p>
+          <h2 className="text-3xl font-bold text-gray-900">Reports & Analytics</h2>
+          <p className="text-gray-600 mt-1">Comprehensive business insights and reports</p>
         </div>
-        <div className="flex items-center space-x-3">
-          <select
-            value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+        <div className="flex gap-3">
+          <button
+            onClick={loadData}
+            className="flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
           >
-            {periods.map(period => (
-              <option key={period} value={period}>
-                {period.charAt(0).toUpperCase() + period.slice(1)}
-              </option>
-            ))}
-          </select>
-          <button 
-            onClick={handleExportAll}
-            className="px-4 py-2 bg-sg-aqua text-white rounded-lg hover:bg-sg-aqua/90 flex items-center space-x-2"
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </button>
+          <button
+            onClick={() => handleDownloadReport(activeTab)}
+            className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
           >
-            <Download className="h-4 w-4" />
-            <span>Export All</span>
+            <Download className="h-5 w-5 mr-2" />
+            Download Report
           </button>
         </div>
       </div>
 
-      {/* Quick Report Generation */}
+      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <button
-          onClick={() => handleGenerateReport('stock-movement')}
-          className="bg-white border border-sg-gray-200 rounded-lg p-4 hover:bg-sg-gray-50 text-left"
-        >
-          <Package className="h-8 w-8 text-blue-500 mb-2" />
-          <h3 className="font-semibold text-sg-black">Stock Movement</h3>
-          <p className="text-sm text-sg-gray-600">Daily/weekly/monthly stock changes</p>
-        </button>
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <Boxes className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{overview.totalProducts || 0}</h3>
+          <p className="text-blue-100 text-sm font-medium">Total Products</p>
+        </div>
+        
+        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <DollarSign className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">${(overview.totalRevenue || 0).toLocaleString()}</h3>
+          <p className="text-emerald-100 text-sm font-medium">Total Revenue</p>
+        </div>
+        
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <ShoppingCart className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{overview.totalOrders || 0}</h3>
+          <p className="text-purple-100 text-sm font-medium">Total Orders</p>
+        </div>
+        
+        <div className="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <Activity className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">${(overview.totalStockValue || 0).toLocaleString()}</h3>
+          <p className="text-amber-100 text-sm font-medium">Stock Value</p>
+        </div>
+      </div>
 
+      {/* Tabs */}
+      <div className="bg-white rounded-xl shadow-sm border-2 border-gray-200 p-1 inline-flex">
         <button
-          onClick={() => handleGenerateReport('top-selling')}
-          className="bg-white border border-sg-gray-200 rounded-lg p-4 hover:bg-sg-gray-50 text-left"
+          onClick={() => setActiveTab('overview')}
+          className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center ${
+            activeTab === 'overview'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
-          <TrendingUp className="h-8 w-8 text-green-500 mb-2" />
-          <h3 className="font-semibold text-sg-black">Top Selling</h3>
-          <p className="text-sm text-sg-gray-600">Best performing products</p>
+          <BarChart3 className="h-4 w-4 mr-2" />
+          Overview
         </button>
-
         <button
-          onClick={() => handleGenerateReport('dead-stock')}
-          className="bg-white border border-sg-gray-200 rounded-lg p-4 hover:bg-sg-gray-50 text-left"
+          onClick={() => setActiveTab('stock')}
+          className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center ${
+            activeTab === 'stock'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
-          <AlertTriangle className="h-8 w-8 text-orange-500 mb-2" />
-          <h3 className="font-semibold text-sg-black">Dead Stock</h3>
-          <p className="text-sm text-sg-gray-600">Slow moving inventory</p>
+          <Package className="h-4 w-4 mr-2" />
+          Stock Movement
         </button>
-
         <button
-          onClick={() => handleGenerateReport('sales-summary')}
-          className="bg-white border border-sg-gray-200 rounded-lg p-4 hover:bg-sg-gray-50 text-left"
+          onClick={() => setActiveTab('sales')}
+          className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center ${
+            activeTab === 'sales'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
         >
-          <BarChart3 className="h-8 w-8 text-purple-500 mb-2" />
-          <h3 className="font-semibold text-sg-black">Sales Summary</h3>
-          <p className="text-sm text-sg-gray-600">Revenue and performance metrics</p>
+          <TrendingUp className="h-4 w-4 mr-2" />
+          Top Selling
+        </button>
+        <button
+          onClick={() => setActiveTab('deadstock')}
+          className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center ${
+            activeTab === 'deadstock'
+              ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md'
+              : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          <AlertTriangle className="h-4 w-4 mr-2" />
+          Dead Stock
         </button>
       </div>
 
-      {/* Report Tabs */}
-      <div className="border-b border-sg-gray-200">
-        <nav className="-mb-px flex space-x-8">
-          {[
-            { id: 'overview', name: 'Overview', icon: BarChart3 },
-            { id: 'stock-movement', name: 'Stock Movement', icon: Package },
-            { id: 'top-selling', name: 'Top Selling', icon: TrendingUp },
-            { id: 'dead-stock', name: 'Dead Stock', icon: AlertTriangle }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
-                activeTab === tab.id
-                  ? 'border-sg-navy text-sg-navy'
-                  : 'border-transparent text-sg-gray-500 hover:text-sg-gray-700 hover:border-sg-gray-300'
-              }`}
-            >
-              <tab.icon className="h-4 w-4 mr-2" />
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      {/* Report Content */}
+      {/* Overview Tab */}
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Reports */}
-          <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200">
-            <div className="p-6 border-b border-sg-gray-200">
-              <h3 className="text-lg font-semibold text-sg-black">Recent Reports</h3>
-            </div>
-            <div className="divide-y divide-sg-gray-200">
-              {reports.map((report: ReportData) => (
-                <div key={report.id} className="p-4 hover:bg-sg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h4 className="font-medium text-sg-black">{report.name}</h4>
-                      <p className="text-sm text-sg-gray-600">{report.period}</p>
-                      <p className="text-xs text-sg-gray-500">
-                        Generated: {new Date(report.generatedAt).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        report.status === 'ready' ? 'bg-green-100 text-green-800' :
-                        report.status === 'generating' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {report.status}
-                      </span>
-                      {report.status === 'ready' && (
-                        <button 
-                          onClick={() => handleDownloadReport(report.type)}
-                          className="text-sg-navy hover:text-sg-navy/80 p-1 rounded hover:bg-sg-gray-100"
-                          title="Download Report"
-                        >
-                          <Download className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+          <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+              <Package className="h-5 w-5 mr-2 text-blue-600" />
+              Inventory Status
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border-2 border-blue-100">
+                <span className="text-gray-700 font-medium">Total Products</span>
+                <span className="text-2xl font-bold text-blue-600">{overview.totalProducts || 0}</span>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border-2 border-yellow-100">
+                <span className="text-gray-700 font-medium">Low Stock Items</span>
+                <span className="text-2xl font-bold text-yellow-600">{overview.lowStockProducts || 0}</span>
+              </div>
+              <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border-2 border-red-100">
+                <span className="text-gray-700 font-medium">Out of Stock</span>
+                <span className="text-2xl font-bold text-red-600">{overview.outOfStockProducts || 0}</span>
+              </div>
             </div>
           </div>
 
-          {/* Key Metrics */}
-          <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200">
-            <div className="p-6 border-b border-sg-gray-200">
-              <h3 className="text-lg font-semibold text-sg-black">Key Metrics (Today)</h3>
-            </div>
-            <div className="p-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sg-gray-600">Total Stock Issued</span>
-                <span className="font-semibold text-red-600">-{stockMovementSummary.totalIssued}</span>
+          <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 p-6">
+            <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center">
+              <ShoppingCart className="h-5 w-5 mr-2 text-emerald-600" />
+              Orders Summary
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-xl border-2 border-emerald-100">
+                <span className="text-gray-700 font-medium">Total Orders</span>
+                <span className="text-2xl font-bold text-emerald-600">{overview.totalOrders || 0}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sg-gray-600">Total Stock Received</span>
-                <span className="font-semibold text-green-600">+{stockMovementSummary.totalReceived}</span>
+              <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border-2 border-yellow-100">
+                <span className="text-gray-700 font-medium">Pending</span>
+                <span className="text-2xl font-bold text-yellow-600">{overview.pendingOrders || 0}</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sg-gray-600">Returns Processed</span>
-                <span className="font-semibold text-yellow-600">{stockMovementSummary.totalReturns}</span>
-              </div>
-              <div className="border-t pt-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sg-gray-900 font-medium">Net Movement</span>
-                  <span className="font-bold text-red-600">{stockMovementSummary.netMovement}</span>
-                </div>
+              <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border-2 border-green-100">
+                <span className="text-gray-700 font-medium">Delivered</span>
+                <span className="text-2xl font-bold text-green-600">{overview.deliveredOrders || 0}</span>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {activeTab === 'stock-movement' && (
-        <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200">
-          <div className="p-6 border-b border-sg-gray-200">
-            <h3 className="text-lg font-semibold text-sg-black">Stock Movement Summary</h3>
+      {/* Stock Movement Tab */}
+      {activeTab === 'stock' && (
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+          <div className="px-6 py-5 border-b-2 border-gray-100">
+            <h3 className="text-xl font-bold text-gray-900">Stock Movement Summary</h3>
+            <p className="text-sm text-gray-600 mt-1">Track inventory changes and movements</p>
           </div>
+          
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-600">-{stockMovementSummary.totalIssued}</div>
-                <div className="text-sm text-sg-gray-600">Total Issued</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">+{stockMovementSummary.totalReceived}</div>
-                <div className="text-sm text-sg-gray-600">Total Received</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-yellow-600">{stockMovementSummary.totalReturns}</div>
-                <div className="text-sm text-sg-gray-600">Returns</div>
-              </div>
-            </div>
-            
-            <h4 className="font-semibold text-sg-black mb-4">Top Issued Products</h4>
-            <div className="space-y-3">
-              {stockMovementSummary.topIssuedProducts?.map((product: any, index: number) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-sg-gray-50 rounded-lg">
-                  <span className="text-sg-gray-900">{product.name}</span>
-                  <span className="font-semibold text-red-600">-{product.quantity}</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-5 border-2 border-red-200">
+                <div className="flex items-center justify-between mb-2">
+                  <ArrowDownRight className="h-8 w-8 text-red-600" />
                 </div>
-              ))}
+                <div className="text-3xl font-bold text-red-700 mb-1">{stockMovement.totalIssued || 0}</div>
+                <div className="text-sm font-medium text-red-600">Total Issued</div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border-2 border-green-200">
+                <div className="flex items-center justify-between mb-2">
+                  <ArrowUpRight className="h-8 w-8 text-green-600" />
+                </div>
+                <div className="text-3xl font-bold text-green-700 mb-1">{stockMovement.totalReceived || 0}</div>
+                <div className="text-sm font-medium text-green-600">Total Received</div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-5 border-2 border-yellow-200">
+                <div className="flex items-center justify-between mb-2">
+                  <Package className="h-8 w-8 text-yellow-600" />
+                </div>
+                <div className="text-3xl font-bold text-yellow-700 mb-1">{stockMovement.totalReturns || 0}</div>
+                <div className="text-sm font-medium text-yellow-600">Total Returns</div>
+              </div>
             </div>
-          </div>
-          <div className="p-6 border-t border-sg-gray-200">
-            <button
-              onClick={() => handleDownloadReport('stock-movement')}
-              className="px-4 py-2 bg-sg-red text-white rounded-lg hover:bg-sg-red/90 flex items-center space-x-2"
-            >
-              <Printer className="h-4 w-4" />
-              <span>Download PDF Report</span>
-            </button>
+
+            {stockMovement.recentMovements && stockMovement.recentMovements.length > 0 && (
+              <>
+                <h4 className="font-bold text-gray-900 mb-4 text-lg">Recent Movements</h4>
+                <div className="space-y-2">
+                  {stockMovement.recentMovements.slice(0, 5).map((movement: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${
+                          movement.type === 'issue' ? 'bg-red-100' :
+                          movement.type === 'receive' ? 'bg-green-100' :
+                          'bg-yellow-100'
+                        }`}>
+                          <Package className={`h-4 w-4 ${
+                            movement.type === 'issue' ? 'text-red-600' :
+                            movement.type === 'receive' ? 'text-green-600' :
+                            'text-yellow-600'
+                          }`} />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-gray-900">{movement.product_name}</div>
+                          <div className="text-sm text-gray-500">{new Date(movement.date).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                      <div className={`font-bold ${
+                        movement.type === 'issue' ? 'text-red-600' :
+                        movement.type === 'receive' ? 'text-green-600' :
+                        'text-yellow-600'
+                      }`}>
+                        {movement.type === 'issue' ? '-' : '+'}{movement.quantity}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
 
-      {activeTab === 'top-selling' && (
-        <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-sg-gray-200">
-            <h3 className="text-lg font-semibold text-sg-black">Top Selling Products</h3>
+      {/* Top Selling Tab */}
+      {activeTab === 'sales' && (
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+          <div className="px-6 py-5 border-b-2 border-gray-100">
+            <h3 className="text-xl font-bold text-gray-900">Top Selling Products</h3>
+            <p className="text-sm text-gray-600 mt-1">Best performing products by revenue</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-sg-gray-50">
+              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Product</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Units Sold</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Revenue</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Growth</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Rank</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Product</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Quantity Sold</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Revenue</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Orders</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-sg-gray-200">
-                {topSellingProducts.map((product: any, index: number) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">{product.name}</td>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">{product.unitsSold}</td>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">${product.revenue.toLocaleString()}</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className={`flex items-center ${product.growth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                        {product.growth >= 0 ? <TrendingUp className="h-4 w-4 mr-1" /> : <TrendingDown className="h-4 w-4 mr-1" />}
-                        {Math.abs(product.growth)}%
-                      </span>
+              <tbody className="bg-white divide-y divide-gray-100">
+                {topSelling.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center">
+                      <TrendingUp className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500 font-medium">No sales data available</p>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  topSelling.map((product: any, index: number) => (
+                    <tr key={index} className="hover:bg-blue-50/50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className={`h-8 w-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                          index === 0 ? 'bg-yellow-100 text-yellow-700' :
+                          index === 1 ? 'bg-gray-100 text-gray-700' :
+                          index === 2 ? 'bg-orange-100 text-orange-700' :
+                          'bg-blue-100 text-blue-700'
+                        }`}>
+                          {index + 1}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-bold text-gray-900">{product.product_name}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-gray-900">{product.quantity}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-bold text-emerald-600">${product.revenue.toLocaleString()}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border-2 border-blue-200">
+                          {product.orders} orders
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
-          </div>
-          <div className="p-6 border-t border-sg-gray-200">
-            <button
-              onClick={() => handleDownloadReport('top-selling')}
-              className="px-4 py-2 bg-sg-red text-white rounded-lg hover:bg-sg-red/90 flex items-center space-x-2"
-            >
-              <Printer className="h-4 w-4" />
-              <span>Download PDF Report</span>
-            </button>
           </div>
         </div>
       )}
 
-      {activeTab === 'dead-stock' && (
-        <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200 overflow-hidden">
-          <div className="p-6 border-b border-sg-gray-200">
-            <h3 className="text-lg font-semibold text-sg-black">Dead Stock Analysis</h3>
-            <p className="text-sm text-sg-gray-600">Products with no sales in the last 30+ days</p>
+      {/* Dead Stock Tab */}
+      {activeTab === 'deadstock' && (
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-200 overflow-hidden">
+          <div className="px-6 py-5 border-b-2 border-gray-100">
+            <h3 className="text-xl font-bold text-gray-900">Dead Stock Analysis</h3>
+            <p className="text-sm text-gray-600 mt-1">Products with no sales in 30+ days</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-sg-gray-50">
+              <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Product</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Days Without Sale</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Current Stock</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Last Sale</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase">Action</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Product</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Current Stock</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Days Inactive</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Stock Value</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Category</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-sg-gray-200">
-                {deadStockItems.map((item: any, index: number) => (
-                  <tr key={index}>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">{item.name}</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className="text-red-600 font-medium">{item.daysWithoutSale} days</span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">{item.currentStock}</td>
-                    <td className="px-6 py-4 text-sm text-sg-gray-900">
-                      {new Date(item.lastSale).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 text-sm">
-                      <button className="text-sg-navy hover:text-sg-navy/80 text-sm font-medium">
-                        Create Promotion
-                      </button>
+              <tbody className="bg-white divide-y divide-gray-100">
+                {deadStock.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center">
+                      <AlertTriangle className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                      <p className="text-gray-500 font-medium">No dead stock found</p>
+                      <p className="text-gray-400 text-sm mt-1">All products are moving well!</p>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  deadStock.map((product: any, index: number) => (
+                    <tr key={index} className="hover:bg-red-50/50 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="text-sm font-bold text-gray-900">{product.name}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-semibold text-gray-900">{product.currentStock}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="inline-flex px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-800 border-2 border-red-200">
+                          {product.daysSinceLastSale} days
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-bold text-gray-900">${product.value.toLocaleString()}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm text-gray-600">{product.category}</span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
-          </div>
-          <div className="p-6 border-t border-sg-gray-200">
-            <button
-              onClick={() => handleDownloadReport('dead-stock')}
-              className="px-4 py-2 bg-sg-red text-white rounded-lg hover:bg-sg-red/90 flex items-center space-x-2"
-            >
-              <Printer className="h-4 w-4" />
-              <span>Download PDF Report</span>
-            </button>
           </div>
         </div>
       )}
     </div>
   );
-};
+}
