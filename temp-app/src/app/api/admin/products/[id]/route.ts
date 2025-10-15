@@ -9,7 +9,7 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
-    const updateData: Record<string, any> = {
+    const updateData = {
       name: productData.name,
       description: productData.description,
       category: productData.category,
@@ -23,9 +23,9 @@ export async function PUT(
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase
       .from('products')
-      .update(updateData)
+      .update(updateData) as any)
       .eq('id', id)
       .select()
       .single();
