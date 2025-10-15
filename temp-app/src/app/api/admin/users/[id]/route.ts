@@ -4,45 +4,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export async function GET() {
-  try {
-    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    });
-
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Supabase error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    const users = (data || []).map((user: any) => ({
-      id: user.id,
-      name: `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email,
-      email: user.email,
-      firstName: user.first_name,
-      lastName: user.last_name,
-      role: user.role || 'User',
-      status: user.is_active ? 'active' : 'inactive',
-      lastLogin: user.updated_at,
-      createdAt: user.created_at
-    }));
-
-    return NextResponse.json(users);
-  } catch (error: any) {
-    console.error('API error:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function POST(request: Request) {
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
       auth: {
@@ -52,17 +17,19 @@ export async function POST(request: Request) {
     });
 
     const userData = await request.json();
+    const id = params.id;
+
+    const updatePayload: any = {};
+    if (userData.firstName !== undefined) updatePayload.first_name = userData.firstName;
+    if (userData.lastName !== undefined) updatePayload.last_name = userData.lastName;
+    if (userData.email !== undefined) updatePayload.email = userData.email;
+    if (userData.role !== undefined) updatePayload.role = userData.role;
+    if (userData.status !== undefined) updatePayload.is_active = userData.status === 'active';
 
     const { data, error } = await supabase
       .from('users')
-      .insert([{
-        email: userData.email,
-        password_hash: userData.password_hash || 'temp_hash',
-        first_name: userData.firstName || null,
-        last_name: userData.lastName || null,
-        role: userData.role || 'User',
-        is_active: userData.status === 'active'
-      }])
+      .update(updatePayload)
+      .eq('id', id)
       .select()
       .single();
 
@@ -72,6 +39,37 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(data);
+  } catch (error: any) {
+    console.error('API error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
+
+    const id = params.id;
+
+    const { error } = await supabase
+      .from('users')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Supabase error:', error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
   } catch (error: any) {
     console.error('API error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
