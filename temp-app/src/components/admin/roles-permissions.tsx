@@ -96,35 +96,72 @@ const updateRole = async (id: string, roleData: Partial<Role>): Promise<Role | n
 };
 
 export function RolesPermissions() {
-  const [activeTab, setActiveTab] = useState<'roles' | 'users'>('roles');
+  const [activeTab, setActiveTab] = useState<'roles' | 'users'>('users');
   const [roles, setRoles] = useState<Role[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [showUserModal, setShowUserModal] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const [rolesData, usersData] = await Promise.all([
-          fetchRoles(),
-          fetchUsers()
-        ]);
-        setRoles(rolesData);
-        setUsers(usersData);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load roles and users data');
-        console.error('Error loading data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [rolesData, usersData] = await Promise.all([
+        fetchRoles(),
+        fetchUsers()
+      ]);
+      setRoles(rolesData);
+      setUsers(usersData);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load roles and users data');
+      console.error('Error loading data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadData();
   }, []);
+
+  const handleAddUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.get('email'),
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          role: formData.get('role'),
+          status: formData.get('status'),
+          password_hash: 'temp_hash_' + Date.now()
+        })
+      });
+      
+      if (res.ok) {
+        setShowUserModal(false);
+        loadData();
+        alert('User added successfully!');
+      } else {
+        const error = await res.json();
+        alert(error.error || 'Failed to add user');
+      }
+    } catch (err) {
+      console.error('Error adding user:', err);
+      alert('Failed to add user');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const getPermissionsByCategory = () => {
     const grouped: { [key: string]: typeof permissions } = {};
@@ -169,14 +206,14 @@ export function RolesPermissions() {
         </div>
         <div className="flex gap-3">
           <button
-            onClick={() => { setRoles([]); setUsers([]); setLoading(true); setTimeout(() => setLoading(false), 1000); }}
+            onClick={loadData}
             className="flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
           >
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </button>
           <button
-            onClick={() => setShowRoleModal(true)}
+            onClick={() => setShowUserModal(true)}
             className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
           >
             <UserPlus className="h-5 w-5 mr-2" />
@@ -453,6 +490,126 @@ export function RolesPermissions() {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Add User Modal */}
+      {showUserModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Add New User</h2>
+                <p className="text-gray-600 text-sm mt-1">Create a new user account</p>
+              </div>
+              <button 
+                onClick={() => setShowUserModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddUser}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="John"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="Doe"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="john.doe@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Role *
+                  </label>
+                  <select
+                    name="role"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="User">User</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Status *
+                  </label>
+                  <select
+                    name="status"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-100 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowUserModal(false)}
+                  disabled={submitting}
+                  className="px-6 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 font-semibold transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold shadow-lg transition-all disabled:opacity-50 flex items-center"
+                >
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Add User
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
