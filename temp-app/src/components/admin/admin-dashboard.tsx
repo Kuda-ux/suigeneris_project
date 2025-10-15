@@ -41,69 +41,13 @@ const sidebarItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-// Calculate real stats from Sui Generis data
-const totalProducts = products.length;
-const totalStockValue = products.reduce((sum, product) => sum + (product.price * product.stockCount), 0);
-const averagePrice = products.reduce((sum, product) => sum + product.price, 0) / products.length;
-const totalStock = products.reduce((sum, product) => sum + product.stockCount, 0);
-
-const stats = [
-  { label: 'Total Revenue', value: `$${(totalStockValue * 0.3).toLocaleString()}`, change: '+18.2%', trend: 'up', icon: DollarSign },
-  { label: 'Orders Today', value: '43', change: '+12.8%', trend: 'up', icon: ShoppingCart },
-  { label: 'Total Products', value: totalProducts.toString(), change: '+5.2%', trend: 'up', icon: Package },
-  { label: 'Total Stock', value: totalStock.toString(), change: '+8.7%', trend: 'up', icon: Warehouse },
-];
-
+// Dummy data for orders section (will be replaced with real data later)
 const recentOrders = [
   { id: '#SG-2024-001', customer: 'Michael Chen', product: 'HP 250 G10 (i7)', amount: '$800.00', status: 'Completed', date: '1 hour ago' },
   { id: '#SG-2024-002', customer: 'Sarah Johnson', product: 'Samsung Galaxy A51', amount: '$120.00', status: 'Processing', date: '3 hours ago' },
   { id: '#SG-2024-003', customer: 'David Rodriguez', product: 'Dell Latitude 5430 Rugged', amount: '$1,200.00', status: 'Shipped', date: '5 hours ago' },
   { id: '#SG-2024-004', customer: 'Emily Davis', product: 'Apple MacBook Pro 2017', amount: '$520.00', status: 'Completed', date: '7 hours ago' },
   { id: '#SG-2024-005', customer: 'James Wilson', product: 'MSI GF63 Gaming', amount: '$750.00', status: 'Processing', date: '9 hours ago' },
-];
-
-// Get top products from real Sui Generis inventory
-const topProducts = [
-  { 
-    name: 'Dell Latitude 5430 Rugged', 
-    sales: 45, 
-    revenue: '$54,000', 
-    trend: '+28%',
-    category: 'Laptops',
-    price: '$1,200'
-  },
-  { 
-    name: 'HP 250 G10 (i7)', 
-    sales: 67, 
-    revenue: '$53,600', 
-    trend: '+22%',
-    category: 'Laptops',
-    price: '$800'
-  },
-  { 
-    name: 'Apple MacBook Pro 2017', 
-    sales: 89, 
-    revenue: '$46,280', 
-    trend: '+35%',
-    category: 'Laptops',
-    price: '$520'
-  },
-  { 
-    name: 'MSI GF63 Gaming', 
-    sales: 34, 
-    revenue: '$25,500', 
-    trend: '+18%',
-    category: 'Laptops',
-    price: '$750'
-  },
-  { 
-    name: 'Samsung Galaxy A51', 
-    sales: 156, 
-    revenue: '$18,720', 
-    trend: '+42%',
-    category: 'Smartphones',
-    price: '$120'
-  },
 ];
 
 export function AdminDashboard() {
@@ -460,18 +404,13 @@ export function AdminDashboard() {
                   <label className="block text-sm font-medium text-sg-gray-700 mb-2">
                     Product
                   </label>
-                  <select
+                  <input
+                    type="text"
                     name="product"
                     required
                     className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-                  >
-                    <option value="">Select a product</option>
-                    {products.slice(0, 10).map(product => (
-                      <option key={product.id} value={product.name}>
-                        {product.name} - ${product.price}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Product name"
+                  />
                 </div>
 
                 <div>
