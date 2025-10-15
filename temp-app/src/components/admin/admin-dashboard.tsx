@@ -508,22 +508,25 @@ export function AdminDashboard() {
                     required
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   >
-                    <option value="credit_card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
+                    <option value="paynow">PayNow</option>
+                    <option value="innbucks">InnBucks</option>
+                    <option value="omari">Omari</option>
+                    <option value="ecocash">EcoCash</option>
                     <option value="bank_transfer">Bank Transfer</option>
+                    <option value="cash">Cash</option>
                   </select>
                 </div>
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-bold text-gray-700 mb-2">
-                    Shipping Address *
+                    Delivery Address *
                   </label>
                   <textarea
                     name="shipping_address"
                     required
                     rows={3}
                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
-                    placeholder="123 Main St, City, Country"
+                    placeholder="e.g., 123 Samora Machel Ave, Harare, Zimbabwe"
                   />
                 </div>
               </div>
