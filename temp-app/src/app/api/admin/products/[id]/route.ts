@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function PUT(
   request: Request,
@@ -12,8 +12,13 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
-    // Create untyped client to avoid type inference issues
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    // Create service role client to bypass RLS
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
 
     const updatePayload = {
       name: productData.name,
@@ -53,8 +58,13 @@ export async function DELETE(
   try {
     const id = parseInt(params.id);
 
-    // Create untyped client to avoid type inference issues
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    // Create service role client to bypass RLS
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
 
     const { error } = await supabase
       .from('products')
