@@ -41,19 +41,14 @@ const sidebarItems = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-// Dummy data for orders section (will be replaced with real data later)
-const recentOrders = [
-  { id: '#SG-2024-001', customer: 'Michael Chen', product: 'HP 250 G10 (i7)', amount: '$800.00', status: 'Completed', date: '1 hour ago' },
-  { id: '#SG-2024-002', customer: 'Sarah Johnson', product: 'Samsung Galaxy A51', amount: '$120.00', status: 'Processing', date: '3 hours ago' },
-  { id: '#SG-2024-003', customer: 'David Rodriguez', product: 'Dell Latitude 5430 Rugged', amount: '$1,200.00', status: 'Shipped', date: '5 hours ago' },
-  { id: '#SG-2024-004', customer: 'Emily Davis', product: 'Apple MacBook Pro 2017', amount: '$520.00', status: 'Completed', date: '7 hours ago' },
-  { id: '#SG-2024-005', customer: 'James Wilson', product: 'MSI GF63 Gaming', amount: '$750.00', status: 'Processing', date: '9 hours ago' },
-];
-
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [orderStats, setOrderStats] = useState({ total: 0, revenue: 0, pending: 0, delivered: 0 });
   const router = useRouter();
 
   useEffect(() => {
@@ -70,38 +65,97 @@ export function AdminDashboard() {
     router.push('/admin');
   };
 
+  const loadOrders = async () => {
+    setLoadingOrders(true);
+    try {
+      const res = await fetch('/api/admin/orders');
+      const data = await res.json();
+      setOrders(data);
+      
+      const total = data.length;
+      const revenue = data.reduce((sum: number, o: any) => sum + o.total_amount, 0);
+      const pending = data.filter((o: any) => o.status === 'pending' || o.status === 'processing').length;
+      const delivered = data.filter((o: any) => o.status === 'delivered').length;
+      setOrderStats({ total, revenue, pending, delivered });
+    } catch (err) {
+      console.error('Error loading orders:', err);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  const loadProducts = async () => {
+    try {
+      const res = await fetch('/api/admin/products');
+      const data = await res.json();
+      setProducts(data);
+    } catch (err) {
+      console.error('Error loading products:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'orders') {
+      loadOrders();
+      loadProducts();
+    }
+  }, [activeTab]);
+
   const handleExportOrders = () => {
-    // Create CSV content
-    const headers = ['Order ID', 'Customer', 'Product', 'Amount', 'Status', 'Date'];
+    const headers = ['Order Number', 'Customer', 'Product', 'Quantity', 'Total', 'Status', 'Date'];
     const csvContent = [
       headers.join(','),
-      ...recentOrders.map(order => [
-        order.id,
-        `"${order.customer}"`,
-        `"${order.product}"`,
-        order.amount,
+      ...orders.map(order => [
+        order.order_number,
+        `"${order.customer_name}"`,
+        `"${order.product_name}"`,
+        order.quantity,
+        order.total_amount,
         order.status,
-        `"${order.date}"`
+        new Date(order.created_at).toLocaleDateString()
       ].join(','))
     ].join('\n');
 
-    // Create and download file
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: 'text/csv' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `sui-generis-orders-${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `orders-${new Date().toISOString().split('T')[0]}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handleNewOrder = (orderData: any) => {
-    // In a real app, this would create a new order via API
-    console.log('Creating new order:', orderData);
-    setShowNewOrderModal(false);
-    // You could add the new order to the recentOrders array here
+  const handleNewOrder = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const res = await fetch('/api/admin/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_name: formData.get('customer_name'),
+          customer_email: formData.get('customer_email'),
+          product_id: parseInt(formData.get('product_id') as string),
+          quantity: parseInt(formData.get('quantity') as string),
+          payment_method: formData.get('payment_method'),
+          shipping_address: formData.get('shipping_address')
+        })
+      });
+      
+      if (res.ok) {
+        setShowNewOrderModal(false);
+        loadOrders();
+      } else {
+        const error = await res.json();
+        alert(error.error || 'Failed to create order');
+      }
+    } catch (err) {
+      console.error('Error creating order:', err);
+      alert('Failed to create order');
+    }
   };
 
   if (!isAuthenticated) {
@@ -143,53 +197,45 @@ export function AdminDashboard() {
             </div>
 
             {/* Order Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-green-600 text-sm font-medium">Completed Orders</p>
-                    <p className="text-2xl font-bold text-green-800">127</p>
-                  </div>
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                    <ShoppingCart className="w-6 h-6 text-white" />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                    <ShoppingCart className="h-6 w-6 text-white" />
                   </div>
                 </div>
+                <h3 className="text-white text-3xl font-bold mb-1">{orderStats.total}</h3>
+                <p className="text-blue-100 text-sm font-medium">Total Orders</p>
               </div>
               
-              <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-yellow-600 text-sm font-medium">Processing</p>
-                    <p className="text-2xl font-bold text-yellow-800">23</p>
-                  </div>
-                  <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <Package className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                    <DollarSign className="h-6 w-6 text-white" />
                   </div>
                 </div>
+                <h3 className="text-white text-3xl font-bold mb-1">${orderStats.revenue.toLocaleString()}</h3>
+                <p className="text-emerald-100 text-sm font-medium">Total Revenue</p>
               </div>
               
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-blue-600 text-sm font-medium">Shipped</p>
-                    <p className="text-2xl font-bold text-blue-800">45</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                    <Package className="h-6 w-6 text-white" />
                   </div>
                 </div>
+                <h3 className="text-white text-3xl font-bold mb-1">{orderStats.pending}</h3>
+                <p className="text-yellow-100 text-sm font-medium">Pending Orders</p>
               </div>
               
-              <div className="bg-gradient-to-r from-sg-red/10 to-red-100 rounded-xl p-6 border border-red-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-red-600 text-sm font-medium">Total Revenue</p>
-                    <p className="text-2xl font-bold text-red-800">$47,230</p>
-                  </div>
-                  <div className="w-12 h-12 bg-sg-red rounded-full flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+                    <TrendingUp className="h-6 w-6 text-white" />
                   </div>
                 </div>
+                <h3 className="text-white text-3xl font-bold mb-1">{orderStats.delivered}</h3>
+                <p className="text-green-100 text-sm font-medium">Delivered</p>
               </div>
             </div>
 
@@ -212,44 +258,60 @@ export function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-sg-gray-200">
-                    {recentOrders.map((order) => (
-                      <tr key={order.id} className="hover:bg-sg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm font-bold text-sg-navy">{order.id}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm font-medium text-sg-black">{order.customer}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-sg-gray-600">{order.product}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm font-bold text-sg-red">{order.amount}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold ${
-                            order.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                            order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
-                          }`}>
-                            {order.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-sg-gray-500">{order.date}</span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center space-x-2">
-                            <button className="text-sg-navy hover:text-sg-navy/80">
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button className="text-sg-aqua hover:text-sg-aqua/80">
-                              <Edit className="w-4 h-4" />
-                            </button>
-                          </div>
+                    {loadingOrders ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                          <p className="text-gray-600">Loading orders...</p>
                         </td>
                       </tr>
-                    ))}
+                    ) : orders.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center">
+                          <ShoppingCart className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                          <p className="text-gray-500 font-medium">No orders found</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      orders.slice(0, 10).map((order) => (
+                        <tr key={order.id} className="hover:bg-sg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-sm font-bold text-sg-navy font-mono">{order.order_number}</span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-sg-black">{order.customer_name}</div>
+                            <div className="text-xs text-gray-500">{order.customer_email}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-sm text-sg-gray-600">{order.product_name}</span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-sm font-bold text-emerald-600">${order.total_amount.toLocaleString()}</span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`inline-flex px-3 py-1 rounded-full text-xs font-bold border-2 ${
+                              order.status === 'delivered' ? 'bg-green-100 text-green-800 border-green-200' :
+                              order.status === 'processing' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                              order.status === 'shipped' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                              order.status === 'cancelled' ? 'bg-red-100 text-red-800 border-red-200' :
+                              'bg-gray-100 text-gray-800 border-gray-200'
+                            }`}>
+                              {order.status.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="text-sm text-sg-gray-500">{new Date(order.created_at).toLocaleDateString()}</span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center space-x-2">
+                              <button className="text-sg-navy hover:text-sg-navy/80">
+                                <Eye className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -362,112 +424,123 @@ export function AdminDashboard() {
 
       {/* New Order Modal */}
       {showNewOrderModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-sg-black">Create New Order</h2>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Create New Order</h2>
+                <p className="text-gray-600 text-sm mt-1">Fill in the order details</p>
+              </div>
               <button 
                 onClick={() => setShowNewOrderModal(false)}
-                className="text-sg-gray-500 hover:text-sg-gray-700"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="h-6 w-6" />
               </button>
             </div>
 
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.target as HTMLFormElement);
-              const orderData = {
-                customer: formData.get('customer'),
-                product: formData.get('product'),
-                quantity: formData.get('quantity'),
-                amount: formData.get('amount'),
-                status: formData.get('status')
-              };
-              handleNewOrder(orderData);
-            }}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <form onSubmit={handleNewOrder}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Customer Name
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Customer Name *
                   </label>
                   <input
                     type="text"
-                    name="customer"
+                    name="customer_name"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-                    placeholder="Enter customer name"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="John Doe"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Product
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Customer Email *
                   </label>
                   <input
-                    type="text"
-                    name="product"
+                    type="email"
+                    name="customer_email"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-                    placeholder="Product name"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="john@example.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Quantity
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Product *
+                  </label>
+                  <select
+                    name="product_id"
+                    required
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">Select product</option>
+                    {products.map(product => (
+                      <option key={product.id} value={product.id}>
+                        {product.name} - ${product.price} (Stock: {product.stock_count})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Quantity *
                   </label>
                   <input
                     type="number"
                     name="quantity"
                     min="1"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                     placeholder="1"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Amount
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Payment Method *
                   </label>
-                  <input
-                    type="text"
-                    name="amount"
+                  <select
+                    name="payment_method"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-                    placeholder="$0.00"
-                  />
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="credit_card">Credit Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="bank_transfer">Bank Transfer</option>
+                  </select>
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Status
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Shipping Address *
                   </label>
-                  <select
-                    name="status"
+                  <textarea
+                    name="shipping_address"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-                  >
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Completed">Completed</option>
-                  </select>
+                    rows={3}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                    placeholder="123 Main St, City, Country"
+                  />
                 </div>
               </div>
 
-              <div className="flex items-center justify-end space-x-3">
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-100 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowNewOrderModal(false)}
-                  className="px-4 py-2 text-sg-gray-700 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 transition-colors"
+                  className="px-6 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 font-semibold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-sg-red text-white rounded-lg hover:bg-sg-red/90 transition-colors"
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold shadow-lg transition-all flex items-center"
                 >
+                  <Plus className="h-4 w-4 mr-2" />
                   Create Order
                 </button>
               </div>
