@@ -1,592 +1,520 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Package, TrendingUp, TrendingDown, AlertTriangle, Plus, Filter, Calendar, ArrowUpRight, ArrowDownRight, RotateCcw, RefreshCw, X, ArrowDown, ArrowUp, AlertCircle, Shield } from 'lucide-react';
-import { products as suiGenerisProducts } from '@/data/products';
+import { 
+  Package, 
+  TrendingUp, 
+  TrendingDown, 
+  AlertTriangle, 
+  Plus, 
+  RefreshCw,
+  X,
+  ArrowDown,
+  ArrowUp,
+  RotateCcw,
+  AlertCircle,
+  Filter,
+  Download,
+  Search
+} from 'lucide-react';
 
 interface StockMovement {
   id: string;
-  productId: number;
-  productName: string;
+  product_id: number;
+  product_name: string;
   type: 'opening' | 'issued' | 'received' | 'return' | 'exchange';
   quantity: number;
-  previousStock: number;
-  newStock: number;
+  previous_stock: number;
+  new_stock: number;
   reason: string;
   reference: string;
-  timestamp: string;
-  userId: string;
-  userName: string;
+  created_at: string;
+  user_name: string;
 }
 
-// Generate realistic stock movements for Sui Generis products
-const generateStockMovements = (): StockMovement[] => {
-  const movements: StockMovement[] = [];
-  const users = ['Admin', 'John Smith', 'Sarah Johnson', 'Mike Chen', 'Emily Davis'];
-  const reasons = {
-    opening: ['Initial stock', 'Stock audit', 'Inventory count'],
-    issued: ['Sale', 'Customer order', 'Bulk order', 'Online sale'],
-    received: ['New shipment', 'Supplier delivery', 'Return to stock', 'Restocking'],
-    return: ['Customer return', 'Defective item', 'Wrong order', 'Damaged goods'],
-    exchange: ['Product exchange', 'Warranty replacement', 'Size exchange']
-  };
+interface Product {
+  id: number;
+  name: string;
+  stock_count: number;
+  category: string;
+  price: number;
+}
 
-  suiGenerisProducts.slice(0, 20).forEach((product, index) => {
-    // Generate 3-8 movements per product
-    const movementCount = 3 + Math.floor(Math.random() * 6);
-    let currentStock = product.stockCount;
-    
-    for (let i = 0; i < movementCount; i++) {
-      const types: (keyof typeof reasons)[] = ['opening', 'issued', 'received', 'return', 'exchange'];
-      const type = types[Math.floor(Math.random() * types.length)];
-      const quantity = Math.floor(Math.random() * 10) + 1;
-      const previousStock = currentStock;
-      
-      if (type === 'issued' || type === 'exchange') {
-        currentStock = Math.max(0, currentStock - quantity);
-      } else {
-        currentStock += quantity;
-      }
-      
-      movements.push({
-        id: `SM-${Date.now()}-${index}-${i}`,
-        productId: product.id,
-        productName: product.name,
-        type,
-        quantity,
-        previousStock,
-        newStock: currentStock,
-        reason: reasons[type][Math.floor(Math.random() * reasons[type].length)],
-        reference: `REF-${Math.random().toString(36).substr(2, 8).toUpperCase()}`,
-        timestamp: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-        userId: `user-${Math.floor(Math.random() * 5) + 1}`,
-        userName: users[Math.floor(Math.random() * users.length)]
-      });
-    }
-  });
-
-  return movements.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-};
-
-// Use real Sui Generis stock data
-const fetchStockMovements = async (filters?: {
-  type?: string;
-  productId?: string;
-  dateRange?: string;
-}): Promise<StockMovement[]> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  let movements = generateStockMovements();
-  
-  // Apply filters
-  if (filters?.type && filters.type !== 'all') {
-    movements = movements.filter(m => m.type === filters.type);
-  }
-  
-  if (filters?.productId && filters.productId !== 'all') {
-    movements = movements.filter(m => m.productId.toString() === filters.productId);
-  }
-  
-  if (filters?.dateRange && filters.dateRange !== 'all') {
-    const now = new Date();
-    let cutoffDate = new Date();
-    
-    switch (filters.dateRange) {
-      case '7days':
-        cutoffDate.setDate(now.getDate() - 7);
-        break;
-      case '30days':
-        cutoffDate.setDate(now.getDate() - 30);
-        break;
-      case '90days':
-        cutoffDate.setDate(now.getDate() - 90);
-        break;
-    }
-    
-    movements = movements.filter(m => new Date(m.timestamp) >= cutoffDate);
-  }
-  
-  return movements;
-};
-
-const createStockMovement = async (movementData: Omit<StockMovement, 'id' | 'timestamp' | 'userId' | 'userName'>): Promise<StockMovement | null> => {
-  // Simulate API call - in real app this would save to database
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const newMovement: StockMovement = {
-    ...movementData,
-    id: `SM-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
-    timestamp: new Date().toISOString(),
-    userId: 'admin-1',
-    userName: 'Admin'
-  };
-  
-  return newMovement;
-};
-
-const fetchStockSummary = async (): Promise<{
+interface StockSummary {
   totalIssued: number;
   totalReceived: number;
   totalReturns: number;
   netMovement: number;
-}> => {
-  // Simulate API call and calculate from real data
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  const movements = generateStockMovements();
-  const totalIssued = movements.filter(m => m.type === 'issued').reduce((sum, m) => sum + m.quantity, 0);
-  const totalReceived = movements.filter(m => m.type === 'received').reduce((sum, m) => sum + m.quantity, 0);
-  const totalReturns = movements.filter(m => m.type === 'return').reduce((sum, m) => sum + m.quantity, 0);
-  
-  return {
-    totalIssued,
-    totalReceived,
-    totalReturns,
-    netMovement: totalReceived + totalReturns - totalIssued
-  };
-};
+  lowStockItems: number;
+  outOfStockItems: number;
+}
 
 export function StockManagement() {
   const [movements, setMovements] = useState<StockMovement[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stockSummary, setStockSummary] = useState({
+  const [summary, setSummary] = useState<StockSummary>({
     totalIssued: 0,
     totalReceived: 0,
     totalReturns: 0,
-    netMovement: 0
+    netMovement: 0,
+    lowStockItems: 0,
+    outOfStockItems: 0
   });
+  
   const [selectedType, setSelectedType] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState('all');
-  const [dateRange, setDateRange] = useState('today');
+  const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showQuickIssue, setShowQuickIssue] = useState(false);
+  const [showQuickReceive, setShowQuickReceive] = useState(false);
 
-  const movementTypes = ['all', 'opening', 'issued', 'received', 'return', 'exchange'];
-  const dateRanges = ['today', 'week', 'month', 'quarter'];
-
-  // Fetch data on component mount and when filters change
-  useEffect(() => {
-    const loadStockData = async () => {
-      setLoading(true);
-      try {
-        const [movementsData, summaryData] = await Promise.all([
-          fetchStockMovements(),
-          fetchStockSummary()
-        ]);
-        setMovements(movementsData);
-        setStockSummary(summaryData);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load stock data');
-        console.error('Error loading stock data:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadStockData();
-  }, []);
-
-  const handleAddMovement = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  // Load data
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
     
-    const productId = formData.get('productId') as string;
-    const productName = getProductNameById(productId);
-    
-    const movementData = {
-      productId: parseInt(productId),
-      productName,
-      type: formData.get('type') as 'opening' | 'issued' | 'received' | 'return' | 'exchange',
-      quantity: parseInt(formData.get('quantity') as string),
-      previousStock: 0, // This would be fetched from current product stock
-      newStock: 0, // This would be calculated based on movement type
-      reason: formData.get('reason') as string || 'Manual entry',
-      reference: formData.get('reference') as string || `REF-${Date.now()}`,
-    };
+    try {
+      // Fetch products
+      const productsRes = await fetch('/api/admin/products');
+      if (!productsRes.ok) throw new Error('Failed to fetch products');
+      const productsData = await productsRes.json();
+      setProducts(productsData);
 
-    const newMovement = await createStockMovement(movementData);
-    if (newMovement) {
-      setMovements([newMovement, ...movements]);
-      setShowAddModal(false);
-      setError(null);
-      // Reload stock summary to reflect changes
-      const updatedSummary = await fetchStockSummary();
-      setStockSummary(updatedSummary);
-    } else {
-      setError('Failed to create stock movement');
+      // Fetch stock movements
+      const movementsRes = await fetch(`/api/admin/stock-movements?type=${selectedType}&productId=${selectedProduct}`);
+      if (!movementsRes.ok) throw new Error('Failed to fetch movements');
+      const movementsData = await movementsRes.json();
+      setMovements(movementsData);
+
+      // Calculate summary
+      const issued = movementsData.filter((m: StockMovement) => m.type === 'issued')
+        .reduce((sum: number, m: StockMovement) => sum + m.quantity, 0);
+      const received = movementsData.filter((m: StockMovement) => m.type === 'received')
+        .reduce((sum: number, m: StockMovement) => sum + m.quantity, 0);
+      const returns = movementsData.filter((m: StockMovement) => m.type === 'return')
+        .reduce((sum: number, m: StockMovement) => sum + m.quantity, 0);
+      
+      const lowStock = productsData.filter((p: Product) => p.stock_count > 0 && p.stock_count <= 10).length;
+      const outOfStock = productsData.filter((p: Product) => p.stock_count === 0).length;
+
+      setSummary({
+        totalIssued: issued,
+        totalReceived: received,
+        totalReturns: returns,
+        netMovement: received + returns - issued,
+        lowStockItems: lowStock,
+        outOfStockItems: outOfStock
+      });
+    } catch (err: any) {
+      setError(err.message);
+      console.error('Error loading data:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getProductNameById = (productId: string): string => {
-    const product = suiGenerisProducts.find(p => p.id.toString() === productId);
-    return product ? product.name : 'Unknown Product';
+  useEffect(() => {
+    loadData();
+  }, [selectedType, selectedProduct]);
+
+  // Handle stock movement creation
+  const handleCreateMovement = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const response = await fetch('/api/admin/stock-movements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: parseInt(formData.get('product_id') as string),
+          type: formData.get('type'),
+          quantity: parseInt(formData.get('quantity') as string),
+          reason: formData.get('reason'),
+          reference: formData.get('reference')
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to create movement');
+      
+      setShowAddModal(false);
+      loadData(); // Reload data
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
-  const filteredMovements = movements.filter(movement => {
-    const matchesType = selectedType === 'all' || movement.type === selectedType;
-    const matchesProduct = selectedProduct === 'all' || movement.productId.toString() === selectedProduct;
-    
-    // Date filtering logic would go here
-    return matchesType && matchesProduct;
-  });
+  // Quick actions
+  const handleQuickAction = async (type: 'issued' | 'received', productId: number, quantity: number, reference: string) => {
+    try {
+      const response = await fetch('/api/admin/stock-movements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product_id: productId,
+          type,
+          quantity,
+          reason: type === 'issued' ? 'Quick issue' : 'Quick receipt',
+          reference
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to process');
+      
+      setShowQuickIssue(false);
+      setShowQuickReceive(false);
+      loadData();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
 
   const getMovementIcon = (type: string) => {
     const icons = {
-      'opening': <Package className="h-4 w-4 text-blue-500" />,
-      'issued': <ArrowDown className="h-4 w-4 text-red-500" />,
-      'received': <ArrowUp className="h-4 w-4 text-green-500" />,
-      'return': <RotateCcw className="h-4 w-4 text-yellow-500" />,
-      'exchange': <RefreshCw className="h-4 w-4 text-purple-500" />
+      'opening': <Package className="h-5 w-5 text-blue-500" />,
+      'issued': <ArrowDown className="h-5 w-5 text-red-500" />,
+      'received': <ArrowUp className="h-5 w-5 text-green-500" />,
+      'return': <RotateCcw className="h-5 w-5 text-yellow-500" />,
+      'exchange': <RefreshCw className="h-5 w-5 text-purple-500" />
     };
-    return icons[type as keyof typeof icons] || <Package className="h-4 w-4 text-gray-500" />;
+    return icons[type as keyof typeof icons];
   };
 
-  const getMovementColor = (type: string) => {
-    const colors = {
-      'opening': 'bg-blue-100 text-blue-800',
-      'issued': 'bg-red-100 text-red-800',
-      'received': 'bg-green-100 text-green-800',
-      'return': 'bg-yellow-100 text-yellow-800',
-      'exchange': 'bg-purple-100 text-purple-800'
+  const getMovementBadge = (type: string) => {
+    const badges = {
+      'opening': 'bg-blue-100 text-blue-800 border-blue-200',
+      'issued': 'bg-red-100 text-red-800 border-red-200',
+      'received': 'bg-green-100 text-green-800 border-green-200',
+      'return': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      'exchange': 'bg-purple-100 text-purple-800 border-purple-200'
     };
-    return colors[type as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return badges[type as keyof typeof badges];
   };
 
-  const formatDateTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleString();
-  };
+  const filteredMovements = movements.filter(m => 
+    m.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    m.reference.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[600px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading stock data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-sg-black">Stock Management</h2>
-          <p className="text-sg-gray-600">Track all stock movements and transactions</p>
+          <h2 className="text-3xl font-bold text-gray-900">Stock Management</h2>
+          <p className="text-gray-600 mt-1">Track and manage all inventory movements</p>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="bg-sg-navy hover:bg-sg-navy/90 text-white px-4 py-2 rounded-lg flex items-center"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Movement
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={loadData}
+            className="flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New Movement
+          </button>
+        </div>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center min-h-96">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sg-navy mx-auto mb-4"></div>
-            <p className="text-sg-gray-600">Loading stock data...</p>
-          </div>
-        </div>
-      ) : error ? (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+      {error && (
+        <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-center justify-between">
           <div className="flex items-center">
-            <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-            <p className="text-red-700">{error}</p>
-            <button 
-              onClick={() => window.location.reload()} 
-              className="ml-4 text-red-600 hover:text-red-800 underline"
-            >
-              Retry
-            </button>
+            <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+            <p className="text-red-800 font-medium">{error}</p>
+          </div>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+      )}
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-red-100 text-sm font-medium mb-1">Stock Issued</p>
+              <h3 className="text-white text-4xl font-bold mb-2">-{summary.totalIssued}</h3>
+              <p className="text-red-100 text-sm">Items issued from inventory</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <ArrowDown className="h-8 w-8 text-white" />
+            </div>
           </div>
         </div>
-      ) : (
-        <>
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-sg-gray-600">Today's Issues</p>
-                  <p className="text-2xl font-bold text-red-600">-{stockSummary.totalIssued}</p>
-                </div>
-                <ArrowDown className="h-8 w-8 text-red-500" />
-              </div>
+
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-green-100 text-sm font-medium mb-1">Stock Received</p>
+              <h3 className="text-white text-4xl font-bold mb-2">+{summary.totalReceived}</h3>
+              <p className="text-green-100 text-sm">Items added to inventory</p>
             </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-sg-gray-600">Today's Receipts</p>
-                  <p className="text-2xl font-bold text-green-600">+{stockSummary.totalReceived}</p>
-                </div>
-                <ArrowUp className="h-8 w-8 text-green-500" />
-              </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <ArrowUp className="h-8 w-8 text-white" />
             </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-sg-gray-600">Returns</p>
-                  <p className="text-2xl font-bold text-yellow-600">{stockSummary.totalReturns}</p>
-                </div>
-                <RotateCcw className="h-8 w-8 text-yellow-500" />
-              </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-yellow-100 text-sm font-medium mb-1">Returns</p>
+              <h3 className="text-white text-4xl font-bold mb-2">{summary.totalReturns}</h3>
+              <p className="text-yellow-100 text-sm">Items returned to stock</p>
             </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-sg-gray-600">Net Movement</p>
-                  <p className="text-2xl font-bold text-orange-600">{stockSummary.netMovement}</p>
-                </div>
-                <AlertCircle className="h-8 w-8 text-orange-500" />
-              </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <RotateCcw className="h-8 w-8 text-white" />
             </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-purple-100 text-sm font-medium mb-1">Net Movement</p>
+              <h3 className="text-white text-4xl font-bold mb-2">{summary.netMovement > 0 ? '+' : ''}{summary.netMovement}</h3>
+              <p className="text-purple-100 text-sm">Overall stock change</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <TrendingUp className="h-8 w-8 text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-orange-100 text-sm font-medium mb-1">Low Stock Items</p>
+              <h3 className="text-white text-4xl font-bold mb-2">{summary.lowStockItems}</h3>
+              <p className="text-orange-100 text-sm">Items need reordering</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <AlertTriangle className="h-8 w-8 text-white" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-gray-700 to-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <p className="text-gray-300 text-sm font-medium mb-1">Out of Stock</p>
+              <h3 className="text-white text-4xl font-bold mb-2">{summary.outOfStockItems}</h3>
+              <p className="text-gray-300 text-sm">Items currently unavailable</p>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm p-3 rounded-xl">
+              <AlertCircle className="h-8 w-8 text-white" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Filters & Search */}
+      <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search movements..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            />
           </div>
 
-          {/* Filters */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
-            {movementTypes.map(type => (
-              <option key={type} value={type}>
-                {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
-              </option>
-            ))}
+            <option value="all">All Types</option>
+            <option value="opening">Opening Stock</option>
+            <option value="issued">Issued</option>
+            <option value="received">Received</option>
+            <option value="return">Returns</option>
+            <option value="exchange">Exchange</option>
           </select>
 
           <select
             value={selectedProduct}
             onChange={(e) => setSelectedProduct(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
             <option value="all">All Products</option>
-            {suiGenerisProducts.slice(0, 20).map(product => (
+            {products.map(product => (
               <option key={product.id} value={product.id.toString()}>
-                {product.name} - ${product.price}
+                {product.name}
               </option>
             ))}
           </select>
 
-          <select
-            value={dateRange}
-            onChange={(e) => setDateRange(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-          >
-            {dateRanges.map(range => (
-              <option key={range} value={range}>
-                {range.charAt(0).toUpperCase() + range.slice(1)}
-              </option>
-            ))}
-          </select>
-
-          <button className="px-4 py-2 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 flex items-center justify-center">
-            <Calendar className="h-4 w-4 mr-2" />
-            Custom Range
+          <button className="px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl flex items-center justify-center transition-colors border-2 border-gray-200">
+            <Download className="h-5 w-5 mr-2" />
+            Export
           </button>
         </div>
       </div>
 
-      {/* Stock Movements Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200 overflow-hidden">
+      {/* Movements Table */}
+      <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-sg-gray-50 border-b border-sg-gray-200">
+            <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Date & Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Product
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Quantity
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Previous Stock
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  Previous
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   New Stock
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   Reference
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                   User
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-sg-gray-200">
-              {filteredMovements.map((movement) => (
-                <tr key={movement.id} className="hover:bg-sg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {formatDateTime(movement.timestamp)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-sg-black">{movement.productName}</div>
-                    <div className="text-sm text-sg-gray-500">{movement.reason}</div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {getMovementIcon(movement.type)}
-                      <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getMovementColor(movement.type)}`}>
-                        {movement.type}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`text-sm font-medium ${movement.quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                      {movement.quantity > 0 ? '+' : ''}{movement.quantity}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {movement.previousStock}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {movement.newStock}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {movement.reference}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {movement.userName}
+            <tbody className="divide-y divide-gray-200">
+              {filteredMovements.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-6 py-12 text-center">
+                    <Package className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500 font-medium">No stock movements found</p>
+                    <p className="text-gray-400 text-sm mt-1">Try adjusting your filters</p>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredMovements.map((movement) => (
+                  <tr key={movement.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {new Date(movement.created_at).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-semibold text-gray-900">{movement.product_name}</div>
+                      <div className="text-sm text-gray-500">{movement.reason}</div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        {getMovementIcon(movement.type)}
+                        <span className={`inline-flex px-3 py-1 text-xs font-bold rounded-full border ${getMovementBadge(movement.type)}`}>
+                          {movement.type.toUpperCase()}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`text-sm font-bold ${
+                        movement.type === 'issued' || movement.type === 'exchange' 
+                          ? 'text-red-600' 
+                          : 'text-green-600'
+                      }`}>
+                        {movement.type === 'issued' || movement.type === 'exchange' ? '-' : '+'}{movement.quantity}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                      {movement.previous_stock}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
+                      {movement.new_stock}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-mono">
+                      {movement.reference}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {movement.user_name}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-          <h3 className="text-lg font-semibold text-sg-black mb-4">Quick Stock Issue</h3>
-          <div className="space-y-3">
-            <select className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg">
-              <option>Select Product</option>
-              <option>Premium Wireless Headphones</option>
-              <option>Smart Fitness Watch</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Quantity"
-              className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Reference/Order #"
-              className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg"
-            />
-            <button className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg">
-              Issue Stock
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-          <h3 className="text-lg font-semibold text-sg-black mb-4">Quick Stock Receipt</h3>
-          <div className="space-y-3">
-            <select className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg">
-              <option>Select Product</option>
-              <option>Premium Wireless Headphones</option>
-              <option>Smart Fitness Watch</option>
-            </select>
-            <input
-              type="number"
-              placeholder="Quantity"
-              className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg"
-            />
-            <input
-              type="text"
-              placeholder="Supplier/PO #"
-              className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg"
-            />
-            <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg">
-              Receive Stock
-            </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-          <h3 className="text-lg font-semibold text-sg-black mb-4">Stock Alerts</h3>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-              <div>
-                <p className="text-sm font-medium text-red-800">Gaming Mouse Pro</p>
-                <p className="text-xs text-red-600">Out of stock</p>
-              </div>
-              <AlertCircle className="h-5 w-5 text-red-500" />
-            </div>
-            <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-              <div>
-                <p className="text-sm font-medium text-yellow-800">Smart Fitness Watch</p>
-                <p className="text-xs text-yellow-600">Low stock (8 remaining)</p>
-              </div>
-              <TrendingUp className="h-5 w-5 text-yellow-500" />
-            </div>
-          </div>
-        </div>
-      </div>
-        </>
-      )}
-
-      {/* Add Stock Movement Modal */}
+      {/* Add Movement Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-sg-black">Add Stock Movement</h3>
+              <h3 className="text-2xl font-bold text-gray-900">New Stock Movement</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-sg-gray-400 hover:text-sg-gray-600"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="h-5 w-5" />
+                <X className="h-6 w-6" />
               </button>
             </div>
             
-            <form onSubmit={handleAddMovement} className="space-y-4">
+            <form onSubmit={handleCreateMovement} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Product *
                 </label>
                 <select
-                  name="productId"
+                  name="product_id"
                   required
-                  className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 >
                   <option value="">Select product</option>
-                  <option value="1">Premium Wireless Headphones</option>
-                  <option value="2">Smart Fitness Watch</option>
-                  <option value="3">Gaming Mouse Pro</option>
-                  <option value="4">Bluetooth Speaker</option>
-                  <option value="5">Phone Case</option>
+                  {products.map(product => (
+                    <option key={product.id} value={product.id}>
+                      {product.name} (Stock: {product.stock_count})
+                    </option>
+                  ))}
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Movement Type *
                 </label>
                 <select
                   name="type"
                   required
-                  className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 >
                   <option value="">Select type</option>
-                  <option value="opening">Opening Stock</option>
-                  <option value="issued">Stock Issued</option>
-                  <option value="received">Stock Received</option>
-                  <option value="return">Stock Return</option>
-                  <option value="exchange">Stock Exchange</option>
+                  <option value="issued">Issue Stock</option>
+                  <option value="received">Receive Stock</option>
+                  <option value="return">Return to Stock</option>
+                  <option value="exchange">Exchange</option>
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Quantity *
                 </label>
                 <input
@@ -594,36 +522,48 @@ export function StockManagement() {
                   name="quantity"
                   min="1"
                   required
-                  className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   placeholder="Enter quantity"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                  Reference/Notes
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Reason
+                </label>
+                <input
+                  type="text"
+                  name="reason"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="e.g., Customer order, Supplier delivery"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Reference
                 </label>
                 <input
                   type="text"
                   name="reference"
-                  className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                  placeholder="Order #, reason, etc."
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  placeholder="e.g., PO-001, SO-123"
                 />
               </div>
               
-              <div className="flex justify-end space-x-3 pt-4">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50"
+                  className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 font-semibold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-sg-navy hover:bg-sg-navy/90 text-white rounded-lg"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold shadow-lg transition-all"
                 >
-                  Add Movement
+                  Create Movement
                 </button>
               </div>
             </form>
