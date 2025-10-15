@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import type { Database } from '@/types/database.types';
+
+type ProductUpdate = Database['public']['Tables']['products']['Update'];
 
 export async function PUT(
   request: Request,
@@ -9,21 +12,23 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
+    const updatePayload: ProductUpdate = {
+      name: productData.name,
+      description: productData.description,
+      category: productData.category,
+      price: productData.price,
+      sku: productData.sku,
+      stock_count: productData.currentStock || productData.stock_count,
+      in_stock: (productData.currentStock || productData.stock_count) > 0,
+      images: productData.images || [],
+      image: productData.images?.[0] || productData.image || '',
+      brand: productData.brand || 'Generic',
+      updated_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
       .from('products')
-      .update({
-        name: productData.name,
-        description: productData.description,
-        category: productData.category,
-        price: productData.price,
-        sku: productData.sku,
-        stock_count: productData.currentStock || productData.stock_count,
-        in_stock: (productData.currentStock || productData.stock_count) > 0,
-        images: productData.images || [],
-        image: productData.images?.[0] || productData.image || '',
-        brand: productData.brand || 'Generic',
-        updated_at: new Date().toISOString()
-      })
+      .update(updatePayload)
       .eq('id', id)
       .select()
       .single();
