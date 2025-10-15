@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Download, Filter, TrendingUp, TrendingDown, Package, AlertTriangle, BarChart3, FileText, Printer } from 'lucide-react';
-import { products as suiGenerisProducts } from '@/data/products';
+import { Calendar, Download, Filter, TrendingUp, TrendingDown, Package, AlertTriangle, BarChart3, FileText, Printer, RefreshCw, DollarSign, ShoppingCart, Boxes, Activity } from 'lucide-react';
 
 interface ReportData {
   id: string;
@@ -13,107 +12,18 @@ interface ReportData {
   status: 'ready' | 'generating' | 'failed';
 }
 
-// Generate real Sui Generis report data
-const generateSuiGenerisReportData = () => {
-  const totalProducts = suiGenerisProducts.length;
-  const totalStockValue = suiGenerisProducts.reduce((sum, product) => sum + (product.price * product.stockCount), 0);
-  const lowStockProducts = suiGenerisProducts.filter(product => product.stockCount <= 5);
-  const outOfStockProducts = suiGenerisProducts.filter(product => product.stockCount === 0);
-  
-  return {
-    totalProducts,
-    totalStockValue,
-    lowStockProducts: lowStockProducts.length,
-    outOfStockProducts: outOfStockProducts.length,
-    categories: {
-      laptops: suiGenerisProducts.filter(p => p.category === 'Laptops').length,
-      desktops: suiGenerisProducts.filter(p => p.category === 'Desktops').length,
-      smartphones: suiGenerisProducts.filter(p => p.category === 'Smartphones').length,
-      monitors: suiGenerisProducts.filter(p => p.category === 'Monitors').length,
-      printers: suiGenerisProducts.filter(p => p.category === 'Printers').length,
-    }
-  };
+// Fetch real analytics from API
+const fetchAnalytics = async (type: string = 'all') => {
+  try {
+    const res = await fetch(`/api/admin/reports?type=${type}`);
+    if (!res.ok) throw new Error('Failed to fetch analytics');
+    return await res.json();
+  } catch (error) {
+    console.error('Error fetching analytics:', error);
+    return null;
+  }
 };
 
-// API functions using real Sui Generis data
-const fetchReports = async (): Promise<ReportData[]> => {
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  return [
-    {
-      id: 'RPT-001',
-      name: 'Monthly Inventory Report',
-      type: 'stock-movement',
-      period: 'month',
-      generatedAt: new Date().toISOString(),
-      status: 'ready'
-    },
-    {
-      id: 'RPT-002',
-      name: 'Top Selling Products',
-      type: 'top-selling',
-      period: 'week',
-      generatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      status: 'ready'
-    },
-    {
-      id: 'RPT-003',
-      name: 'Dead Stock Analysis',
-      type: 'dead-stock',
-      period: 'quarter',
-      generatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      status: 'ready'
-    }
-  ];
-};
-
-const fetchStockMovementSummary = async (): Promise<any> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  const reportData = generateSuiGenerisReportData();
-  return {
-    totalIssued: 234,
-    totalReceived: 189,
-    totalReturns: 12,
-    netMovement: -57,
-    topIssuedProducts: [
-      { name: 'HP 250 G10 (i7)', quantity: 45, value: '$36,000' },
-      { name: 'Samsung Galaxy A51', quantity: 67, value: '$8,040' },
-      { name: 'Dell Latitude 5430 Rugged', quantity: 23, value: '$27,600' }
-    ],
-    ...reportData
-  };
-};
-
-const fetchTopSellingProducts = async (): Promise<any[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  return [
-    { name: 'Dell Latitude 5430 Rugged', sales: 45, revenue: '$54,000', growth: '+28%' },
-    { name: 'HP 250 G10 (i7)', sales: 67, revenue: '$53,600', growth: '+22%' },
-    { name: 'Apple MacBook Pro 2017', sales: 89, revenue: '$46,280', growth: '+35%' },
-    { name: 'Samsung Galaxy A51', sales: 156, revenue: '$18,720', growth: '+42%' },
-    { name: 'MSI GF63 Gaming', sales: 34, revenue: '$25,500', growth: '+18%' }
-  ];
-};
-
-const fetchDeadStockItems = async (): Promise<any[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300));
-  
-  // Find products with very low movement
-  const deadStockItems = suiGenerisProducts
-    .filter(product => product.stockCount > 10 && Math.random() < 0.1) // Simulate dead stock
-    .slice(0, 10)
-    .map(product => ({
-      name: product.name,
-      currentStock: product.stockCount,
-      lastMovement: `${Math.floor(Math.random() * 90) + 30} days ago`,
-      value: `$${(product.price * product.stockCount).toLocaleString()}`,
-      category: product.category
-    }));
-    
-  return deadStockItems;
-};
 
 const generatePDFReport = (reportData: any, reportType: string) => {
   // Create comprehensive PDF content
@@ -315,6 +225,10 @@ export function ReportsSection() {
           reportData = { 
             ...generateSuiGenerisReportData(), 
             topProducts: topSellingProducts,
+            totalProducts: 100,
+            totalStockValue: 100000,
+            lowStockProducts: 10,
+            outOfStockProducts: 2,
             reportType: 'Sales Summary' 
           };
           break;
