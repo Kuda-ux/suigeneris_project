@@ -9,24 +9,21 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
-    const updateData = {
-      name: productData.name,
-      description: productData.description,
-      category: productData.category,
-      price: productData.price,
-      sku: productData.sku,
-      stock_count: productData.currentStock || productData.stock_count,
-      in_stock: (productData.currentStock || productData.stock_count) > 0,
-      images: productData.images || [],
-      image: productData.images?.[0] || productData.image || '',
-      brand: productData.brand || 'Generic',
-      updated_at: new Date().toISOString()
-    };
-
-    // @ts-ignore - Supabase type inference issue with dynamic updates
     const { data, error } = await supabase
       .from('products')
-      .update(updateData)
+      .update({
+        name: productData.name,
+        description: productData.description,
+        category: productData.category,
+        price: productData.price,
+        sku: productData.sku,
+        stock_count: productData.currentStock || productData.stock_count,
+        in_stock: (productData.currentStock || productData.stock_count) > 0,
+        images: productData.images || [],
+        image: productData.images?.[0] || productData.image || '',
+        brand: productData.brand || 'Generic',
+        updated_at: new Date().toISOString()
+      })
       .eq('id', id)
       .select()
       .single();

@@ -52,8 +52,10 @@ export interface Database {
           price: number
           category: string | null
           brand: string | null
+          sku: string | null
           stock_count: number
           in_stock: boolean
+          image: string | null
           images: string[] | null
           specifications: Json | null
           warranty: string | null
@@ -67,8 +69,10 @@ export interface Database {
           price: number
           category?: string | null
           brand?: string | null
+          sku?: string | null
           stock_count?: number
           in_stock?: boolean
+          image?: string | null
           images?: string[] | null
           specifications?: Json | null
           warranty?: string | null
@@ -82,8 +86,10 @@ export interface Database {
           price?: number
           category?: string | null
           brand?: string | null
+          sku?: string | null
           stock_count?: number
           in_stock?: boolean
+          image?: string | null
           images?: string[] | null
           specifications?: Json | null
           warranty?: string | null
