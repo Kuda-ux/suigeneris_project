@@ -71,7 +71,7 @@ export function ProductManagement() {
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors', 'Printers'];
+  const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors'];
 
   // Fetch products on component mount
   useEffect(() => {
