@@ -9,21 +9,23 @@ export async function PUT(
     const productData = await request.json();
     const id = parseInt(params.id);
 
+    const updateData: Record<string, any> = {
+      name: productData.name,
+      description: productData.description,
+      category: productData.category,
+      price: productData.price,
+      sku: productData.sku,
+      stock_count: productData.currentStock || productData.stock_count,
+      in_stock: (productData.currentStock || productData.stock_count) > 0,
+      images: productData.images || [],
+      image: productData.images?.[0] || productData.image || '',
+      brand: productData.brand || 'Generic',
+      updated_at: new Date().toISOString()
+    };
+
     const { data, error } = await supabase
       .from('products')
-      .update({
-        name: productData.name,
-        description: productData.description,
-        category: productData.category,
-        price: productData.price,
-        sku: productData.sku,
-        stock_count: productData.currentStock || productData.stock_count,
-        in_stock: (productData.currentStock || productData.stock_count) > 0,
-        images: productData.images || [],
-        image: productData.images?.[0] || productData.image || '',
-        brand: productData.brand || 'Generic',
-        updated_at: new Date().toISOString()
-      } as any)
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();
