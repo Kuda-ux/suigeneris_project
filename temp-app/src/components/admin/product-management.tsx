@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield, Save } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield, Save, RefreshCw, DollarSign, Boxes, Grid, List, Tag, AlertCircle } from 'lucide-react';
 
 interface AdminProduct {
   id: string;
@@ -70,6 +70,15 @@ export function ProductManagement() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [stats, setStats] = useState({
+    totalProducts: 0,
+    totalValue: 0,
+    lowStockCount: 0,
+    outOfStockCount: 0,
+    averagePrice: 0,
+    totalStock: 0
+  });
 
   const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors'];
 
@@ -110,6 +119,16 @@ export function ProductManagement() {
     try {
       const fetchedProducts = await fetchProducts();
       setProducts(fetchedProducts);
+      
+      // Calculate stats
+      const totalProducts = fetchedProducts.length;
+      const totalValue = fetchedProducts.reduce((sum, p) => sum + (p.price * p.currentStock), 0);
+      const lowStockCount = fetchedProducts.filter(p => p.currentStock > 0 && p.currentStock <= p.reorderLevel).length;
+      const outOfStockCount = fetchedProducts.filter(p => p.currentStock === 0).length;
+      const averagePrice = fetchedProducts.reduce((sum, p) => sum + p.price, 0) / totalProducts;
+      const totalStock = fetchedProducts.reduce((sum, p) => sum + p.currentStock, 0);
+      
+      setStats({ totalProducts, totalValue, lowStockCount, outOfStockCount, averagePrice, totalStock });
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to load products');
@@ -196,10 +215,10 @@ export function ProductManagement() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-96">
+      <div className="flex items-center justify-center min-h-[600px]">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading products from database...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg font-medium">Loading products from database...</p>
         </div>
       </div>
     );
@@ -227,30 +246,114 @@ export function ProductManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
-          <p className="text-gray-600">Manage your inventory - {products.length} products in database</p>
+          <h2 className="text-3xl font-bold text-gray-900">Product Management</h2>
+          <p className="text-gray-600 mt-1">Manage your entire product catalog</p>
         </div>
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center font-semibold shadow-lg hover:shadow-xl transition-all"
-        >
-          <Plus className="h-5 w-5 mr-2" />
-          Add New Product
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={loadProducts}
+            className="flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </button>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Add Product
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+            <p className="text-red-800 font-medium">{error}</p>
+          </div>
+          <button onClick={() => setError(null)} className="text-red-500 hover:text-red-700">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+      )}
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <Package className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{stats.totalProducts}</h3>
+          <p className="text-blue-100 text-sm font-medium">Total Products</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <DollarSign className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">${stats.totalValue.toLocaleString()}</h3>
+          <p className="text-emerald-100 text-sm font-medium">Total Value</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <Boxes className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{stats.totalStock}</h3>
+          <p className="text-purple-100 text-sm font-medium">Total Stock</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <Tag className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">${stats.averagePrice.toFixed(2)}</h3>
+          <p className="text-cyan-100 text-sm font-medium">Avg Price</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <AlertTriangle className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{stats.lowStockCount}</h3>
+          <p className="text-orange-100 text-sm font-medium">Low Stock</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div className="flex items-start justify-between mb-3">
+            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
+              <AlertCircle className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <h3 className="text-white text-3xl font-bold mb-1">{stats.outOfStockCount}</h3>
+          <p className="text-red-100 text-sm font-medium">Out of Stock</p>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-sg-gray-400" />
+          <div className="relative md:col-span-2">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search products..."
+              placeholder="Search by name, SKU, or brand..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
             />
           </div>
 
@@ -258,7 +361,7 @@ export function ProductManagement() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
             {categories.map(category => (
               <option key={category} value={category}>
@@ -271,7 +374,7 @@ export function ProductManagement() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           >
             {statuses.map(status => (
               <option key={status} value={status}>
@@ -280,11 +383,29 @@ export function ProductManagement() {
             ))}
           </select>
 
-          {/* Export Button */}
-          <button className="px-4 py-2 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 flex items-center justify-center">
-            <Filter className="h-4 w-4 mr-2" />
-            Export
-          </button>
+          {/* View Toggle */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`flex-1 px-4 py-3 rounded-xl flex items-center justify-center transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <Grid className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex-1 px-4 py-3 rounded-xl flex items-center justify-center transition-all ${
+                viewMode === 'list'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              <List className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </div>
 
