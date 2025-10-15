@@ -50,34 +50,36 @@ export async function POST(request: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const productData = await request.json();
     
+    console.log('Creating product with data:', productData);
+    
     const { data, error } = await supabase
       .from('products')
       .insert([{
         name: productData.name,
-        description: productData.description,
-        category: productData.category,
-        price: productData.price,
-        sku: productData.sku,
-        stock_count: productData.currentStock,
-        in_stock: productData.currentStock > 0,
+        description: productData.description || null,
+        category: productData.category || null,
+        price: parseFloat(productData.price),
+        sku: productData.sku || null,
+        stock_count: parseInt(productData.currentStock) || 0,
+        in_stock: (parseInt(productData.currentStock) || 0) > 0,
         images: productData.images || [],
-        image: productData.images?.[0] || '',
-        brand: productData.brand || 'Generic',
-        rating: 4.5,
-        reviews: 0,
-        features: [],
-        specifications: {},
-        warranty: false
-      }] as any)
+        image: productData.images?.[0] || null,
+        brand: productData.brand || null,
+        specifications: null,
+        warranty: null
+      }])
       .select()
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Supabase error:', error);
+      return NextResponse.json({ error: error.message, details: error }, { status: 500 });
     }
 
+    console.log('Product created successfully:', data);
     return NextResponse.json(data);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error('API error:', error);
+    return NextResponse.json({ error: error.message, stack: error.stack }, { status: 500 });
   }
 }
