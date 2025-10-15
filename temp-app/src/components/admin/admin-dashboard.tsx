@@ -24,11 +24,10 @@ import {
 } from 'lucide-react';
 import { ProductManagement } from './product-management';
 import { StockManagement } from './stock-management';
-import { DashboardCharts } from './dashboard-charts';
+import { OverviewDashboard } from './overview-dashboard';
 import { RolesPermissions } from './roles-permissions';
 import { ReportsSection } from './reports-section';
 import { AlertsSystem } from './alerts-system';
-import { products } from '@/data/products';
 
 const sidebarItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -168,107 +167,7 @@ export function AdminDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
-        return (
-          <div className="space-y-6">
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {stats.map((stat, index) => {
-                const IconComponent = stat.icon;
-                return (
-                  <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-sg-gray-600 mb-1">{stat.label}</p>
-                        <p className="text-2xl font-bold text-sg-black">{stat.value}</p>
-                        <p className="text-sm text-green-600 mt-1">{stat.change}</p>
-                      </div>
-                      <div className="bg-sg-navy/10 p-3 rounded-lg">
-                        <IconComponent className="h-6 w-6 text-sg-navy" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Charts and Analytics */}
-            <DashboardCharts />
-            
-            {/* Recent Orders and Top Products */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Recent Orders */}
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-sg-black">Recent Orders</h3>
-                  <button className="text-sg-navy hover:text-sg-navy/80 text-sm font-medium">
-                    View All
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {recentOrders.map((order) => (
-                    <div key={order.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-sg-gray-50 to-white rounded-lg border border-sg-gray-100 hover:shadow-md transition-shadow">
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="font-bold text-sg-navy">{order.id}</p>
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                            order.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                            order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-blue-100 text-blue-800'
-                          }`}>
-                            {order.status}
-                          </span>
-                        </div>
-                        <p className="text-sm font-medium text-sg-black">{order.customer}</p>
-                        <p className="text-xs text-sg-gray-600 mb-1">{order.product}</p>
-                        <div className="flex items-center justify-between">
-                          <p className="text-lg font-bold text-sg-red">{order.amount}</p>
-                          <p className="text-xs text-sg-gray-500">{order.date}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Products */}
-              <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-sg-black">Top Products</h3>
-                  <button className="text-sg-navy hover:text-sg-navy/80 text-sm font-medium">
-                    View All
-                  </button>
-                </div>
-                <div className="space-y-4">
-                  {topProducts.map((product, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gradient-to-r from-sg-gray-50 to-white rounded-lg border border-sg-gray-100 hover:shadow-md transition-shadow">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-gradient-to-r from-sg-navy to-blue-800 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                          #{index + 1}
-                        </div>
-                        <div>
-                          <p className="font-bold text-sg-black">{product.name}</p>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs bg-sg-aqua/20 text-sg-navy px-2 py-1 rounded-full font-medium">
-                              {product.category}
-                            </span>
-                            <span className="text-xs text-sg-gray-600">{product.sales} sales</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-bold text-sg-red">{product.revenue}</p>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-sg-gray-600">{product.price}</span>
-                          <span className="text-sm font-bold text-green-600">{product.trend}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return <OverviewDashboard />;
       
       case 'products':
         return <ProductManagement />;
@@ -424,135 +323,7 @@ export function AdminDashboard() {
         return <AlertsSystem />;
       
       case 'analytics':
-        return (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-sg-black">Analytics Dashboard</h2>
-              <div className="flex items-center space-x-3">
-                <select className="border border-sg-gray-300 rounded-lg px-3 py-2 text-sm">
-                  <option>Last 7 days</option>
-                  <option>Last 30 days</option>
-                  <option>Last 90 days</option>
-                </select>
-                <button className="bg-sg-aqua hover:bg-sg-aqua/90 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                  Export Report
-                </button>
-              </div>
-            </div>
-
-            {/* Analytics Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-blue-600 text-sm font-medium">Page Views</p>
-                    <p className="text-2xl font-bold text-blue-800">12,847</p>
-                    <p className="text-xs text-blue-600 mt-1">+15.3% from last week</p>
-                  </div>
-                  <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                    <Eye className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-green-600 text-sm font-medium">Conversion Rate</p>
-                    <p className="text-2xl font-bold text-green-800">3.2%</p>
-                    <p className="text-xs text-green-600 mt-1">+0.8% from last week</p>
-                  </div>
-                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-purple-600 text-sm font-medium">Avg. Order Value</p>
-                    <p className="text-2xl font-bold text-purple-800">$387</p>
-                    <p className="text-xs text-purple-600 mt-1">+12.5% from last week</p>
-                  </div>
-                  <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-6 border border-orange-200">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-orange-600 text-sm font-medium">Customer Satisfaction</p>
-                    <p className="text-2xl font-bold text-orange-800">4.8/5</p>
-                    <p className="text-xs text-orange-600 mt-1">+0.2 from last week</p>
-                  </div>
-                  <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
-                    <Users className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Category Performance */}
-            <div className="bg-white rounded-xl shadow-sm border border-sg-gray-200 p-6">
-              <h3 className="text-lg font-semibold text-sg-black mb-6">Category Performance</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-sg-gray-50 to-white rounded-lg border border-sg-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-sg-navy to-blue-800 rounded-full flex items-center justify-center">
-                      <Package className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-sg-black">💻 Laptops</p>
-                      <p className="text-sm text-sg-gray-600">67 products</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-sg-red">$89,420</p>
-                    <p className="text-sm text-green-600 font-medium">+28% ↗</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-sg-gray-50 to-white rounded-lg border border-sg-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-sg-aqua to-cyan-500 rounded-full flex items-center justify-center">
-                      <Smartphone className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-sg-black">📱 Smartphones</p>
-                      <p className="text-sm text-sg-gray-600">11 products</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-sg-red">$18,720</p>
-                    <p className="text-sm text-green-600 font-medium">+42% ↗</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between p-4 bg-gradient-to-r from-sg-gray-50 to-white rounded-lg border border-sg-gray-100">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
-                      <Package className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="font-bold text-sg-black">🖥️ Desktops</p>
-                      <p className="text-sm text-sg-gray-600">20 products</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-sg-red">$12,450</p>
-                    <p className="text-sm text-green-600 font-medium">+18% ↗</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Charts */}
-            <DashboardCharts />
-          </div>
-        );
+        return <OverviewDashboard />;
       
       case 'settings':
         return (
