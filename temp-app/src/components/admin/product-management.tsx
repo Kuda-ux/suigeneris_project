@@ -1,83 +1,61 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield } from 'lucide-react';
-import { products as suiGenerisProducts, Product as SuiGenerisProduct } from '@/data/products';
+import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield, Save } from 'lucide-react';
 
-interface AdminProduct extends SuiGenerisProduct {
+interface AdminProduct {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  price: number;
   sku: string;
-  openingStock: number;
+  brand?: string;
   currentStock: number;
+  openingStock: number;
   stockIssued: number;
   stockReceived: number;
   stockReturns: number;
   stockExchanges: number;
   reorderLevel: number;
   status: 'active' | 'inactive' | 'low-stock' | 'out-of-stock';
+  images: string[];
   createdAt: string;
   updatedAt: string;
 }
 
-// Convert Sui Generis products to admin format
-const convertToAdminProducts = (products: SuiGenerisProduct[]): AdminProduct[] => {
-  return products.map(product => ({
-    ...product,
-    sku: `SG-${product.id.toString().padStart(4, '0')}`,
-    openingStock: product.stockCount + Math.floor(Math.random() * 20),
-    currentStock: product.stockCount,
-    stockIssued: Math.floor(Math.random() * 50),
-    stockReceived: Math.floor(Math.random() * 30),
-    stockReturns: Math.floor(Math.random() * 5),
-    stockExchanges: Math.floor(Math.random() * 3),
-    reorderLevel: Math.max(5, Math.floor(product.stockCount * 0.2)),
-    status: product.stockCount === 0 ? 'out-of-stock' : 
-            product.stockCount <= 5 ? 'low-stock' : 
-            product.inStock ? 'active' : 'inactive',
-    createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
-    updatedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString()
-  }));
-};
-
-// Use real Sui Generis products
+// API Functions - Connected to Supabase Database
 const fetchProducts = async (): Promise<AdminProduct[]> => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-  return convertToAdminProducts(suiGenerisProducts);
+  const response = await fetch('/api/admin/products');
+  if (!response.ok) throw new Error('Failed to fetch products');
+  return await response.json();
 };
 
-const createProduct = async (productData: Omit<AdminProduct, 'id' | 'createdAt' | 'updatedAt'>): Promise<AdminProduct | null> => {
-  // Simulate API call - in real app this would save to database
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const newProduct: AdminProduct = {
-    ...productData,
-    id: Math.max(...suiGenerisProducts.map(p => p.id)) + 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
-  
-  return newProduct;
+const createProduct = async (productData: any): Promise<AdminProduct> => {
+  const response = await fetch('/api/admin/products', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(productData),
+  });
+  if (!response.ok) throw new Error('Failed to create product');
+  return await response.json();
 };
 
-const updateProduct = async (id: number, productData: Partial<AdminProduct>): Promise<AdminProduct | null> => {
-  // Simulate API call - in real app this would update database
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  const existingProduct = suiGenerisProducts.find(p => p.id === id);
-  if (!existingProduct) return null;
-  
-  const updatedProduct: AdminProduct = {
-    ...convertToAdminProducts([existingProduct])[0],
-    ...productData,
-    updatedAt: new Date().toISOString()
-  };
-  
-  return updatedProduct;
+const updateProduct = async (id: string, productData: any): Promise<AdminProduct> => {
+  const response = await fetch(`/api/admin/products/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(productData),
+  });
+  if (!response.ok) throw new Error('Failed to update product');
+  return await response.json();
 };
 
-const deleteProduct = async (id: number): Promise<boolean> => {
-  // Simulate API call - in real app this would delete from database
-  await new Promise(resolve => setTimeout(resolve, 500));
+const deleteProduct = async (id: string): Promise<boolean> => {
+  const response = await fetch(`/api/admin/products/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) throw new Error('Failed to delete product');
   return true;
 };
 
@@ -89,26 +67,14 @@ export function ProductManagement() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors', 'Printers'];
 
   // Fetch products on component mount
   useEffect(() => {
-    const loadProducts = async () => {
-      setLoading(true);
-      try {
-        const fetchedProducts = await fetchProducts();
-        setProducts(fetchedProducts);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load products');
-        console.error('Error loading products:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadProducts();
   }, []);
   const statuses = ['all', 'active', 'inactive', 'low-stock', 'out-of-stock'];
@@ -138,20 +104,38 @@ export function ProductManagement() {
     return <TrendingUp className="h-4 w-4 text-green-500" />;
   };
 
+  // Reload products from database
+  const loadProducts = async () => {
+    setLoading(true);
+    try {
+      const fetchedProducts = await fetchProducts();
+      setProducts(fetchedProducts);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Handle product deletion
-  const handleDeleteProduct = async (productId: number) => {
-    const success = await deleteProduct(productId);
-    if (success) {
-      setProducts(products.filter(product => product.id !== productId));
-    } else {
-      setError('Failed to delete product');
+  const handleDeleteProduct = async (productId: string) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+    
+    try {
+      await deleteProduct(productId);
+      await loadProducts();
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete product');
     }
   };
 
   const handleAddProduct = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+    setSubmitting(true);
     
+    const formData = new FormData(e.currentTarget);
     const imageUrl = formData.get('image') as string || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop';
     
     const productData = {
@@ -160,44 +144,53 @@ export function ProductManagement() {
       category: formData.get('category') as string,
       price: parseFloat(formData.get('price') as string),
       description: formData.get('description') as string || '',
-      image: imageUrl,
-      images: [imageUrl],
-      rating: 0,
-      reviews: 0,
       brand: formData.get('brand') as string || 'Generic',
-      inStock: parseInt(formData.get('currentStock') as string) > 0,
-      stockCount: parseInt(formData.get('currentStock') as string),
-      features: [],
-      specifications: {},
-      warranty: false,
-      openingStock: parseInt(formData.get('currentStock') as string),
       currentStock: parseInt(formData.get('currentStock') as string),
-      stockIssued: 0,
-      stockReceived: 0,
-      stockReturns: 0,
-      stockExchanges: 0,
-      reorderLevel: parseInt(formData.get('reorderLevel') as string),
-      status: formData.get('status') as 'active' | 'inactive' | 'low-stock' | 'out-of-stock',
+      images: [imageUrl],
     };
 
-    const newProduct = await createProduct(productData);
-    if (newProduct) {
-      setProducts([newProduct, ...products]);
+    try {
+      await createProduct(productData);
+      await loadProducts();
       setShowAddModal(false);
       setError(null);
-    } else {
-      setError('Failed to create product');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create product');
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  // Handle product creation/update
-  const handleSaveProduct = async (productData: Omit<AdminProduct, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const result = await createProduct(productData);
-    if (result) {
-      setProducts([...products, result]);
-      setShowAddModal(false);
-    } else {
-      setError('Failed to save product');
+  // Handle product update
+  const handleUpdateProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!selectedProduct) return;
+    
+    setSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    
+    const productData = {
+      name: formData.get('name') as string,
+      sku: formData.get('sku') as string,
+      category: formData.get('category') as string,
+      price: parseFloat(formData.get('price') as string),
+      description: formData.get('description') as string,
+      brand: formData.get('brand') as string,
+      currentStock: parseInt(formData.get('currentStock') as string),
+      image: formData.get('image') as string,
+      images: [formData.get('image') as string],
+    };
+
+    try {
+      await updateProduct(selectedProduct.id, productData);
+      await loadProducts();
+      setShowEditModal(false);
+      setSelectedProduct(null);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to update product');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -205,8 +198,8 @@ export function ProductManagement() {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sg-navy mx-auto mb-4"></div>
-          <p className="text-sg-gray-600">Loading products...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading products from database...</p>
         </div>
       </div>
     );
@@ -234,15 +227,15 @@ export function ProductManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-sg-black">Product Management</h2>
-          <p className="text-sg-gray-600">Manage your inventory and stock levels</p>
+          <h2 className="text-2xl font-bold text-gray-900">Product Management</h2>
+          <p className="text-gray-600">Manage your inventory - {products.length} products in database</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-sg-navy hover:bg-sg-navy/90 text-white px-4 py-2 rounded-lg flex items-center"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center font-semibold shadow-lg hover:shadow-xl transition-all"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Product
+          <Plus className="h-5 w-5 mr-2" />
+          Add New Product
         </button>
       </div>
 
