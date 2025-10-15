@@ -534,160 +534,162 @@ export function ProductManagement() {
 
       {/* Add Product Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-sg-black">Add New Product</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Add New Product</h3>
+                <p className="text-gray-600 text-sm mt-1">Fill in the details to add a new product to your inventory</p>
+              </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-sg-gray-400 hover:text-sg-gray-600"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="h-5 w-5" />
+                <X className="h-6 w-6" />
               </button>
             </div>
             
-            <form onSubmit={handleAddProduct} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleAddProduct} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     Product Name *
                   </label>
                   <input
                     type="text"
                     name="name"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="Enter product name"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="e.g., HP 250 G10 Laptop"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     SKU *
                   </label>
                   <input
                     type="text"
                     name="sku"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="Enter SKU"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-mono"
+                    placeholder="e.g., LAP-HP-250-G10"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     Category *
                   </label>
                   <select
                     name="category"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                   >
                     <option value="">Select category</option>
-                    <option value="Audio">Audio</option>
-                    <option value="Wearables">Wearables</option>
-                    <option value="Electronics">Electronics</option>
-                    <option value="Fashion">Fashion</option>
-                    <option value="Home">Home</option>
+                    <option value="Laptops">Laptops</option>
+                    <option value="Desktops">Desktops</option>
+                    <option value="Smartphones">Smartphones</option>
+                    <option value="Monitors">Monitors</option>
                   </select>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Price *
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Price ($) *
                   </label>
-                  <input
-                    type="number"
-                    name="price"
-                    step="0.01"
-                    min="0"
-                    required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="0.00"
-                  />
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                    <input
+                      type="number"
+                      name="price"
+                      step="0.01"
+                      min="0"
+                      required
+                      className="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      placeholder="0.00"
+                    />
+                  </div>
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Current Stock *
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Initial Stock *
                   </label>
                   <input
                     type="number"
                     name="currentStock"
                     min="0"
                     required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="0"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="e.g., 50"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Reorder Level *
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Brand
                   </label>
                   <input
-                    type="number"
-                    name="reorderLevel"
-                    min="0"
-                    required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="0"
+                    type="text"
+                    name="brand"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="e.g., HP, Dell, Apple"
                   />
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
-                    Status *
-                  </label>
-                  <select
-                    name="status"
-                    required
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="out-of-stock">Out of Stock</option>
-                  </select>
-                </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
                     Image URL
                   </label>
                   <input
                     type="url"
                     name="image"
-                    className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                    placeholder="https://example.com/image.jpg"
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    placeholder="https://example.com/product-image.jpg"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Leave empty to use default image</p>
                 </div>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-sg-gray-700 mb-2">
+                <label className="block text-sm font-bold text-gray-700 mb-2">
                   Description
                 </label>
                 <textarea
                   name="description"
-                  rows={3}
-                  className="w-full px-3 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                  placeholder="Enter product description"
+                  rows={4}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                  placeholder="Enter a detailed description of the product..."
                 />
               </div>
               
-              <div className="flex justify-end space-x-3 pt-4">
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-100">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50"
+                  disabled={submitting}
+                  className="px-6 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 font-semibold transition-colors disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-sg-navy hover:bg-sg-navy/90 text-white rounded-lg"
+                  disabled={submitting}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold shadow-lg transition-all disabled:opacity-50 flex items-center"
                 >
-                  Add Product
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Product
+                    </>
+                  )}
                 </button>
               </div>
             </form>
