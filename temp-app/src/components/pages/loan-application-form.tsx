@@ -19,7 +19,20 @@ export function LoanApplicationForm() {
       const res = await fetch('/api/admin/products');
       if (res.ok) {
         const data = await res.json();
-        setProducts(data.filter((p: any) => p.stock_count > 0));
+        console.log('Loaded products:', data);
+        // Filter for laptops/computers with stock
+        const laptops = data.filter((p: any) => {
+          const hasStock = (p.currentStock || p.stock_count || 0) > 0;
+          const isLaptop = p.category?.toLowerCase().includes('laptop') || 
+                          p.category?.toLowerCase().includes('computer') ||
+                          p.name?.toLowerCase().includes('laptop') ||
+                          p.name?.toLowerCase().includes('hp') ||
+                          p.name?.toLowerCase().includes('dell') ||
+                          p.name?.toLowerCase().includes('lenovo');
+          return hasStock && isLaptop;
+        });
+        console.log('Filtered laptops:', laptops);
+        setProducts(laptops);
       }
     } catch (err) {
       console.error('Error loading products:', err);
@@ -508,7 +521,7 @@ export function LoanApplicationForm() {
                           <div className="flex items-center justify-between">
                             <span className="text-2xl font-black text-red-600">${product.price}</span>
                             <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
-                              {product.stock_count} in stock
+                              {product.currentStock || product.stock_count || 0} in stock
                             </span>
                           </div>
                         </div>
