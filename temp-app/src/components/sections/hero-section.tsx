@@ -230,7 +230,7 @@ export function HeroSection() {
                 </div>
               </div>
 
-              {!isLoanSlide && (
+              {!isLoanSlide && 'discount' in currentSlide && (
                 <div className="absolute top-4 left-4 z-10">
                   <div className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full font-black text-sm shadow-xl">
                     -{currentSlide.discount}%
@@ -243,7 +243,7 @@ export function HeroSection() {
                 <div className={`transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                   <img 
                     src={currentSlide.image}
-                    alt={isLoanSlide ? currentSlide.title : currentSlide.name}
+                    alt={isLoanSlide ? (currentSlide as any).title : (currentSlide as any).name}
                     className="w-full h-48 object-cover rounded-xl shadow-lg"
                   />
                 </div>
@@ -254,12 +254,12 @@ export function HeroSection() {
                 {isLoanSlide ? (
                   <>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 mb-1">{currentSlide.title}</h3>
+                      <h3 className="text-xl font-black text-gray-900 mb-1">{(currentSlide as any).title}</h3>
                       <p className="text-sm font-semibold text-blue-600 mb-2">{currentSlide.subtitle}</p>
-                      <p className="text-xs text-gray-600 mb-3">{currentSlide.description}</p>
+                      <p className="text-xs text-gray-600 mb-3">{(currentSlide as any).description}</p>
                     </div>
                     <div className="space-y-2">
-                      {currentSlide.features.map((feature: string, i: number) => (
+                      {(currentSlide as any).features.map((feature: string, i: number) => (
                         <div key={i} className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-600" />
                           <span className="text-xs font-semibold text-gray-700">{feature}</span>
@@ -267,19 +267,19 @@ export function HeroSection() {
                       ))}
                     </div>
                     <Link
-                      href={currentSlide.ctaLink}
+                      href={(currentSlide as any).ctaLink}
                       className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105 flex items-center justify-center gap-2"
                     >
                       <CreditCard className="w-4 h-4" />
-                      {currentSlide.ctaText}
+                      {(currentSlide as any).ctaText}
                     </Link>
                   </>
                 ) : (
                   <>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 mb-1">{currentSlide.name}</h3>
+                      <h3 className="text-xl font-black text-gray-900 mb-1">{(currentSlide as any).name}</h3>
                       <p className="text-sm font-semibold text-red-600 mb-1">{currentSlide.subtitle}</p>
-                      <p className="text-xs text-gray-600">{currentSlide.specs}</p>
+                      <p className="text-xs text-gray-600">{(currentSlide as any).specs}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1">
@@ -287,18 +287,18 @@ export function HeroSection() {
                           <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                         ))}
                       </div>
-                      <span className="font-bold text-sm text-gray-900">{currentSlide.rating}</span>
-                      <span className="text-xs text-gray-500">({currentSlide.reviews})</span>
+                      <span className="font-bold text-sm text-gray-900">{(currentSlide as any).rating}</span>
+                      <span className="text-xs text-gray-500">({(currentSlide as any).reviews})</span>
                     </div>
                     <div className="flex items-baseline gap-2 py-3 border-t border-gray-200">
                       <span className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                        ${currentSlide.price}
+                        ${(currentSlide as any).price}
                       </span>
                       <span className="text-base text-gray-400 line-through font-semibold">
-                        ${currentSlide.originalPrice}
+                        ${(currentSlide as any).originalPrice}
                       </span>
                       <span className="ml-auto bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold">
-                        Save ${currentSlide.originalPrice - currentSlide.price}
+                        Save ${(currentSlide as any).originalPrice - (currentSlide as any).price}
                       </span>
                     </div>
                     <Link
