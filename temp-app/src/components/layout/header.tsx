@@ -94,7 +94,7 @@ export function Header() {
                 >
                   <Link
                     href={item.href}
-                    className="px-4 py-2 text-gray-700 hover:text-blue-600 font-semibold transition-colors flex items-center gap-1 group"
+                    className="px-4 py-2 text-black hover:text-red-600 font-black transition-colors flex items-center gap-1 group uppercase"
                   >
                     {item.name}
                     {item.submenu && (
@@ -199,7 +199,7 @@ export function Header() {
                     <div key={item.name}>
                       <Link
                         href={item.href}
-                        className="block px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl font-semibold transition-all"
+                        className="block px-4 py-3 text-black hover:text-red-600 hover:bg-red-50 rounded-xl font-black transition-all uppercase"
                         onClick={() => !item.submenu && setMobileMenuOpen(false)}
                       >
                         {item.name}
