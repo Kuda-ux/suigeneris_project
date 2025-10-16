@@ -118,7 +118,7 @@ export function HeroSection() {
             </div>
             
             {/* Main Heading */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight">
               <span className="block text-white drop-shadow-2xl">
                 Premium Technology
               </span>
