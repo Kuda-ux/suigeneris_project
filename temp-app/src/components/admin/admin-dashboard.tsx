@@ -28,6 +28,7 @@ import { RolesPermissions } from './roles-permissions';
 import { ReportsSection } from './reports-section';
 import { AlertsSystem } from './alerts-system';
 import { OrdersManagement } from './orders-management';
+import { AnalyticsDashboard } from './analytics-dashboard';
 
 const sidebarItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -82,6 +83,8 @@ export function AdminDashboard() {
         return <ReportsSection />;
       case 'alerts':
         return <AlertsSystem />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
       default:
         return (
           <div className="flex items-center justify-center h-96">

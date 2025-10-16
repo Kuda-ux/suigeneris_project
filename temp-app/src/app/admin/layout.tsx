@@ -1,3 +1,8 @@
+export const metadata = {
+  title: 'Admin Dashboard - Sui Generis Technologies',
+  description: 'Admin panel for managing Sui Generis store',
+};
+
 export default function AdminLayout({
   children,
 }: {
@@ -5,6 +10,11 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-screen">
+      <style jsx global>{`
+        header, footer {
+          display: none !important;
+        }
+      `}</style>
       {children}
     </div>
   );
