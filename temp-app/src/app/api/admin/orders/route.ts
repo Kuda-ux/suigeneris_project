@@ -2,11 +2,16 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function GET(request: Request) {
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
     const { searchParams } = new URL(request.url);
     
     const status = searchParams.get('status');
@@ -37,7 +42,12 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    });
     const orderData = await request.json();
 
     console.log('Creating order with data:', orderData);
@@ -68,21 +78,29 @@ export async function POST(request: Request) {
     console.log(`Updating stock from ${product.stock_count} to ${newStockCount}`);
 
     // Update product stock
-    const { error: updateError } = await supabase
+    const { data: updatedProduct, error: updateError } = await supabase
       .from('products')
       .update({ 
         stock_count: newStockCount,
         in_stock: newStockCount > 0,
         updated_at: new Date().toISOString()
       })
-      .eq('id', orderData.product_id);
+      .eq('id', orderData.product_id)
+      .select()
+      .single();
 
     if (updateError) {
       console.error('Stock update error:', updateError);
       throw updateError;
     }
 
-    console.log('Stock updated successfully');
+    console.log('Stock updated successfully. New product state:', updatedProduct);
+
+    // Verify the update
+    if (updatedProduct.stock_count !== newStockCount) {
+      console.error('Stock update verification failed!');
+      throw new Error('Stock update did not apply correctly');
+    }
 
     // Generate order number
     const orderNumber = `SG-2024-${Date.now().toString().slice(-6)}`;
