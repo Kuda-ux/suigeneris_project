@@ -118,14 +118,14 @@ export function HeroSection() {
             </div>
             
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight">
-              <span className="block text-white drop-shadow-2xl">
+            <div className="space-y-2">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white drop-shadow-2xl">
                 Premium Technology
-              </span>
-              <span className="block bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-2xl">
+              </h1>
+              <p className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-xl">
                 For Your Business
-              </span>
-            </h1>
+              </p>
+            </div>
             
             {/* Subheading */}
             <p className="text-base md:text-lg text-gray-200 font-medium leading-relaxed max-w-xl">
