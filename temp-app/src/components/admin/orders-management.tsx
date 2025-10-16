@@ -1,17 +1,42 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Package, Download, Plus, Eye, Search, Filter } from 'lucide-react';
+import { Package, Download, Plus, Eye, Search, Filter, X, ShoppingCart } from 'lucide-react';
 
 export function OrdersManagement() {
   const [orders, setOrders] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+    product_id: '',
+    quantity: 1,
+    payment_method: 'cash',
+    shipping_address: '',
+    notes: ''
+  });
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
   useEffect(() => {
     loadOrders();
+    loadProducts();
   }, []);
+
+  const loadProducts = async () => {
+    try {
+      const res = await fetch('/api/admin/products');
+      const data = await res.json();
+      setProducts(data.filter((p: any) => p.in_stock && p.stock_count > 0));
+    } catch (err) {
+      console.error('Error loading products:', err);
+    }
+  };
 
   const loadOrders = async () => {
     setLoading(true);
@@ -23,6 +48,56 @@ export function OrdersManagement() {
       console.error('Error loading orders:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleProductSelect = (productId: string) => {
+    const product = products.find(p => p.id === productId);
+    setSelectedProduct(product);
+    setFormData({ ...formData, product_id: productId, quantity: 1 });
+  };
+
+  const calculateTotal = () => {
+    if (!selectedProduct) return 0;
+    return selectedProduct.price * formData.quantity;
+  };
+
+  const handleSubmitOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/admin/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        alert(error.error || 'Failed to create order');
+        return;
+      }
+
+      alert('Order created successfully!');
+      setShowAddModal(false);
+      setFormData({
+        customer_name: '',
+        customer_email: '',
+        customer_phone: '',
+        product_id: '',
+        quantity: 1,
+        payment_method: 'cash',
+        shipping_address: '',
+        notes: ''
+      });
+      setSelectedProduct(null);
+      loadOrders();
+      loadProducts();
+    } catch (err) {
+      console.error('Error creating order:', err);
+      alert('Failed to create order');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -122,8 +197,15 @@ export function OrdersManagement() {
             </div>
             <div className="flex gap-3">
               <button
+                onClick={() => setShowAddModal(true)}
+                className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+              >
+                <Plus className="w-5 h-5" />
+                Add Order
+              </button>
+              <button
                 onClick={handleExportOrders}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                className="flex items-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
               >
                 <Download className="w-5 h-5" />
                 Export
@@ -230,6 +312,198 @@ export function OrdersManagement() {
           )}
         </div>
       </div>
+
+      {/* Add Order Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <div>
+                <h3 className="text-2xl font-black text-gray-900">Create New Order</h3>
+                <p className="text-sm text-gray-600 font-medium">Add a new sales order</p>
+              </div>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-all"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitOrder} className="p-6 space-y-6">
+              {/* Customer Information */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5 text-red-600" />
+                  Customer Information
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">Customer Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.customer_name}
+                      onChange={(e) => setFormData({ ...formData, customer_name: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium"
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.customer_email}
+                      onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    value={formData.customer_phone}
+                    onChange={(e) => setFormData({ ...formData, customer_phone: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium"
+                    placeholder="+263 77 123 4567"
+                  />
+                </div>
+              </div>
+
+              {/* Product Selection */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  <Package className="w-5 h-5 text-red-600" />
+                  Product Details
+                </h4>
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">Select Product *</label>
+                  <select
+                    required
+                    value={formData.product_id}
+                    onChange={(e) => handleProductSelect(e.target.value)}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold"
+                  >
+                    <option value="">Choose a product...</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name} - ${product.price} (Stock: {product.stock_count})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {selectedProduct && (
+                  <div className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-600 font-medium">Product:</span>
+                        <p className="font-bold text-gray-900">{selectedProduct.name}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 font-medium">Price:</span>
+                        <p className="font-bold text-gray-900">${selectedProduct.price}</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 font-medium">Available Stock:</span>
+                        <p className="font-bold text-gray-900">{selectedProduct.stock_count} units</p>
+                      </div>
+                      <div>
+                        <span className="text-gray-600 font-medium">Category:</span>
+                        <p className="font-bold text-gray-900">{selectedProduct.category}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">Quantity *</label>
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      max={selectedProduct?.stock_count || 999}
+                      value={formData.quantity}
+                      onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-bold text-lg"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">Total Amount</label>
+                    <div className="w-full px-4 py-3 bg-green-50 border-2 border-green-200 rounded-xl font-black text-2xl text-green-700">
+                      ${calculateTotal().toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment & Shipping */}
+              <div className="space-y-4">
+                <h4 className="text-lg font-bold text-gray-900">Payment & Shipping</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-900 mb-2">Payment Method *</label>
+                    <select
+                      required
+                      value={formData.payment_method}
+                      onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold"
+                    >
+                      <option value="cash">Cash</option>
+                      <option value="ecocash">EcoCash</option>
+                      <option value="bank_transfer">Bank Transfer</option>
+                      <option value="credit_card">Credit Card</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">Shipping Address *</label>
+                  <textarea
+                    required
+                    value={formData.shipping_address}
+                    onChange={(e) => setFormData({ ...formData, shipping_address: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium resize-none"
+                    placeholder="Enter full shipping address..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">Notes (Optional)</label>
+                  <textarea
+                    value={formData.notes}
+                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    rows={2}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-medium resize-none"
+                    placeholder="Any additional notes..."
+                  />
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting || !selectedProduct}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Creating Order...' : 'Create Order'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
