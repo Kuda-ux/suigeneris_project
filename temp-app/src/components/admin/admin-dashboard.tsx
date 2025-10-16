@@ -19,7 +19,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  User
+  User,
+  CreditCard
 } from 'lucide-react';
 import { ProductManagement } from './product-management';
 import { StockManagement } from './stock-management';
@@ -29,12 +30,14 @@ import { ReportsSection } from './reports-section';
 import { AlertsSystem } from './alerts-system';
 import { OrdersManagement } from './orders-management';
 import { AnalyticsDashboard } from './analytics-dashboard';
+import { LoanApplicationsManagement } from './loan-applications-management';
 
 const sidebarItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'products', label: 'Products', icon: Package },
   { id: 'stock', label: 'Stock Management', icon: Warehouse },
   { id: 'orders', label: 'Orders', icon: ShoppingCart },
+  { id: 'loans', label: 'Loan Applications', icon: CreditCard },
   { id: 'users', label: 'Users & Roles', icon: Shield },
   { id: 'reports', label: 'Reports', icon: FileText },
   { id: 'alerts', label: 'Alerts', icon: Bell },
@@ -85,6 +88,8 @@ export function AdminDashboard() {
         return <AlertsSystem />;
       case 'analytics':
         return <AnalyticsDashboard />;
+      case 'loans':
+        return <LoanApplicationsManagement />;
       default:
         return (
           <div className="flex items-center justify-center h-96">

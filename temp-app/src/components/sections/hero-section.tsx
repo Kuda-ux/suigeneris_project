@@ -2,9 +2,28 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, ShoppingBag, Shield, Award, CheckCircle, Star, ChevronLeft, ChevronRight, Tag, Zap } from 'lucide-react';
+import { ArrowRight, ShoppingBag, Shield, Award, CheckCircle, Star, ChevronLeft, ChevronRight, Tag, Zap, CreditCard, FileText, DollarSign } from 'lucide-react';
 
-const promoProducts = [
+const slides = [
+  {
+    id: 'loan',
+    type: 'loan',
+    title: 'Civil Servant Loan Application',
+    subtitle: 'Salary-Based Financing for Zimbabwe Civil Servants',
+    description: 'Quick and easy loan application process. Get approved within 3-5 business days.',
+    features: [
+      'Competitive Interest Rates',
+      'Flexible Repayment Terms',
+      'Quick Approval Process',
+      'Secure & Confidential'
+    ],
+    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop&crop=center&q=80',
+    ctaText: 'Apply Now',
+    ctaLink: '/loan-application',
+    badge: 'NEW SERVICE'
+  },
+  ...[
+
   {
     id: 1,
     name: 'HP 250 G10',
@@ -55,12 +74,14 @@ const promoProducts = [
     discount: 36,
     rating: 4.6,
     reviews: 15,
-    badge: 'LIMITED'
+    badge: 'LIMITED',
+    type: 'product'
   }
+].map(p => ({ ...p, type: 'product' }))
 ];
 
 export function HeroSection() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -69,12 +90,12 @@ export function HeroSection() {
     }, 5000); // Auto-rotate every 5 seconds
 
     return () => clearInterval(timer);
-  }, [currentSlide]);
+  }, [currentIndex]);
 
   const nextSlide = () => {
     if (!isAnimating) {
       setIsAnimating(true);
-      setCurrentSlide((prev) => (prev + 1) % promoProducts.length);
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
       setTimeout(() => setIsAnimating(false), 500);
     }
   };
@@ -82,12 +103,13 @@ export function HeroSection() {
   const prevSlide = () => {
     if (!isAnimating) {
       setIsAnimating(true);
-      setCurrentSlide((prev) => (prev - 1 + promoProducts.length) % promoProducts.length);
+      setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
       setTimeout(() => setIsAnimating(false), 500);
     }
   };
 
-  const currentProduct = promoProducts[currentSlide];
+  const currentSlide = slides[currentIndex];
+  const isLoanSlide = currentSlide?.type === 'loan';
 
   return (
     <section className="relative h-[600px] md:h-[700px] lg:h-[800px] overflow-hidden">
@@ -200,71 +222,93 @@ export function HeroSection() {
           {/* Right Content - Product Carousel */}
           <div className="relative mt-4">
             <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border-2 border-white/50 overflow-hidden max-w-md mx-auto">
-              {/* Promo Badge */}
+              {/* Badge */}
               <div className="absolute top-4 right-4 z-10">
                 <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2 animate-pulse">
                   <Zap className="w-4 h-4" />
-                  {currentProduct.badge}
+                  {currentSlide.badge}
                 </div>
               </div>
 
-              {/* Discount Badge */}
-              <div className="absolute top-4 left-4 z-10">
-                <div className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full font-black text-sm shadow-xl">
-                  -{currentProduct.discount}%
+              {!isLoanSlide && (
+                <div className="absolute top-4 left-4 z-10">
+                  <div className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full font-black text-sm shadow-xl">
+                    -{currentSlide.discount}%
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Product Image */}
+              {/* Image */}
               <div className="relative mb-4 group">
                 <div className={`transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                   <img 
-                    src={currentProduct.image}
-                    alt={currentProduct.name}
+                    src={currentSlide.image}
+                    alt={isLoanSlide ? currentSlide.title : currentSlide.name}
                     className="w-full h-48 object-cover rounded-xl shadow-lg"
                   />
                 </div>
               </div>
 
-              {/* Product Info */}
+              {/* Content */}
               <div className={`space-y-3 transition-all duration-500 ${isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <div>
-                  <h3 className="text-xl font-black text-gray-900 mb-1">{currentProduct.name}</h3>
-                  <p className="text-sm font-semibold text-red-600 mb-1">{currentProduct.subtitle}</p>
-                  <p className="text-xs text-gray-600">{currentProduct.specs}</p>
-                </div>
-
-                {/* Rating */}
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <span className="font-bold text-sm text-gray-900">{currentProduct.rating}</span>
-                  <span className="text-xs text-gray-500">({currentProduct.reviews})</span>
-                </div>
-
-                {/* Price */}
-                <div className="flex items-baseline gap-2 py-3 border-t border-gray-200">
-                  <span className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                    ${currentProduct.price}
-                  </span>
-                  <span className="text-base text-gray-400 line-through font-semibold">
-                    ${currentProduct.originalPrice}
-                  </span>
-                  <span className="ml-auto bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold">
-                    Save ${currentProduct.originalPrice - currentProduct.price}
-                  </span>
-                </div>
-
-                {/* CTA Button */}
-                <Link
-                  href="/products"
-                  className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105"
-                >
-                  View Details
-                </Link>
+                {isLoanSlide ? (
+                  <>
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1">{currentSlide.title}</h3>
+                      <p className="text-sm font-semibold text-blue-600 mb-2">{currentSlide.subtitle}</p>
+                      <p className="text-xs text-gray-600 mb-3">{currentSlide.description}</p>
+                    </div>
+                    <div className="space-y-2">
+                      {currentSlide.features.map((feature: string, i: number) => (
+                        <div key={i} className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="text-xs font-semibold text-gray-700">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <Link
+                      href={currentSlide.ctaLink}
+                      className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105 flex items-center justify-center gap-2"
+                    >
+                      <CreditCard className="w-4 h-4" />
+                      {currentSlide.ctaText}
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <h3 className="text-xl font-black text-gray-900 mb-1">{currentSlide.name}</h3>
+                      <p className="text-sm font-semibold text-red-600 mb-1">{currentSlide.subtitle}</p>
+                      <p className="text-xs text-gray-600">{currentSlide.specs}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                        ))}
+                      </div>
+                      <span className="font-bold text-sm text-gray-900">{currentSlide.rating}</span>
+                      <span className="text-xs text-gray-500">({currentSlide.reviews})</span>
+                    </div>
+                    <div className="flex items-baseline gap-2 py-3 border-t border-gray-200">
+                      <span className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+                        ${currentSlide.price}
+                      </span>
+                      <span className="text-base text-gray-400 line-through font-semibold">
+                        ${currentSlide.originalPrice}
+                      </span>
+                      <span className="ml-auto bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold">
+                        Save ${currentSlide.originalPrice - currentSlide.price}
+                      </span>
+                    </div>
+                    <Link
+                      href="/products"
+                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105"
+                    >
+                      View Details
+                    </Link>
+                  </>
+                )}
               </div>
 
               {/* Navigation Controls */}
@@ -279,18 +323,18 @@ export function HeroSection() {
 
                 {/* Dots Indicator */}
                 <div className="flex gap-2">
-                  {promoProducts.map((_, index) => (
+                  {slides.map((_, index) => (
                     <button
                       key={index}
                       onClick={() => {
                         if (!isAnimating) {
                           setIsAnimating(true);
-                          setCurrentSlide(index);
+                          setCurrentIndex(index);
                           setTimeout(() => setIsAnimating(false), 500);
                         }
                       }}
                       className={`h-2 rounded-full transition-all duration-300 ${
-                        index === currentSlide 
+                        index === currentIndex 
                           ? 'w-8 bg-gradient-to-r from-red-600 to-red-700' 
                           : 'w-2 bg-gray-300 hover:bg-gray-400'
                       }`}
@@ -308,11 +352,11 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Product Counter */}
+            {/* Counter */}
             <div className="mt-4 text-center">
               <p className="text-white font-semibold text-sm bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2 inline-block">
                 <Tag className="w-4 h-4 inline mr-2" />
-                Product {currentSlide + 1} of {promoProducts.length}
+                {isLoanSlide ? 'Special Offer' : `Product ${currentIndex} of ${slides.length - 1}`}
               </p>
             </div>
           </div>
