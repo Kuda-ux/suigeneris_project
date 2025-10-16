@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard } from 'lucide-react';
 
 export function LoanApplicationForm() {
@@ -8,6 +8,28 @@ export function LoanApplicationForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState('');
+  
+  useEffect(() => {
+    loadProducts();
+  }, []);
+  
+  const loadProducts = async () => {
+    setLoadingProducts(true);
+    try {
+      const res = await fetch('/api/admin/products');
+      if (res.ok) {
+        const data = await res.json();
+        setProducts(data.filter((p: any) => p.stock_count > 0));
+      }
+    } catch (err) {
+      console.error('Error loading products:', err);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+  
+  const [products, setProducts] = useState<any[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   
   const [formData, setFormData] = useState({
     // Personal Information
@@ -30,6 +52,11 @@ export function LoanApplicationForm() {
     // Banking Information
     bank_name: '',
     account_number: '',
+    
+    // Product Selection
+    product_id: '',
+    product_name: '',
+    product_price: '',
     
     // Documents
     national_id_document: null as File | null,
@@ -86,16 +113,16 @@ export function LoanApplicationForm() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-12 h-12 text-green-600" />
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-12 h-12 text-red-600" />
             </div>
             <h1 className="text-3xl font-black text-gray-900 mb-4">Application Submitted Successfully!</h1>
             <p className="text-lg text-gray-600 mb-6">
               Your loan application has been received and is being processed.
             </p>
-            <div className="bg-blue-50 rounded-2xl p-6 mb-6">
-              <p className="text-sm font-semibold text-blue-900 mb-2">Application Number</p>
-              <p className="text-2xl font-black text-blue-600">{applicationNumber}</p>
+            <div className="bg-red-50 rounded-2xl p-6 mb-6">
+              <p className="text-sm font-semibold text-red-900 mb-2">Application Number</p>
+              <p className="text-2xl font-black text-red-600">{applicationNumber}</p>
             </div>
             <p className="text-gray-600 mb-8">
               A confirmation email has been sent to <strong>{formData.email}</strong>. 
@@ -103,7 +130,7 @@ export function LoanApplicationForm() {
             </p>
             <button
               onClick={() => window.location.href = '/'}
-              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl transition-all shadow-lg"
+              className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
             >
               Return to Home
             </button>
@@ -119,32 +146,33 @@ export function LoanApplicationForm() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-            Civil Servant Loan Application
+            Zero Deposit Laptop Application
           </h1>
-          <p className="text-lg text-gray-600 font-medium">
-            Salary-Based Financing for Zimbabwe Civil Servants
+          <p className="text-lg text-red-600 font-bold">
+            For Zimbabwe Civil Servants • No Deposit Required
           </p>
         </div>
 
         {/* Progress Steps */}
         <div className="mb-8">
           <div className="flex items-center justify-center gap-4">
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  step >= s ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
+                  step >= s ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-600'
                 }`}>
                   {s}
                 </div>
-                {s < 4 && <div className={`w-12 h-1 ${step > s ? 'bg-blue-600' : 'bg-gray-200'}`} />}
+                {s < 5 && <div className={`w-12 h-1 ${step > s ? 'bg-red-600' : 'bg-gray-200'}`} />}
               </div>
             ))}
           </div>
-          <div className="flex justify-center gap-12 mt-4">
-            <span className="text-sm font-semibold text-gray-600">Personal</span>
-            <span className="text-sm font-semibold text-gray-600">Employment</span>
-            <span className="text-sm font-semibold text-gray-600">Banking</span>
-            <span className="text-sm font-semibold text-gray-600">Documents</span>
+          <div className="flex justify-center gap-8 mt-4">
+            <span className="text-xs font-semibold text-gray-600">Personal</span>
+            <span className="text-xs font-semibold text-gray-600">Employment</span>
+            <span className="text-xs font-semibold text-gray-600">Banking</span>
+            <span className="text-xs font-semibold text-gray-600">Laptop</span>
+            <span className="text-xs font-semibold text-gray-600">Documents</span>
           </div>
         </div>
 
@@ -154,7 +182,7 @@ export function LoanApplicationForm() {
           {step === 1 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <User className="w-6 h-6 text-blue-600" />
+                <User className="w-6 h-6 text-red-600" />
                 <h2 className="text-2xl font-black text-gray-900">Personal Information</h2>
               </div>
 
@@ -249,7 +277,7 @@ export function LoanApplicationForm() {
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
               >
                 Continue to Employment Information
               </button>
@@ -260,7 +288,7 @@ export function LoanApplicationForm() {
           {step === 2 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <Briefcase className="w-6 h-6 text-blue-600" />
+                <Briefcase className="w-6 h-6 text-red-600" />
                 <h2 className="text-2xl font-black text-gray-900">Employment Information</h2>
               </div>
 
@@ -353,7 +381,7 @@ export function LoanApplicationForm() {
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
                 >
                   Continue to Banking
                 </button>
@@ -365,7 +393,7 @@ export function LoanApplicationForm() {
           {step === 3 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <Building className="w-6 h-6 text-blue-600" />
+                <Building className="w-6 h-6 text-red-600" />
                 <h2 className="text-2xl font-black text-gray-900">Banking Information</h2>
               </div>
 
@@ -414,7 +442,95 @@ export function LoanApplicationForm() {
                 <button
                   type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                >
+                  Select Your Laptop
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 4: Laptop Selection */}
+          {step === 4 && (
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6">
+                <CreditCard className="w-6 h-6 text-red-600" />
+                <h2 className="text-2xl font-black text-gray-900">Select Your Laptop</h2>
+              </div>
+
+              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <h3 className="text-lg font-black text-red-900 mb-2">💻 Zero Deposit - Pay Monthly</h3>
+                <p className="text-sm text-gray-700 font-medium">
+                  Choose your laptop and pay through convenient salary deductions. No upfront payment required!
+                </p>
+              </div>
+
+              {loadingProducts ? (
+                <div className="text-center py-12">
+                  <div className="text-4xl mb-4">⏳</div>
+                  <p className="text-gray-600 font-semibold">Loading available laptops...</p>
+                </div>
+              ) : products.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-4xl mb-4">📦</div>
+                  <p className="text-gray-600 font-semibold">No laptops available at the moment</p>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      onClick={() => {
+                        setFormData({
+                          ...formData,
+                          product_id: product.id.toString(),
+                          product_name: product.name,
+                          product_price: product.price.toString()
+                        });
+                      }}
+                      className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
+                        formData.product_id === product.id.toString()
+                          ? 'border-red-600 bg-red-50'
+                          : 'border-gray-200 hover:border-red-300'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="radio"
+                          name="product"
+                          checked={formData.product_id === product.id.toString()}
+                          onChange={() => {}}
+                          className="mt-1 w-5 h-5 text-red-600"
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-black text-gray-900">{product.name}</h4>
+                          <p className="text-sm text-gray-600 mb-2">{product.description || 'Quality refurbished laptop'}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-2xl font-black text-red-600">${product.price}</span>
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
+                              {product.stock_count} in stock
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(5)}
+                  disabled={!formData.product_id}
+                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Continue to Documents
                 </button>
@@ -422,11 +538,11 @@ export function LoanApplicationForm() {
             </div>
           )}
 
-          {/* Step 4: Documents & Consent */}
-          {step === 4 && (
+          {/* Step 5: Documents & Consent */}
+          {step === 5 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6">
-                <FileText className="w-6 h-6 text-blue-600" />
+                <FileText className="w-6 h-6 text-red-600" />
                 <h2 className="text-2xl font-black text-gray-900">Required Documents</h2>
               </div>
 
@@ -451,7 +567,7 @@ export function LoanApplicationForm() {
                 ))}
               </div>
 
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -469,7 +585,7 @@ export function LoanApplicationForm() {
               <div className="flex gap-4">
                 <button
                   type="button"
-                  onClick={() => setStep(3)}
+                  onClick={() => setStep(4)}
                   className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
                 >
                   Back
@@ -477,7 +593,7 @@ export function LoanApplicationForm() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? 'Submitting...' : 'Submit Application'}
                 </button>

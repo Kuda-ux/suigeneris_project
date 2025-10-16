@@ -28,6 +28,11 @@ CREATE TABLE loan_applications (
   bank_name TEXT NOT NULL,
   account_number TEXT NOT NULL,
   
+  -- Product Selection (Zero Deposit Laptop)
+  product_id INTEGER REFERENCES products(id),
+  product_name TEXT NOT NULL,
+  product_price DECIMAL(10, 2) NOT NULL,
+  
   -- Document Uploads (URLs)
   national_id_document TEXT,
   payslip_document TEXT,

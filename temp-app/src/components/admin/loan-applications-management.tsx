@@ -211,8 +211,8 @@ export function LoanApplicationsManagement() {
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Application #</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Applicant</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Laptop</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Employer</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Salary</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Date</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
@@ -230,12 +230,12 @@ export function LoanApplicationsManagement() {
                       <div className="text-sm text-gray-500">{app.national_id}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{app.employer}</div>
-                      <div className="text-sm text-gray-500">{app.job_title}</div>
+                      <div className="font-bold text-red-600">{app.product_name}</div>
+                      <div className="text-sm text-gray-500">${app.product_price}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="font-bold text-gray-900">${app.net_salary}</div>
-                      <div className="text-xs text-gray-500">Net Salary</div>
+                      <div className="font-medium text-gray-900">{app.employer}</div>
+                      <div className="text-sm text-gray-500">{app.job_title}</div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -360,10 +360,30 @@ export function LoanApplicationsManagement() {
                 </div>
               </div>
 
+              {/* Laptop Selection */}
+              <div>
+                <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
+                  <CreditCard className="w-5 h-5 text-red-600" />
+                  Selected Laptop (Zero Deposit)
+                </h4>
+                <div className="bg-red-50 rounded-xl p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-sm font-semibold text-gray-600">Product</span>
+                      <p className="font-black text-gray-900 text-lg">{selectedApplication.product_name}</p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-sm font-semibold text-gray-600">Price</span>
+                      <p className="font-black text-red-600 text-2xl">${selectedApplication.product_price}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Banking Info */}
               <div>
                 <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
-                  <Building className="w-5 h-5 text-blue-600" />
+                  <Building className="w-5 h-5 text-red-600" />
                   Banking Information
                 </h4>
                 <div className="grid md:grid-cols-2 gap-4 bg-gray-50 rounded-xl p-4">

@@ -8,19 +8,19 @@ const slides = [
   {
     id: 'loan',
     type: 'loan',
-    title: 'Civil Servant Loan Application',
-    subtitle: 'Salary-Based Financing for Zimbabwe Civil Servants',
-    description: 'Quick and easy loan application process. Get approved within 3-5 business days.',
+    title: 'Zero Deposit Laptops',
+    subtitle: 'For Zimbabwe Civil Servants',
+    description: 'Get your laptop today with NO deposit required. Pay through salary deductions.',
     features: [
-      'Competitive Interest Rates',
-      'Flexible Repayment Terms',
-      'Quick Approval Process',
-      'Secure & Confidential'
+      '💻 Zero Deposit Required',
+      '💰 Affordable Monthly Payments',
+      '⚡ Instant Approval',
+      '✅ Salary Deduction Payment'
     ],
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&h=600&fit=crop&crop=center&q=80',
-    ctaText: 'Apply Now',
+    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=600&fit=crop&crop=center&q=80',
+    ctaText: 'Apply for Laptop',
     ctaLink: '/loan-application',
-    badge: 'NEW SERVICE'
+    badge: 'ZERO DEPOSIT'
   },
   ...[
 
@@ -224,7 +224,7 @@ export function HeroSection() {
             <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border-2 border-white/50 overflow-hidden max-w-md mx-auto">
               {/* Badge */}
               <div className="absolute top-4 right-4 z-10">
-                <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2 animate-pulse">
+                <div className={`${isLoanSlide ? 'bg-gradient-to-r from-red-600 to-red-700' : 'bg-gradient-to-r from-red-600 to-red-700'} text-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2 animate-pulse`}>
                   <Zap className="w-4 h-4" />
                   {currentSlide.badge}
                 </div>
@@ -255,20 +255,19 @@ export function HeroSection() {
                   <>
                     <div>
                       <h3 className="text-xl font-black text-gray-900 mb-1">{(currentSlide as any).title}</h3>
-                      <p className="text-sm font-semibold text-blue-600 mb-2">{currentSlide.subtitle}</p>
+                      <p className="text-sm font-semibold text-red-600 mb-2">{currentSlide.subtitle}</p>
                       <p className="text-xs text-gray-600 mb-3">{(currentSlide as any).description}</p>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-2 bg-red-50 rounded-xl p-3">
                       {(currentSlide as any).features.map((feature: string, i: number) => (
                         <div key={i} className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-green-600" />
-                          <span className="text-xs font-semibold text-gray-700">{feature}</span>
+                          <span className="text-sm font-bold text-gray-800">{feature}</span>
                         </div>
                       ))}
                     </div>
                     <Link
                       href={(currentSlide as any).ctaLink}
-                      className="block w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105 flex items-center justify-center gap-2"
+                      className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105 flex items-center justify-center gap-2"
                     >
                       <CreditCard className="w-4 h-4" />
                       {(currentSlide as any).ctaText}
