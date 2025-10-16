@@ -82,19 +82,35 @@ export function OrdersManagement() {
     e.preventDefault();
     setSubmitting(true);
     try {
+      // Prepare order data with proper types
+      const orderPayload = {
+        customer_name: formData.customer_name,
+        customer_email: formData.customer_email,
+        customer_phone: formData.customer_phone || null,
+        product_id: parseInt(formData.product_id), // Convert to integer
+        quantity: parseInt(formData.quantity.toString()),
+        payment_method: formData.payment_method,
+        shipping_address: formData.shipping_address,
+        notes: formData.notes || null
+      };
+
+      console.log('Submitting order:', orderPayload);
+
       const res = await fetch('/api/admin/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(orderPayload)
       });
 
+      const responseData = await res.json();
+      console.log('Order response:', responseData);
+
       if (!res.ok) {
-        const error = await res.json();
-        alert(error.error || 'Failed to create order');
+        alert(responseData.error || 'Failed to create order');
         return;
       }
 
-      alert('Order created successfully!');
+      alert('✅ Order created successfully! Stock has been updated.');
       setShowAddModal(false);
       setFormData({
         customer_name: '',
@@ -107,11 +123,11 @@ export function OrdersManagement() {
         notes: ''
       });
       setSelectedProduct(null);
-      loadOrders();
-      loadProducts();
+      // Reload both orders and products to show updated stock
+      await Promise.all([loadOrders(), loadProducts()]);
     } catch (err) {
       console.error('Error creating order:', err);
-      alert('Failed to create order');
+      alert('Failed to create order: ' + (err as Error).message);
     } finally {
       setSubmitting(false);
     }

@@ -40,6 +40,8 @@ export async function POST(request: Request) {
     const supabase = createClient(supabaseUrl, supabaseKey);
     const orderData = await request.json();
 
+    console.log('Creating order with data:', orderData);
+
     // Get product details
     const { data: product, error: productError } = await supabase
       .from('products')
@@ -47,27 +49,40 @@ export async function POST(request: Request) {
       .eq('id', orderData.product_id)
       .single();
 
-    if (productError) throw productError;
+    if (productError) {
+      console.error('Product fetch error:', productError);
+      throw productError;
+    }
+
+    console.log('Current product:', product);
 
     // Check stock availability
     if (product.stock_count < orderData.quantity) {
       return NextResponse.json(
-        { error: 'Insufficient stock available' },
+        { error: `Insufficient stock. Available: ${product.stock_count}, Requested: ${orderData.quantity}` },
         { status: 400 }
       );
     }
+
+    const newStockCount = product.stock_count - orderData.quantity;
+    console.log(`Updating stock from ${product.stock_count} to ${newStockCount}`);
 
     // Update product stock
     const { error: updateError } = await supabase
       .from('products')
       .update({ 
-        stock_count: product.stock_count - orderData.quantity,
-        in_stock: (product.stock_count - orderData.quantity) > 0,
+        stock_count: newStockCount,
+        in_stock: newStockCount > 0,
         updated_at: new Date().toISOString()
       })
       .eq('id', orderData.product_id);
 
-    if (updateError) throw updateError;
+    if (updateError) {
+      console.error('Stock update error:', updateError);
+      throw updateError;
+    }
+
+    console.log('Stock updated successfully');
 
     // Generate order number
     const orderNumber = `SG-2024-${Date.now().toString().slice(-6)}`;
@@ -94,8 +109,12 @@ export async function POST(request: Request) {
       .select()
       .single();
 
-    if (orderError) throw orderError;
+    if (orderError) {
+      console.error('Order creation error:', orderError);
+      throw orderError;
+    }
 
+    console.log('Order created successfully:', newOrder);
     return NextResponse.json(newOrder);
   } catch (error: any) {
     console.error('Error creating order:', error);
