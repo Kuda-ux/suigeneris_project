@@ -158,7 +158,7 @@ export function LoanApplicationForm() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-black text-black mb-4 uppercase">
             Zero Deposit Laptop Application
           </h1>
           <p className="text-lg text-red-600 font-bold">
