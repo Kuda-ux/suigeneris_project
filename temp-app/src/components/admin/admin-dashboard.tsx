@@ -27,6 +27,7 @@ import { OverviewDashboard } from './overview-dashboard';
 import { RolesPermissions } from './roles-permissions';
 import { ReportsSection } from './reports-section';
 import { AlertsSystem } from './alerts-system';
+import { OrdersManagement } from './orders-management';
 
 const sidebarItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -73,6 +74,8 @@ export function AdminDashboard() {
         return <ProductManagement />;
       case 'stock':
         return <StockManagement />;
+      case 'orders':
+        return <OrdersManagement />;
       case 'users':
         return <RolesPermissions />;
       case 'reports':
@@ -189,9 +192,7 @@ export function AdminDashboard() {
                   <Menu className="w-6 h-6" />
                 </button>
                 <div>
-                  <h1 className="text-2xl font-black text-gray-900">
-                    {sidebarItems.find(item => item.id === activeTab)?.label || 'Dashboard'}
-                  </h1>
+                  <h1 className="text-2xl font-black text-gray-900">Admin Dashboard</h1>
                   <p className="text-sm text-gray-500 font-medium">Welcome back, Admin</p>
                 </div>
               </div>
