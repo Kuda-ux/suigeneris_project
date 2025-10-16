@@ -7,6 +7,7 @@ export function OrdersManagement() {
   const [orders, setOrders] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -29,12 +30,26 @@ export function OrdersManagement() {
   }, []);
 
   const loadProducts = async () => {
+    setLoadingProducts(true);
     try {
       const res = await fetch('/api/admin/products');
+      if (!res.ok) {
+        throw new Error('Failed to fetch products');
+      }
       const data = await res.json();
-      setProducts(data.filter((p: any) => p.in_stock && p.stock_count > 0));
+      console.log('Loaded products:', data);
+      // Filter products that have stock available
+      const availableProducts = data.filter((p: any) => {
+        const stock = p.currentStock || p.stock_count || 0;
+        return stock > 0;
+      });
+      console.log('Available products:', availableProducts);
+      setProducts(availableProducts);
     } catch (err) {
       console.error('Error loading products:', err);
+      alert('Failed to load products. Please refresh the page.');
+    } finally {
+      setLoadingProducts(false);
     }
   };
 
@@ -53,6 +68,7 @@ export function OrdersManagement() {
 
   const handleProductSelect = (productId: string) => {
     const product = products.find(p => p.id === productId);
+    console.log('Selected product:', product);
     setSelectedProduct(product);
     setFormData({ ...formData, product_id: productId, quantity: 1 });
   };
@@ -385,15 +401,28 @@ export function OrdersManagement() {
                     required
                     value={formData.product_id}
                     onChange={(e) => handleProductSelect(e.target.value)}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold"
+                    disabled={loadingProducts}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold disabled:opacity-50"
                   >
-                    <option value="">Choose a product...</option>
-                    {products.map((product) => (
-                      <option key={product.id} value={product.id}>
-                        {product.name} - ${product.price} (Stock: {product.stock_count})
-                      </option>
-                    ))}
+                    <option value="">{loadingProducts ? 'Loading products...' : 'Choose a product...'}</option>
+                    {!loadingProducts && products.length === 0 ? (
+                      <option disabled>No products with stock available</option>
+                    ) : (
+                      products.map((product) => {
+                        const stock = product.currentStock || product.stock_count || 0;
+                        return (
+                          <option key={product.id} value={product.id}>
+                            {product.name} - ${product.price} (Stock: {stock})
+                          </option>
+                        );
+                      })
+                    )}
                   </select>
+                  {!loadingProducts && products.length === 0 && (
+                    <p className="text-sm text-red-600 font-semibold mt-2">
+                      No products available. Please add products first.
+                    </p>
+                  )}
                 </div>
 
                 {selectedProduct && (
@@ -409,7 +438,7 @@ export function OrdersManagement() {
                       </div>
                       <div>
                         <span className="text-gray-600 font-medium">Available Stock:</span>
-                        <p className="font-bold text-gray-900">{selectedProduct.stock_count} units</p>
+                        <p className="font-bold text-gray-900">{selectedProduct.currentStock || selectedProduct.stock_count || 0} units</p>
                       </div>
                       <div>
                         <span className="text-gray-600 font-medium">Category:</span>
@@ -426,7 +455,7 @@ export function OrdersManagement() {
                       type="number"
                       required
                       min="1"
-                      max={selectedProduct?.stock_count || 999}
+                      max={selectedProduct ? (selectedProduct.currentStock || selectedProduct.stock_count || 999) : 999}
                       value={formData.quantity}
                       onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
                       className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-bold text-lg"
