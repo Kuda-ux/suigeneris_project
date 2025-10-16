@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bell, AlertTriangle, TrendingDown, Package, X, Settings, Check, RefreshCw, Filter, CheckCircle, XCircle } from 'lucide-react';
+import { Bell, AlertTriangle, TrendingDown, Package, X, Settings, Check } from 'lucide-react';
 
 interface Alert {
   id: string;
@@ -21,7 +21,7 @@ interface Alert {
 
 // API functions for alerts
 const fetchAlerts = async (): Promise<Alert[]> => {
-  try {
+  try {  
     const response = await fetch('/api/admin/alerts');
     if (!response.ok) throw new Error('Failed to fetch alerts');
     return await response.json();
@@ -80,21 +80,21 @@ export function AlertsSystem() {
   const alertTypes = ['all', 'low-stock', 'out-of-stock', 'reorder-suggestion', 'high-demand', 'system'];
   const priorities = ['all', 'high', 'medium', 'low'];
 
-  const loadAlerts = async () => {
-    setLoading(true);
-    try {
-      const alertsData = await fetchAlerts();
-      setAlerts(alertsData);
-      setError(null);
-    } catch (err) {
-      setError('Failed to load alerts');
-      console.error('Error loading alerts:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const loadAlerts = async () => {
+      setLoading(true);
+      try {
+        const alertsData = await fetchAlerts();
+        setAlerts(alertsData);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load alerts');
+        console.error('Error loading alerts:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     loadAlerts();
   }, []);
 
@@ -158,105 +158,90 @@ export function AlertsSystem() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading alerts...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 flex items-center">
+          <h2 className="text-2xl font-bold text-sg-black flex items-center">
+            <Bell className="h-6 w-6 mr-2" />
             Alerts & Notifications
             {unreadCount > 0 && (
-              <span className="ml-3 bg-red-500 text-white text-sm px-3 py-1 rounded-full font-semibold">
+              <span className="ml-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
                 {unreadCount}
               </span>
             )}
           </h2>
-          <p className="text-gray-600 mt-1">Real-time inventory alerts and notifications</p>
+          <p className="text-sg-gray-600">Monitor stock levels and system notifications</p>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={loadAlerts}
-            className="flex items-center px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </button>
-          <button
-            onClick={() => setShowSettings(true)}
-            className="flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg hover:shadow-xl"
-          >
-            <Settings className="h-5 w-5 mr-2" />
-            Settings
-          </button>
-        </div>
+        <button
+          onClick={() => setShowSettings(true)}
+          className="bg-sg-navy hover:bg-sg-navy/90 text-white px-4 py-2 rounded-lg flex items-center"
+        >
+          <Settings className="h-4 w-4 mr-2" />
+          Alert Settings
+        </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex items-start justify-between mb-3">
-            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
-              <Bell className="h-6 w-6 text-white" />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-sg-gray-600">Total Alerts</p>
+              <p className="text-2xl font-bold text-sg-black">{alerts.length}</p>
             </div>
+            <Bell className="h-8 w-8 text-sg-gray-400" />
           </div>
-          <h3 className="text-white text-3xl font-bold mb-1">{alerts.length}</h3>
-          <p className="text-blue-100 text-sm font-medium">Total Alerts</p>
         </div>
         
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex items-start justify-between mb-3">
-            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl relative">
-              <Bell className="h-6 w-6 text-white" />
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-sg-gray-600">Unread</p>
+              <p className="text-2xl font-bold text-blue-600">{unreadCount}</p>
+            </div>
+            <div className="relative">
+              <Bell className="h-8 w-8 text-blue-500" />
               {unreadCount > 0 && (
-                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                   {unreadCount}
                 </div>
               )}
             </div>
           </div>
-          <h3 className="text-white text-3xl font-bold mb-1">{unreadCount}</h3>
-          <p className="text-purple-100 text-sm font-medium">Unread Alerts</p>
         </div>
         
-        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex items-start justify-between mb-3">
-            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
-              <AlertTriangle className="h-6 w-6 text-white" />
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-sg-gray-600">High Priority</p>
+              <p className="text-2xl font-bold text-red-600">{highPriorityCount}</p>
             </div>
+            <AlertTriangle className="h-8 w-8 text-red-500" />
           </div>
-          <h3 className="text-white text-3xl font-bold mb-1">{highPriorityCount}</h3>
-          <p className="text-red-100 text-sm font-medium">High Priority</p>
         </div>
         
-        <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-5 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div className="flex items-start justify-between mb-3">
-            <div className="bg-white/20 backdrop-blur-sm p-2.5 rounded-xl">
-              <Package className="h-6 w-6 text-white" />
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-sg-gray-600">Actionable</p>
+              <p className="text-2xl font-bold text-green-600">
+                {alerts.filter(a => a.isActionable && !a.isRead).length}
+              </p>
             </div>
+            <Package className="h-8 w-8 text-green-500" />
           </div>
-          <h3 className="text-white text-3xl font-bold mb-1">{alerts.filter(a => a.isActionable && !a.isRead).length}</h3>
-          <p className="text-emerald-100 text-sm font-medium">Actionable</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200">
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-sg-gray-200">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium"
+            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
           >
             {alertTypes.map(type => (
               <option key={type} value={type}>
@@ -268,7 +253,7 @@ export function AlertsSystem() {
           <select
             value={selectedPriority}
             onChange={(e) => setSelectedPriority(e.target.value)}
-            className="px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-medium"
+            className="px-4 py-2 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
           >
             {priorities.map(priority => (
               <option key={priority} value={priority}>
@@ -279,9 +264,9 @@ export function AlertsSystem() {
 
           <button
             onClick={() => setAlerts(alerts.map(alert => ({ ...alert, isRead: true })))}
-            className="px-4 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 flex items-center justify-center font-semibold transition-colors"
+            className="px-4 py-2 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 flex items-center justify-center"
           >
-            <CheckCircle className="h-4 w-4 mr-2" />
+            <Check className="h-4 w-4 mr-2" />
             Mark All Read
           </button>
         </div>
@@ -292,9 +277,9 @@ export function AlertsSystem() {
         {filteredAlerts.map((alert) => (
           <div
             key={alert.id}
-            className={`bg-white rounded-2xl shadow-lg border-l-4 ${getPriorityColor(alert.priority)} ${
-              !alert.isRead ? 'border-2 border-gray-200' : 'border border-gray-100 opacity-75'
-            } hover:shadow-xl transition-all`}
+            className={`bg-white rounded-lg shadow-sm border-l-4 ${getPriorityColor(alert.priority)} ${
+              !alert.isRead ? 'border border-sg-gray-200' : 'border border-sg-gray-100 opacity-75'
+            }`}
           >
             <div className="p-6">
               <div className="flex items-start justify-between">
