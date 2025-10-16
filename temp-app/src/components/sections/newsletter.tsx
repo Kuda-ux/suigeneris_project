@@ -1,52 +1,116 @@
-import { Mail, Gift, Truck, Shield } from 'lucide-react';
+'use client';
+
+import { useState } from 'react';
+import { Send, CheckCircle, Mail, Gift } from 'lucide-react';
 
 export function NewsletterSection() {
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle newsletter subscription
+    setSubscribed(true);
+    setTimeout(() => {
+      setSubscribed(false);
+      setEmail('');
+    }, 3000);
+  };
+
   return (
-    <section className="py-16 bg-gradient-to-r from-sg-navy to-sg-black text-white">
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold font-heading mb-4">
-            Stay in the Loop
-          </h2>
-          <p className="text-xl text-sg-gray-200 mb-8">
-            Subscribe to our newsletter for exclusive deals, new arrivals, and insider updates.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-sg-black placeholder-sg-gray-500 focus:outline-none focus:ring-2 focus:ring-sg-aqua"
-            />
-            <button className="bg-sg-red hover:bg-sg-red/90 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center">
-              <Mail className="mr-2 h-4 w-4" />
-              Subscribe
-            </button>
+    <section className="py-20 bg-gradient-to-br from-red-600 to-red-700 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
+      
+      {/* Decorative Circles */}
+      <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            {/* Icon Badge */}
+            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2 mb-6">
+              <Gift className="w-5 h-5 text-white" />
+              <span className="text-sm font-bold text-white">Exclusive Offers</span>
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+              Stay Updated
+            </h2>
+            <p className="text-lg md:text-xl text-red-100 max-w-2xl mx-auto leading-relaxed">
+              Subscribe to our newsletter and get <span className="font-bold text-white">exclusive deals</span>, early access to new products, and tech tips delivered to your inbox.
+            </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <div className="text-center">
-              <div className="bg-sg-aqua/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Gift className="h-8 w-8 text-sg-aqua" />
+
+          {/* Newsletter Form */}
+          <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  required
+                  className="w-full pl-12 pr-4 py-4 bg-white rounded-xl text-gray-900 placeholder-gray-500 font-medium focus:outline-none focus:ring-4 focus:ring-white/30 transition-all"
+                />
               </div>
-              <h3 className="text-lg font-semibold mb-2">Exclusive Offers</h3>
-              <p className="text-sg-gray-300">Get access to subscriber-only deals and early bird discounts.</p>
+              <button
+                type="submit"
+                disabled={subscribed}
+                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center ${
+                  subscribed
+                    ? 'bg-green-500 text-white'
+                    : 'bg-white text-red-600 hover:bg-gray-50'
+                }`}
+              >
+                {subscribed ? (
+                  <>
+                    <CheckCircle className="mr-2 h-5 w-5" />
+                    Subscribed!
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-5 w-5" />
+                    Subscribe
+                  </>
+                )}
+              </button>
             </div>
-            
-            <div className="text-center">
-              <div className="bg-sg-aqua/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Truck className="h-8 w-8 text-sg-aqua" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Free Shipping</h3>
-              <p className="text-sg-gray-300">Enjoy free shipping on orders over $50 for newsletter subscribers.</p>
+          </form>
+
+          {/* Trust Indicators */}
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/80">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-white" />
+              <span className="text-sm font-semibold">No spam, ever</span>
             </div>
-            
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-white" />
+              <span className="text-sm font-semibold">Unsubscribe anytime</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-white" />
+              <span className="text-sm font-semibold">Exclusive deals only</span>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="mt-12 grid grid-cols-3 gap-6 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="bg-sg-aqua/20 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <Shield className="h-8 w-8 text-sg-aqua" />
-              </div>
-              <h3 className="text-lg font-semibold mb-2">Privacy Protected</h3>
-              <p className="text-sg-gray-300">Your information is secure. We never share your data with third parties.</p>
+              <div className="text-3xl md:text-4xl font-black text-white mb-2">500+</div>
+              <div className="text-sm text-red-100">Subscribers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-black text-white mb-2">Weekly</div>
+              <div className="text-sm text-red-100">Updates</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-black text-white mb-2">20%</div>
+              <div className="text-sm text-red-100">Avg. Savings</div>
             </div>
           </div>
         </div>

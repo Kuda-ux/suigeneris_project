@@ -1,208 +1,160 @@
 import Link from 'next/link';
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, Package, Zap } from 'lucide-react';
 
 const categories = [
   {
     id: 1,
-    name: '💻 Laptops',
-    description: 'Professional laptops with warranty - HP, Dell, Lenovo, Toshiba & more',
+    name: 'Laptops',
+    icon: '💻',
+    description: 'Professional laptops with warranty',
+    subtitle: 'HP, Dell, Lenovo, Toshiba & more',
     href: '/products?category=laptops',
     count: 67,
-    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop&crop=center',
-    featuredProducts: [
-      {
-        name: 'HP 250 G10 (i7)',
-        price: '$800',
-        image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=80&h=80&fit=crop&crop=center'
-      },
-      {
-        name: 'Dell Latitude 5430 Rugged',
-        price: '$1,200',
-        image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=80&h=80&fit=crop&crop=center'
-      }
-    ],
-    gradient: 'from-blue-500 to-cyan-500'
+    image: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-red-600 to-red-700'
   },
   {
     id: 2,
-    name: '🖥️ Desktops / CPUs',
-    description: 'Desktop computers and CPU units with reliable performance',
+    name: 'Desktops',
+    icon: '🖥️',
+    description: 'Desktop computers and CPU units',
+    subtitle: 'Reliable performance guaranteed',
     href: '/products?category=desktops',
     count: 20,
-    image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=400&h=300&fit=crop&crop=center',
-    featuredProducts: [
-      {
-        name: 'Dell Vostro 3888',
-        price: '$250',
-        image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=80&h=80&fit=crop&crop=center'
-      },
-      {
-        name: 'CPU Microsoft i3 7th Gen',
-        price: '$180',
-        image: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=80&h=80&fit=crop&crop=center'
-      }
-    ],
-    gradient: 'from-purple-500 to-pink-500'
+    image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-gray-700 to-gray-800'
   },
   {
     id: 3,
-    name: '🖥️ Monitors & AIOs',
-    description: 'All-in-One computers and professional monitors',
+    name: 'Monitors',
+    icon: '🖥️',
+    description: 'All-in-One computers & monitors',
+    subtitle: 'Professional display solutions',
     href: '/products?category=monitors',
     count: 9,
-    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop&crop=center',
-    featuredProducts: [
-      {
-        name: 'Apple MacBook Pro 2017',
-        price: '$520',
-        image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=80&h=80&fit=crop&crop=center'
-      },
-      {
-        name: 'MSI GF63 Gaming AIO',
-        price: '$750',
-        image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=80&h=80&fit=crop&crop=center'
-      }
-    ],
-    gradient: 'from-green-500 to-emerald-500'
+    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-red-500 to-red-600'
   },
   {
     id: 4,
-    name: '🖨️ Printers',
-    description: 'All-in-One printers for home and office use',
+    name: 'Printers',
+    icon: '🖨️',
+    description: 'All-in-One printers',
+    subtitle: 'For home and office use',
     href: '/products?category=printers',
     count: 1,
-    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&h=300&fit=crop&crop=center',
-    featuredProducts: [
-      {
-        name: 'HP DeskJet 2320',
-        price: '$50',
-        image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=80&h=80&fit=crop&crop=center'
-      },
-      {
-        name: 'More Coming Soon',
-        price: 'TBA',
-        image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=80&h=80&fit=crop&crop=center'
-      }
-    ],
-    gradient: 'from-orange-500 to-amber-500'
+    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-gray-600 to-gray-700'
   },
   {
     id: 5,
-    name: '📱 Smartphones',
-    description: 'Samsung and Xiaomi smartphones with great specs',
+    name: 'Smartphones',
+    icon: '📱',
+    description: 'Samsung and Xiaomi smartphones',
+    subtitle: 'Great specs, better prices',
     href: '/products?category=smartphones',
     count: 11,
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop&crop=center',
-    featuredProducts: [
-      {
-        name: 'Samsung A51',
-        price: '$120',
-        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=80&h=80&fit=crop&crop=center'
-      },
-      {
-        name: 'Xiaomi Redmi 13',
-        price: '$110',
-        image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=80&h=80&fit=crop&crop=center'
-      }
-    ],
-    gradient: 'from-pink-500 to-rose-500'
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-red-600 to-red-700'
+  },
+  {
+    id: 6,
+    name: 'Accessories',
+    icon: '⌨️',
+    description: 'Tech accessories & peripherals',
+    subtitle: 'Complete your setup',
+    href: '/products?category=accessories',
+    count: 15,
+    image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=600&h=400&fit=crop&crop=center&q=80',
+    gradient: 'from-gray-700 to-gray-800'
   }
 ];
 
 export function CategoriesSection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-sg-gray-50 to-white">
+    <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
+        {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold font-heading text-sg-black mb-6">
+          <div className="inline-flex items-center gap-2 bg-red-50 border-2 border-red-200 rounded-full px-6 py-2 mb-6">
+            <Package className="w-5 h-5 text-red-600" />
+            <span className="text-sm font-bold text-red-700">Browse Categories</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
             Shop by Category
           </h2>
-          <p className="text-xl text-sg-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Discover premium products across our curated categories, each featuring the latest innovations and trending items.
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Discover premium products across our curated categories, each featuring <span className="text-red-600 font-bold">certified quality</span> and warranty protection.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Categories Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((category) => (
             <Link
               key={category.id}
               href={category.href}
-              className="group relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+              className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-100 hover:border-red-200"
             >
               {/* Background Image */}
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-48 overflow-hidden">
                 <img
                   src={category.image}
                   alt={category.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-80 group-hover:opacity-70 transition-opacity duration-300`}></div>
+                <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-70 group-hover:opacity-60 transition-opacity duration-300`}></div>
                 
-                {/* Category Badge */}
-                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
-                  <span className="text-white text-sm font-semibold">{category.count} items</span>
+                {/* Icon Badge */}
+                <div className="absolute top-4 left-4 text-5xl drop-shadow-2xl">
+                  {category.icon}
+                </div>
+
+                {/* Count Badge */}
+                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md rounded-full px-4 py-1.5 border border-white/30">
+                  <span className="text-white text-sm font-bold">{category.count} items</span>
                 </div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <div className="mb-4">
-                  <h3 className="text-2xl font-bold text-sg-black group-hover:text-sg-red transition-colors duration-300 mb-2">
-                    {category.name}
-                  </h3>
-                  <p className="text-sg-gray-600 group-hover:text-sg-gray-700 transition-colors">
-                    {category.description}
-                  </p>
-                </div>
-
-                {/* Featured Products Preview */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex -space-x-2">
-                    {category.featuredProducts.map((product, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-12 h-12 rounded-full border-2 border-white object-cover shadow-md"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-sg-gray-500">Starting from</p>
-                    <p className="text-lg font-bold text-sg-aqua">
-                      {category.featuredProducts[1]?.price || category.featuredProducts[0]?.price}
-                    </p>
-                  </div>
-                </div>
+                <h3 className="text-2xl font-black text-gray-900 group-hover:text-red-600 transition-colors duration-300 mb-2">
+                  {category.name}
+                </h3>
+                <p className="text-base font-semibold text-gray-700 mb-1">
+                  {category.description}
+                </p>
+                <p className="text-sm text-gray-500 mb-4">
+                  {category.subtitle}
+                </p>
 
                 {/* CTA */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-1">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-sm text-sg-gray-600">Premium Quality</span>
+                    <span className="text-sm font-semibold text-gray-600">Premium Quality</span>
                   </div>
-                  <div className="flex items-center text-sg-red group-hover:text-sg-aqua transition-colors">
-                    <span className="text-sm font-semibold mr-1">Explore</span>
+                  <div className="flex items-center text-red-600 group-hover:text-red-700 transition-colors font-bold">
+                    <span className="text-sm mr-1">Explore</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </div>
 
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-sg-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              {/* Hover Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-t from-red-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </Link>
           ))}
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
+        <div className="text-center mt-12">
           <Link
             href="/categories"
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-sg-red to-sg-aqua hover:from-sg-red/90 hover:to-sg-aqua/90 text-white font-bold rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
           >
+            <Zap className="w-5 h-5" />
             View All Categories
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
