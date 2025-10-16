@@ -34,13 +34,13 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+    <footer className="bg-black text-white border-t border-gray-800">
       {/* Newsletter Section */}
       <div className="border-b border-gray-700">
         <div className="container mx-auto px-4 py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left">
-              <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
                 Stay Updated!
               </h3>
               <p className="text-gray-400">Subscribe to get special offers, free giveaways, and updates.</p>
@@ -50,9 +50,9 @@ export function Footer() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-gray-800 border-2 border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-white placeholder-gray-500"
+                  className="flex-1 px-4 py-3 bg-gray-900 border-2 border-gray-800 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none text-white placeholder-gray-500"
                 />
-                <button className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+                <button className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
                   <Send className="h-5 w-5" />
                   Subscribe
                 </button>
@@ -77,7 +77,7 @@ export function Footer() {
                 />
               </div>
               <div>
-                <div className="text-xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                <div className="text-xl font-bold bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
                   SUI GENERIS
                 </div>
                 <div className="text-sm text-gray-400 font-medium">Technologies</div>
@@ -94,7 +94,7 @@ export function Footer() {
                 href="https://facebook.com" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800 hover:bg-blue-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
+                className="p-3 bg-gray-900 hover:bg-red-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
               >
                 <Facebook className="h-5 w-5" />
               </a>
@@ -102,7 +102,7 @@ export function Footer() {
                 href="https://twitter.com" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800 hover:bg-blue-400 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
+                className="p-3 bg-gray-900 hover:bg-red-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
               >
                 <Twitter className="h-5 w-5" />
               </a>
@@ -110,7 +110,7 @@ export function Footer() {
                 href="https://instagram.com" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800 hover:bg-pink-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
+                className="p-3 bg-gray-900 hover:bg-red-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
               >
                 <Instagram className="h-5 w-5" />
               </a>
@@ -118,7 +118,7 @@ export function Footer() {
                 href="https://linkedin.com" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-gray-800 hover:bg-blue-700 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
+                className="p-3 bg-gray-900 hover:bg-red-600 rounded-xl transition-all hover:scale-110 hover:shadow-lg"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
@@ -133,7 +133,7 @@ export function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group font-medium"
                   >
                     <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -ml-6 group-hover:ml-0" />
                     {link.name}
@@ -151,7 +151,7 @@ export function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group font-medium"
                   >
                     <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -ml-6 group-hover:ml-0" />
                     {link.name}
@@ -169,7 +169,7 @@ export function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group font-medium"
                   >
                     <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -ml-6 group-hover:ml-0" />
                     {link.name}
@@ -187,7 +187,7 @@ export function Footer() {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-blue-400 transition-colors flex items-center gap-2 group"
+                    className="text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2 group font-medium"
                   >
                     <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all -ml-6 group-hover:ml-0" />
                     {link.name}
