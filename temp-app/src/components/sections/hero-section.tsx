@@ -98,8 +98,8 @@ export function HeroSection() {
           alt="Premium Technology"
           className="w-full h-full object-cover"
         />
-        {/* Dark overlay with red gradient */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/75 to-black/60"></div>
+        {/* Lighter overlay with red gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/50 to-black/40"></div>
         
         {/* Subtle pattern overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
@@ -107,10 +107,10 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="container mx-auto px-4 h-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full py-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start h-full pt-8 pb-20">
           
           {/* Left Content */}
-          <div className="space-y-6">
+          <div className="space-y-4 mt-4">
             {/* Trust Badge */}
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 shadow-xl w-fit">
               <Shield className="w-5 h-5 text-red-400" />
@@ -118,7 +118,7 @@ export function HeroSection() {
             </div>
             
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black leading-[1.1] tracking-tight">
               <span className="block text-white drop-shadow-2xl">
                 Premium Technology
               </span>
@@ -128,7 +128,7 @@ export function HeroSection() {
             </h1>
             
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-gray-200 font-medium leading-relaxed max-w-xl">
+            <p className="text-base md:text-lg text-gray-200 font-medium leading-relaxed max-w-xl">
               Certified refurbished <span className="text-red-400 font-bold">laptops</span>, 
               <span className="text-red-400 font-bold"> desktops</span>, and 
               <span className="text-red-400 font-bold"> smartphones</span> with warranty included.
@@ -153,22 +153,22 @@ export function HeroSection() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link
                 href="/products"
-                className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-2xl shadow-red-900/50 hover:shadow-red-900/70 transform hover:-translate-y-1 hover:scale-105"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-base rounded-xl transition-all duration-300 shadow-2xl shadow-red-900/50 hover:shadow-red-900/70 transform hover:-translate-y-1 hover:scale-105"
               >
-                <ShoppingBag className="mr-3 h-6 w-6" />
+                <ShoppingBag className="mr-2 h-5 w-5" />
                 Shop Now
-                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
               
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center px-8 py-4 bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 hover:border-white/50 text-white font-bold text-lg rounded-xl transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1"
+                className="group inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 hover:border-white/50 text-white font-bold text-base rounded-xl transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1"
               >
                 Contact Us
-                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
@@ -198,10 +198,10 @@ export function HeroSection() {
           </div>
 
           {/* Right Content - Product Carousel */}
-          <div className="relative">
-            <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/50 overflow-hidden">
+          <div className="relative mt-4">
+            <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border-2 border-white/50 overflow-hidden max-w-md mx-auto">
               {/* Promo Badge */}
-              <div className="absolute top-6 right-6 z-10">
+              <div className="absolute top-4 right-4 z-10">
                 <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2 animate-pulse">
                   <Zap className="w-4 h-4" />
                   {currentProduct.badge}
@@ -209,51 +209,51 @@ export function HeroSection() {
               </div>
 
               {/* Discount Badge */}
-              <div className="absolute top-6 left-6 z-10">
+              <div className="absolute top-4 left-4 z-10">
                 <div className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full font-black text-sm shadow-xl">
                   -{currentProduct.discount}%
                 </div>
               </div>
 
               {/* Product Image */}
-              <div className="relative mb-6 group">
+              <div className="relative mb-4 group">
                 <div className={`transition-all duration-500 ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
                   <img 
                     src={currentProduct.image}
                     alt={currentProduct.name}
-                    className="w-full h-80 object-cover rounded-2xl shadow-lg"
+                    className="w-full h-48 object-cover rounded-xl shadow-lg"
                   />
                 </div>
               </div>
 
               {/* Product Info */}
-              <div className={`space-y-4 transition-all duration-500 ${isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+              <div className={`space-y-3 transition-all duration-500 ${isAnimating ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
                 <div>
-                  <h3 className="text-3xl font-black text-gray-900 mb-1">{currentProduct.name}</h3>
-                  <p className="text-lg font-semibold text-red-600 mb-2">{currentProduct.subtitle}</p>
-                  <p className="text-sm text-gray-600">{currentProduct.specs}</p>
+                  <h3 className="text-xl font-black text-gray-900 mb-1">{currentProduct.name}</h3>
+                  <p className="text-sm font-semibold text-red-600 mb-1">{currentProduct.subtitle}</p>
+                  <p className="text-xs text-gray-600">{currentProduct.specs}</p>
                 </div>
 
                 {/* Rating */}
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                      <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
                     ))}
                   </div>
-                  <span className="font-bold text-gray-900">{currentProduct.rating}</span>
-                  <span className="text-sm text-gray-500">({currentProduct.reviews} reviews)</span>
+                  <span className="font-bold text-sm text-gray-900">{currentProduct.rating}</span>
+                  <span className="text-xs text-gray-500">({currentProduct.reviews})</span>
                 </div>
 
                 {/* Price */}
-                <div className="flex items-baseline gap-3 py-4 border-t border-gray-200">
-                  <span className="text-4xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+                <div className="flex items-baseline gap-2 py-3 border-t border-gray-200">
+                  <span className="text-2xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
                     ${currentProduct.price}
                   </span>
-                  <span className="text-xl text-gray-400 line-through font-semibold">
+                  <span className="text-base text-gray-400 line-through font-semibold">
                     ${currentProduct.originalPrice}
                   </span>
-                  <span className="ml-auto bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">
+                  <span className="ml-auto bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-bold">
                     Save ${currentProduct.originalPrice - currentProduct.price}
                   </span>
                 </div>
@@ -261,20 +261,20 @@ export function HeroSection() {
                 {/* CTA Button */}
                 <Link
                   href="/products"
-                  className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl text-center transform hover:scale-105"
+                  className="block w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-sm transform hover:scale-105"
                 >
                   View Details
                 </Link>
               </div>
 
               {/* Navigation Controls */}
-              <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
                 <button
                   onClick={prevSlide}
                   disabled={isAnimating}
-                  className="p-3 bg-gray-100 hover:bg-red-600 text-gray-700 hover:text-white rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="p-2 bg-gray-100 hover:bg-red-600 text-gray-700 hover:text-white rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
-                  <ChevronLeft className="w-6 h-6" />
+                  <ChevronLeft className="w-5 h-5" />
                 </button>
 
                 {/* Dots Indicator */}
@@ -301,9 +301,9 @@ export function HeroSection() {
                 <button
                   onClick={nextSlide}
                   disabled={isAnimating}
-                  className="p-3 bg-gray-100 hover:bg-red-600 text-gray-700 hover:text-white rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="p-2 bg-gray-100 hover:bg-red-600 text-gray-700 hover:text-white rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
-                  <ChevronRight className="w-6 h-6" />
+                  <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
