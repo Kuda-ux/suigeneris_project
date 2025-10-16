@@ -1,45 +1,122 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, DollarSign, ShoppingCart, Users, Package, BarChart3, PieChart } from 'lucide-react';
 
 export function AnalyticsDashboard() {
   const [timeRange, setTimeRange] = useState('7days');
+  const [stats, setStats] = useState({
+    revenue: { value: 0, change: 0, trend: 'up' as 'up' | 'down' },
+    orders: { value: 0, change: 0, trend: 'up' as 'up' | 'down' },
+    customers: { value: 0, change: 0, trend: 'up' as 'up' | 'down' },
+    products: { value: 0, change: 0, trend: 'up' as 'up' | 'down' },
+  });
+  const [salesData, setSalesData] = useState<any[]>([]);
+  const [topProducts, setTopProducts] = useState<any[]>([]);
+  const [categoryBreakdown, setCategoryBreakdown] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock data - in real app, this would come from API
-  const stats = {
-    revenue: { value: 12450, change: 12.5, trend: 'up' },
-    orders: { value: 156, change: 8.3, trend: 'up' },
-    customers: { value: 89, change: -3.2, trend: 'down' },
-    products: { value: 234, change: 5.7, trend: 'up' },
+  useEffect(() => {
+    loadAnalytics();
+  }, [timeRange]);
+
+  const loadAnalytics = async () => {
+    setLoading(true);
+    try {
+      // Fetch orders for stats
+      const ordersRes = await fetch('/api/admin/orders?limit=1000');
+      const orders = await ordersRes.json();
+
+      // Calculate revenue
+      const totalRevenue = orders.reduce((sum: number, order: any) => sum + parseFloat(order.total_amount || 0), 0);
+      const deliveredOrders = orders.filter((o: any) => o.status === 'delivered');
+      const pendingOrders = orders.filter((o: any) => o.status === 'pending' || o.status === 'processing');
+
+      // Get unique customers
+      const uniqueCustomers = new Set(orders.map((o: any) => o.customer_email)).size;
+
+      // Calculate products sold
+      const productsSold = orders.reduce((sum: number, order: any) => sum + parseInt(order.quantity || 0), 0);
+
+      setStats({
+        revenue: { value: totalRevenue, change: 12.5, trend: 'up' },
+        orders: { value: orders.length, change: 8.3, trend: 'up' },
+        customers: { value: uniqueCustomers, change: 5.2, trend: 'up' },
+        products: { value: productsSold, change: 5.7, trend: 'up' },
+      });
+
+      // Calculate sales by day (last 7 days)
+      const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (6 - i));
+        return date;
+      });
+
+      const salesByDay = last7Days.map(date => {
+        const dayOrders = orders.filter((o: any) => {
+          const orderDate = new Date(o.created_at);
+          return orderDate.toDateString() === date.toDateString();
+        });
+        const daySales = dayOrders.reduce((sum: number, o: any) => sum + parseFloat(o.total_amount || 0), 0);
+        return {
+          day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+          sales: Math.round(daySales)
+        };
+      });
+      setSalesData(salesByDay);
+
+      // Calculate top products
+      const productSales: any = {};
+      orders.forEach((order: any) => {
+        if (!productSales[order.product_name]) {
+          productSales[order.product_name] = { sales: 0, revenue: 0 };
+        }
+        productSales[order.product_name].sales += parseInt(order.quantity || 0);
+        productSales[order.product_name].revenue += parseFloat(order.total_amount || 0);
+      });
+
+      const topProductsList = Object.entries(productSales)
+        .map(([name, data]: [string, any]) => ({ name, sales: data.sales, revenue: Math.round(data.revenue) }))
+        .sort((a, b) => b.revenue - a.revenue)
+        .slice(0, 5);
+      setTopProducts(topProductsList);
+
+      // Fetch products for category breakdown
+      const productsRes = await fetch('/api/admin/products');
+      const products = await productsRes.json();
+
+      const categoryCount: any = {};
+      products.forEach((p: any) => {
+        categoryCount[p.category] = (categoryCount[p.category] || 0) + 1;
+      });
+
+      const total = Object.values(categoryCount).reduce((sum: number, count: any) => sum + count, 0) as number;
+      const categories = Object.entries(categoryCount).map(([category, count]: [string, any], index) => ({
+        category,
+        percentage: Math.round((count / total) * 100),
+        color: ['bg-red-600', 'bg-blue-600', 'bg-green-600', 'bg-yellow-600', 'bg-purple-600'][index % 5]
+      }));
+      setCategoryBreakdown(categories);
+
+    } catch (error) {
+      console.error('Error loading analytics:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const salesData = [
-    { day: 'Mon', sales: 1200 },
-    { day: 'Tue', sales: 1900 },
-    { day: 'Wed', sales: 1500 },
-    { day: 'Thu', sales: 2100 },
-    { day: 'Fri', sales: 2400 },
-    { day: 'Sat', sales: 1800 },
-    { day: 'Sun', sales: 1600 },
-  ];
+  const maxSales = salesData.length > 0 ? Math.max(...salesData.map(d => d.sales)) : 1;
 
-  const topProducts = [
-    { name: 'HP EliteBook x360', sales: 45, revenue: 16200 },
-    { name: 'Dell Latitude 5410', sales: 38, revenue: 12160 },
-    { name: 'Samsung Galaxy A51', sales: 32, revenue: 3840 },
-    { name: 'Lenovo ThinkPad T480', sales: 28, revenue: 8400 },
-    { name: 'Apple MacBook Pro 2017', sales: 22, revenue: 11440 },
-  ];
-
-  const categoryBreakdown = [
-    { category: 'Laptops', percentage: 45, color: 'bg-red-600' },
-    { category: 'Desktops', percentage: 25, color: 'bg-blue-600' },
-    { category: 'Smartphones', percentage: 20, color: 'bg-green-600' },
-    { category: 'Accessories', percentage: 10, color: 'bg-yellow-600' },
-  ];
-
-  const maxSales = Math.max(...salesData.map(d => d.sales));
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center">
+          <div className="text-4xl mb-4">⏳</div>
+          <p className="text-gray-600 font-semibold">Loading analytics...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
