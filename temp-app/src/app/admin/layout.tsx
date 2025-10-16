@@ -9,13 +9,8 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen">
-      <style jsx global>{`
-        header, footer {
-          display: none !important;
-        }
-      `}</style>
+    <>
       {children}
-    </div>
+    </>
   );
 }
