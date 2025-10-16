@@ -119,10 +119,10 @@ export function HeroSection() {
             
             {/* Main Heading */}
             <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white drop-shadow-2xl">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-white drop-shadow-2xl">
                 Premium Technology
               </h1>
-              <p className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-xl">
+              <p className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-xl">
                 For Your Business
               </p>
             </div>
