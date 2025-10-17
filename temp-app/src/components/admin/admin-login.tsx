@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Shield, Eye, EyeOff, Lock, User } from 'lucide-react';
+import { Shield, Eye, EyeOff, Lock, User, CheckCircle, ArrowRight, AlertCircle } from 'lucide-react';
 
 export function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -30,82 +30,129 @@ export function AdminLogin() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-white rounded-xl shadow-lg p-8">
-        <div className="text-center mb-8">
-          <div className="relative w-20 h-20 mx-auto mb-4">
-            <img
-              src="/logo.svg"
-              alt="Sui Generis Technologies"
-              className="w-full h-full object-contain"
-            />
+      <div className="bg-white rounded-3xl shadow-2xl border-4 border-gray-100 overflow-hidden">
+        {/* Header with gradient */}
+        <div className="bg-gradient-to-r from-red-600 to-red-700 p-8 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
+          <div className="relative">
+            <div className="bg-white rounded-2xl w-24 h-24 mx-auto mb-4 flex items-center justify-center shadow-xl">
+              <img
+                src="/logo.svg"
+                alt="Sui Generis Technologies"
+                className="w-20 h-20 object-contain"
+              />
+            </div>
+            <h1 className="text-3xl font-black text-white mb-2">Admin Portal</h1>
+            <p className="text-red-100 font-semibold">Sui Generis Technologies</p>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <Shield className="w-4 h-4 text-white" />
+              <span className="text-xs text-white font-bold">Secure Access</span>
+            </div>
           </div>
-          <h1 className="text-2xl font-bold text-sg-black mb-2">Admin Login</h1>
-          <p className="text-sg-gray-600">Access the Sui Generis Store dashboard</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-sg-gray-700 mb-2">
-              Email Address
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-sg-gray-400" />
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                placeholder="admin@suigeneris.com"
-                required
-              />
+        <div className="p-8">
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-black text-gray-900 mb-2 uppercase">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-red-50 rounded-lg p-2">
+                  <User className="h-5 w-5 text-red-600" />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-16 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-600 transition-all font-semibold text-gray-900"
+                  placeholder="admin@suigeneris.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-black text-gray-900 mb-2 uppercase">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-red-50 rounded-lg p-2">
+                  <Lock className="h-5 w-5 text-red-600" />
+                </div>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-16 pr-14 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-600 transition-all font-semibold text-gray-900"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-600 transition-colors p-2 hover:bg-red-50 rounded-lg"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 disabled:from-gray-400 disabled:to-gray-500 text-white py-5 px-6 rounded-2xl font-black text-lg transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                  <span>Authenticating...</span>
+                </>
+              ) : (
+                <>
+                  <Shield className="h-6 w-6" />
+                  <span>Sign In Securely</span>
+                  <ArrowRight className="h-5 w-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Security Features */}
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3 border-2 border-green-200">
+              <CheckCircle className="h-5 w-5 text-green-600 mb-1" />
+              <p className="text-xs font-bold text-green-800">SSL Encrypted</p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 border-2 border-blue-200">
+              <Shield className="h-5 w-5 text-blue-600 mb-1" />
+              <p className="text-xs font-bold text-blue-800">2FA Protected</p>
             </div>
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-sg-gray-700 mb-2">
-              Password
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-sg-gray-400" />
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-12 py-3 border border-sg-gray-300 rounded-lg focus:ring-2 focus:ring-sg-navy focus:border-transparent"
-                placeholder="Enter your password"
-                required
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sg-gray-400 hover:text-sg-gray-600"
-              >
-                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-              </button>
+          {/* Demo Credentials */}
+          <div className="mt-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl p-5">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-black text-yellow-900 mb-2">Demo Credentials</p>
+                <div className="space-y-1 text-xs">
+                  <p className="text-yellow-800"><span className="font-bold">Email:</span> admin@suigeneris.com</p>
+                  <p className="text-yellow-800"><span className="font-bold">Password:</span> admin123</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-sg-navy hover:bg-sg-navy/90 disabled:bg-sg-gray-400 text-white py-3 px-4 rounded-lg font-semibold transition-colors flex items-center justify-center"
-          >
-            {isLoading ? (
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            ) : (
-              'Sign In'
-            )}
-          </button>
-        </form>
-
-        <div className="mt-6 p-4 bg-sg-gray-50 rounded-lg">
-          <p className="text-sm text-sg-gray-600 text-center">
-            <strong>Demo Credentials:</strong><br />
-            Email: admin@suigeneris.com<br />
-            Password: admin123
-          </p>
+          {/* Footer */}
+          <div className="mt-6 text-center">
+            <p className="text-xs text-gray-500">
+              © 2024 Sui Generis Technologies. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </div>

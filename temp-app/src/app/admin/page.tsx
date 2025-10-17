@@ -10,7 +10,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-sg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-gray-50 flex items-center justify-center p-4">
       <AdminLogin />
     </div>
   );
