@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw, Check, ChevronRight, Award, Zap } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
 import { getProductById } from '@/data/products';
 
@@ -53,40 +53,57 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       {/* Breadcrumb */}
-      <div className="bg-sg-gray-50 py-4">
+      <div className="bg-white border-b-2 border-gray-100 py-4 shadow-sm">
         <div className="container mx-auto px-4">
-          <nav className="flex items-center space-x-2 text-sm">
-            <Link href="/" className="text-sg-gray-600 hover:text-sg-navy">Home</Link>
-            <span className="text-sg-gray-400">/</span>
-            <Link href="/products" className="text-sg-gray-600 hover:text-sg-navy">Products</Link>
-            <span className="text-sg-gray-400">/</span>
-            <Link href={`/categories/${product.category.toLowerCase()}`} className="text-sg-gray-600 hover:text-sg-navy">{product.category}</Link>
-            <span className="text-sg-gray-400">/</span>
-            <span className="text-sg-black">{product.name}</span>
+          <nav className="flex items-center space-x-2 text-sm font-semibold">
+            <Link href="/" className="text-gray-600 hover:text-red-600 transition-colors">Home</Link>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <Link href="/products" className="text-gray-600 hover:text-red-600 transition-colors">Products</Link>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <Link href={`/categories/${product.category.toLowerCase()}`} className="text-gray-600 hover:text-red-600 transition-colors">{product.category}</Link>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <span className="text-black font-bold">{product.name}</span>
           </nav>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Product Images */}
           <div className="space-y-4">
-            <div className="aspect-square bg-sg-gray-100 rounded-lg overflow-hidden">
+            {/* Badges */}
+            <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+              {product.originalPrice && (
+                <div className="bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-full font-black text-sm shadow-xl animate-pulse">
+                  SAVE ${(product.originalPrice - product.price).toFixed(0)}
+                </div>
+              )}
+              {product.stockCount <= 5 && (
+                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-xl">
+                  ONLY {product.stockCount} LEFT!
+                </div>
+              )}
+            </div>
+            
+            <div className="relative aspect-square bg-white rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-100 group">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
             <div className="grid grid-cols-4 gap-4">
               {product.images.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`aspect-square bg-sg-gray-100 rounded-lg overflow-hidden border-2 transition-colors ${
-                    selectedImage === index ? 'border-sg-navy' : 'border-transparent hover:border-sg-gray-300'
+                  className={`aspect-square bg-white rounded-xl overflow-hidden border-4 transition-all transform hover:scale-105 ${
+                    selectedImage === index 
+                      ? 'border-red-600 shadow-lg ring-4 ring-red-100' 
+                      : 'border-gray-200 hover:border-red-300 shadow-md'
                   }`}
                 >
                   <img
@@ -102,107 +119,138 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <div className="flex items-center space-x-2 mb-2">
-                <span className="text-sm text-sg-gray-600">{product.brand}</span>
-                <span className="text-sm text-sg-gray-400">•</span>
-                <span className="text-sm text-sg-gray-600">{product.category}</span>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="bg-red-100 text-red-700 px-4 py-1.5 rounded-full text-sm font-bold">{product.brand}</span>
+                <span className="bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-bold">{product.category}</span>
               </div>
-              <h1 className="text-3xl font-bold text-sg-black mb-4">{product.name}</h1>
+              <h1 className="text-4xl md:text-5xl font-black text-black mb-4 leading-tight">{product.name}</h1>
               
-              <div className="flex items-center mb-4">
+              <div className="flex items-center gap-4 mb-6 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-4 border-2 border-yellow-200">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${
+                      className={`h-6 w-6 ${
                         i < Math.floor(product.rating)
-                          ? 'text-yellow-400 fill-current'
-                          : 'text-sg-gray-300'
+                          ? 'text-yellow-500 fill-current'
+                          : 'text-gray-300'
                       }`}
                     />
                   ))}
                 </div>
-                <span className="ml-2 text-sm text-sg-gray-600">
-                  {product.rating} ({product.reviews} reviews)
-                </span>
+                <div>
+                  <span className="text-lg font-black text-gray-900">{product.rating}</span>
+                  <span className="text-sm text-gray-600 ml-2">({product.reviews} reviews)</span>
+                </div>
               </div>
 
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="text-3xl font-bold text-sg-black">${product.price}</span>
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-6 mb-6 border-2 border-red-200">
+                <div className="flex items-baseline gap-4 mb-2">
+                  <span className="text-5xl font-black bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">${product.price}</span>
+                  {product.originalPrice && (
+                    <span className="text-2xl text-gray-500 line-through font-semibold">${product.originalPrice}</span>
+                  )}
+                </div>
                 {product.originalPrice && (
-                  <span className="text-xl text-sg-gray-500 line-through">${product.originalPrice}</span>
-                )}
-                {product.originalPrice && (
-                  <span className="bg-sg-red text-white px-2 py-1 rounded text-sm font-semibold">
-                    Save ${(product.originalPrice - product.price).toFixed(2)}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-red-600" />
+                    <span className="text-red-700 font-bold text-lg">
+                      You save ${(product.originalPrice - product.price).toFixed(2)} ({Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF)
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
 
-            <div className="border-t border-sg-gray-200 pt-6">
-              <p className="text-sg-gray-700 mb-6">{product.description}</p>
+            <div className="border-t-2 border-gray-200 pt-6">
+              <p className="text-gray-700 text-lg leading-relaxed mb-6">{product.description}</p>
 
               {/* Quantity and Add to Cart */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm font-medium text-sg-black">Quantity:</span>
-                  <div className="flex items-center border border-sg-gray-300 rounded-lg">
+              <div className="space-y-6">
+                <div className="flex items-center gap-6">
+                  <span className="text-lg font-black text-black">Quantity:</span>
+                  <div className="flex items-center bg-white border-2 border-gray-300 rounded-xl shadow-md">
                     <button
                       onClick={() => handleQuantityChange(-1)}
-                      className="p-2 hover:bg-sg-gray-100 transition-colors"
+                      className="p-4 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={quantity <= 1}
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-5 w-5 text-red-600" />
                     </button>
-                    <span className="px-4 py-2 border-x border-sg-gray-300">{quantity}</span>
+                    <span className="px-8 py-3 border-x-2 border-gray-300 font-black text-xl text-black min-w-[80px] text-center">{quantity}</span>
                     <button
                       onClick={() => handleQuantityChange(1)}
-                      className="p-2 hover:bg-sg-gray-100 transition-colors"
+                      className="p-4 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={quantity >= product.stockCount}
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-5 w-5 text-red-600" />
                     </button>
                   </div>
-                  <span className="text-sm text-sg-gray-600">
-                    {product.stockCount} in stock
-                  </span>
+                  <div className="bg-green-100 border-2 border-green-300 px-4 py-2 rounded-full">
+                    <span className="text-sm font-bold text-green-700">
+                      ✓ {product.stockCount} in stock
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex space-x-4">
+                <div className="flex gap-4">
                   <button 
                     onClick={handleAddToCart}
-                    className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center ${
+                    className={`flex-1 py-5 px-8 rounded-2xl font-black text-lg transition-all transform hover:scale-105 flex items-center justify-center shadow-xl ${
                       addedToCart 
-                        ? 'bg-green-500 text-white' 
-                        : 'bg-sg-navy hover:bg-sg-navy/90 text-white'
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' 
+                        : 'bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white'
                     }`}
                   >
-                    <ShoppingCart className="mr-2 h-5 w-5" />
-                    {addedToCart ? '✓ Added to Cart!' : 'Add to Cart'}
+                    {addedToCart ? (
+                      <>
+                        <Check className="mr-3 h-6 w-6" />
+                        Added to Cart!
+                      </>
+                    ) : (
+                      <>
+                        <ShoppingCart className="mr-3 h-6 w-6" />
+                        Add to Cart
+                      </>
+                    )}
                   </button>
-                  <button className="p-3 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 transition-colors">
-                    <Heart className="h-5 w-5 text-sg-gray-600" />
+                  <button className="p-5 bg-white border-2 border-gray-300 rounded-2xl hover:bg-red-50 hover:border-red-300 transition-all shadow-md group">
+                    <Heart className="h-6 w-6 text-gray-600 group-hover:text-red-600 group-hover:fill-current transition-all" />
                   </button>
-                  <button className="p-3 border border-sg-gray-300 rounded-lg hover:bg-sg-gray-50 transition-colors">
-                    <Share2 className="h-5 w-5 text-sg-gray-600" />
+                  <button className="p-5 bg-white border-2 border-gray-300 rounded-2xl hover:bg-red-50 hover:border-red-300 transition-all shadow-md group">
+                    <Share2 className="h-6 w-6 text-gray-600 group-hover:text-red-600 transition-colors" />
                   </button>
                 </div>
               </div>
 
               {/* Features */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 p-4 bg-sg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-2">
-                  <Truck className="h-5 w-5 text-sg-navy" />
-                  <span className="text-sm text-sg-gray-700">Free shipping over $50</span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-red-600 p-3 rounded-xl">
+                    <Truck className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-black text-sm">Free Shipping</p>
+                    <p className="text-xs text-gray-600">Over $50</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5 text-sg-navy" />
-                  <span className="text-sm text-sg-gray-700">2-year warranty</span>
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-blue-600 p-3 rounded-xl">
+                    <Shield className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-black text-sm">2-Year Warranty</p>
+                    <p className="text-xs text-gray-600">Full coverage</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RotateCcw className="h-5 w-5 text-sg-navy" />
-                  <span className="text-sm text-sg-gray-700">30-day returns</span>
+                <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-green-600 p-3 rounded-xl">
+                    <RotateCcw className="h-6 w-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-black text-sm">30-Day Returns</p>
+                    <p className="text-xs text-gray-600">Easy returns</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -210,66 +258,76 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
         </div>
 
         {/* Product Details Tabs */}
-        <div className="mt-16">
-          <div className="border-b border-sg-gray-200">
-            <nav className="flex space-x-8">
+        <div className="mt-20">
+          <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-100 overflow-hidden">
+            <nav className="flex border-b-2 border-gray-200 bg-gray-50">
               {['description', 'features', 'specifications', 'reviews'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm capitalize transition-colors ${
+                  className={`flex-1 py-5 px-6 font-black text-sm uppercase transition-all ${
                     activeTab === tab
-                      ? 'border-sg-navy text-sg-navy'
-                      : 'border-transparent text-sg-gray-500 hover:text-sg-gray-700 hover:border-sg-gray-300'
+                      ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
+                      : 'text-gray-600 hover:text-red-600 hover:bg-white'
                   }`}
                 >
                   {tab}
                 </button>
               ))}
             </nav>
-          </div>
 
-          <div className="py-8">
-            {activeTab === 'description' && (
-              <div className="prose max-w-none">
-                <p className="text-sg-gray-700 leading-relaxed">{product.description}</p>
-                <p className="text-sg-gray-700 leading-relaxed mt-4">
-                  Our premium wireless headphones represent the pinnacle of audio engineering and design. 
-                  Crafted with meticulous attention to detail, these headphones deliver an unparalleled 
-                  listening experience that will transform how you enjoy music, podcasts, and calls.
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'features' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {product.features.map((feature, index) => (
-                  <div key={index} className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-sg-navy rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-sg-gray-700">{feature}</span>
+            <div className="p-8">
+              {activeTab === 'description' && (
+                <div className="space-y-6">
+                  <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 border-2 border-red-200">
+                    <h3 className="text-2xl font-black text-black mb-4 flex items-center gap-2">
+                      <Award className="h-6 w-6 text-red-600" />
+                      Product Description
+                    </h3>
+                    <p className="text-gray-700 text-lg leading-relaxed">{product.description}</p>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {activeTab === 'specifications' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(product.specifications).map(([key, value]) => (
-                  <div key={key} className="flex justify-between py-2 border-b border-sg-gray-200">
-                    <span className="font-medium text-sg-black">{key}:</span>
-                    <span className="text-sg-gray-700">{value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {activeTab === 'reviews' && (
-              <div className="space-y-6">
-                <div className="text-center py-8">
-                  <p className="text-sg-gray-600">Reviews section would be implemented here with customer feedback and ratings.</p>
+                  <p className="text-gray-700 text-lg leading-relaxed">
+                    Our premium products represent the pinnacle of engineering and design. 
+                    Crafted with meticulous attention to detail, this product delivers an unparalleled 
+                    experience that will transform how you work and play.
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
+
+              {activeTab === 'features' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {product.features.map((feature, index) => (
+                    <div key={index} className="flex items-start gap-4 bg-gradient-to-r from-gray-50 to-white rounded-xl p-4 border-2 border-gray-200 hover:border-red-300 transition-all">
+                      <div className="bg-gradient-to-br from-red-600 to-red-700 p-2 rounded-lg flex-shrink-0">
+                        <Check className="h-5 w-5 text-white" />
+                      </div>
+                      <span className="text-gray-800 font-semibold text-base leading-relaxed">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === 'specifications' && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(product.specifications).map(([key, value]) => (
+                    <div key={key} className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-5 border-2 border-gray-200 hover:shadow-md transition-all">
+                      <span className="font-black text-black text-sm uppercase block mb-2">{key}</span>
+                      <span className="text-gray-700 font-semibold text-base">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {activeTab === 'reviews' && (
+                <div className="space-y-6">
+                  <div className="text-center py-12 bg-gradient-to-br from-gray-50 to-white rounded-2xl border-2 border-gray-200">
+                    <Star className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
+                    <h3 className="text-2xl font-black text-black mb-2">Customer Reviews</h3>
+                    <p className="text-gray-600 text-lg">Reviews section coming soon with customer feedback and ratings.</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
