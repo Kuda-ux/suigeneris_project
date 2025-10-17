@@ -26,11 +26,11 @@ export const products: Product[] = [
     price: 360,
     rating: 4.7,
     reviews: 45,
-    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "HP",
@@ -62,10 +62,10 @@ export const products: Product[] = [
     price: 620,
     rating: 4.5,
     reviews: 32,
-    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "HP",
@@ -97,10 +97,10 @@ export const products: Product[] = [
     price: 800,
     rating: 4.8,
     reviews: 28,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "HP",
@@ -132,10 +132,10 @@ export const products: Product[] = [
     price: 320,
     rating: 4.6,
     reviews: 67,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Dell",
@@ -167,10 +167,10 @@ export const products: Product[] = [
     price: 300,
     rating: 4.7,
     reviews: 89,
-    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Lenovo",
@@ -202,10 +202,10 @@ export const products: Product[] = [
     price: 520,
     rating: 4.9,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Apple",
@@ -237,10 +237,10 @@ export const products: Product[] = [
     price: 750,
     rating: 4.8,
     reviews: 94,
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "MSI",
@@ -272,10 +272,10 @@ export const products: Product[] = [
     price: 550,
     rating: 4.6,
     reviews: 73,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Asus",
@@ -307,10 +307,10 @@ export const products: Product[] = [
     price: 600,
     rating: 4.5,
     reviews: 42,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "HP",
@@ -342,10 +342,10 @@ export const products: Product[] = [
     price: 620,
     rating: 4.6,
     reviews: 38,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "HP",
@@ -377,10 +377,10 @@ export const products: Product[] = [
     price: 260,
     rating: 4.4,
     reviews: 56,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Dell",
@@ -412,10 +412,10 @@ export const products: Product[] = [
     price: 160,
     rating: 4.2,
     reviews: 78,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Dell",
@@ -447,10 +447,10 @@ export const products: Product[] = [
     price: 265,
     rating: 4.5,
     reviews: 64,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Dell",
@@ -482,10 +482,10 @@ export const products: Product[] = [
     price: 1200,
     rating: 4.9,
     reviews: 23,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Dell",
@@ -517,10 +517,10 @@ export const products: Product[] = [
     price: 330,
     rating: 4.7,
     reviews: 71,
-    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Laptops",
     brand: "Lenovo",
@@ -554,10 +554,10 @@ export const products: Product[] = [
     price: 180,
     rating: 4.3,
     reviews: 34,
-    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Desktops",
     brand: "Dell",
@@ -589,10 +589,10 @@ export const products: Product[] = [
     price: 250,
     rating: 4.5,
     reviews: 28,
-    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Desktops",
     brand: "Dell",
@@ -624,10 +624,10 @@ export const products: Product[] = [
     price: 160,
     rating: 4.2,
     reviews: 18,
-    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Desktops",
     brand: "MSI",
@@ -659,10 +659,10 @@ export const products: Product[] = [
     price: 180,
     rating: 4.4,
     reviews: 25,
-    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Desktops",
     brand: "Microsoft",
@@ -696,10 +696,10 @@ export const products: Product[] = [
     price: 520,
     rating: 4.9,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Monitors",
     brand: "Apple",
@@ -731,10 +731,10 @@ export const products: Product[] = [
     price: 750,
     rating: 4.8,
     reviews: 94,
-    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Monitors",
     brand: "MSI",
@@ -768,10 +768,10 @@ export const products: Product[] = [
     price: 100,
     rating: 4.2,
     reviews: 187,
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
@@ -803,10 +803,10 @@ export const products: Product[] = [
     price: 100,
     rating: 4.3,
     reviews: 142,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
@@ -838,10 +838,10 @@ export const products: Product[] = [
     price: 120,
     rating: 4.5,
     reviews: 298,
-    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
@@ -873,10 +873,10 @@ export const products: Product[] = [
     price: 85,
     rating: 4.1,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Xiaomi",
@@ -908,10 +908,10 @@ export const products: Product[] = [
     price: 85,
     rating: 4.1,
     reviews: 134,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
@@ -943,10 +943,10 @@ export const products: Product[] = [
     price: 120,
     rating: 4.3,
     reviews: 98,
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
@@ -978,10 +978,10 @@ export const products: Product[] = [
     price: 110,
     rating: 4.4,
     reviews: 76,
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop&crop=center",
+    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
     images: [
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center"
+      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
     ],
     category: "Smartphones",
     brand: "Samsung",
