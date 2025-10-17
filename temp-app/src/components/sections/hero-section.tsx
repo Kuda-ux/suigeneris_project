@@ -112,7 +112,7 @@ export function HeroSection() {
   const isLoanSlide = currentSlide?.type === 'loan';
 
   return (
-    <section className="relative h-[600px] md:h-[700px] lg:h-[800px] overflow-hidden">
+    <section className="relative min-h-screen lg:h-[800px] overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img 
@@ -129,48 +129,48 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="container mx-auto px-4 h-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start h-full pt-8 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full py-8 lg:py-12">
           
           {/* Left Content */}
-          <div className="space-y-4 mt-4">
+          <div className="space-y-4 order-2 lg:order-1">
             {/* Trust Badge */}
-            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 shadow-xl w-fit">
-              <Shield className="w-5 h-5 text-red-400" />
-              <span className="text-sm font-bold text-white">Trusted in Zimbabwe • Quality Guaranteed</span>
+            <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 md:px-6 py-2 md:py-3 shadow-xl w-fit">
+              <Shield className="w-4 md:w-5 h-4 md:h-5 text-red-400" />
+              <span className="text-xs md:text-sm font-bold text-white">Trusted in Zimbabwe • Quality Guaranteed</span>
             </div>
             
             {/* Main Heading */}
             <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight text-white drop-shadow-2xl">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-tight tracking-tight text-white drop-shadow-2xl">
                 Premium Technology
               </h1>
-              <p className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-xl">
+              <p className="text-2xl md:text-3xl lg:text-5xl font-black bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent drop-shadow-xl">
                 For Your Business
               </p>
             </div>
             
             {/* Subheading */}
-            <p className="text-base md:text-lg text-gray-200 font-medium leading-relaxed max-w-xl">
+            <p className="text-sm md:text-base lg:text-lg text-gray-200 font-medium leading-relaxed max-w-xl">
               Certified refurbished <span className="text-red-400 font-bold">laptops</span>, 
               <span className="text-red-400 font-bold"> desktops</span>, and 
               <span className="text-red-400 font-bold"> smartphones</span> with warranty included.
             </p>
 
             {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span className="text-white font-semibold text-sm">Warranty Included</span>
+            <div className="flex flex-wrap items-center gap-2 md:gap-4">
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 md:px-4 py-1.5 md:py-2">
+                <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-green-400" />
+                <span className="text-white font-semibold text-xs md:text-sm">Warranty Included</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
-                <Award className="w-5 h-5 text-yellow-400" />
-                <span className="text-white font-semibold text-sm">Certified Quality</span>
+              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 md:px-4 py-1.5 md:py-2">
+                <Award className="w-4 md:w-5 h-4 md:h-5 text-yellow-400" />
+                <span className="text-white font-semibold text-xs md:text-sm">Certified Quality</span>
               </div>
-              <div className="flex items-center gap-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 py-2">
+              <div className="flex items-center gap-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-3 md:px-4 py-1.5 md:py-2">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-3 md:w-4 h-3 md:h-4 text-yellow-400 fill-current" />
                 ))}
-                <span className="text-white font-semibold text-sm ml-2">4.8/5</span>
+                <span className="text-white font-semibold text-xs md:text-sm ml-2">4.8/5</span>
               </div>
             </div>
 
@@ -178,7 +178,7 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link
                 href="/products"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-base rounded-xl transition-all duration-300 shadow-2xl shadow-red-900/50 hover:shadow-red-900/70 transform hover:-translate-y-1 hover:scale-105"
+                className="group inline-flex items-center justify-center px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-sm md:text-base rounded-xl transition-all duration-300 shadow-2xl shadow-red-900/50 hover:shadow-red-900/70 transform hover:-translate-y-1 hover:scale-105"
               >
                 <ShoppingBag className="mr-2 h-5 w-5" />
                 Shop Now
@@ -187,7 +187,7 @@ export function HeroSection() {
               
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center px-6 py-3 bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 hover:border-white/50 text-white font-bold text-base rounded-xl transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1"
+                className="group inline-flex items-center justify-center px-5 md:px-6 py-2.5 md:py-3 bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 hover:border-white/50 text-white font-bold text-sm md:text-base rounded-xl transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1"
               >
                 Contact Us
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -220,8 +220,8 @@ export function HeroSection() {
           </div>
 
           {/* Right Content - Product Carousel */}
-          <div className="relative mt-4">
-            <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-5 shadow-2xl border-2 border-white/50 overflow-hidden max-w-md mx-auto">
+          <div className="relative order-1 lg:order-2">
+            <div className="relative bg-white/95 backdrop-blur-xl rounded-2xl p-4 md:p-5 shadow-2xl border-2 border-white/50 overflow-hidden max-w-md mx-auto">
               {/* Badge */}
               <div className="absolute top-4 right-4 z-10">
                 <div className={`${isLoanSlide ? 'bg-gradient-to-r from-red-600 to-red-700' : 'bg-gradient-to-r from-red-600 to-red-700'} text-white px-4 py-2 rounded-full font-bold text-xs shadow-xl flex items-center gap-2 animate-pulse`}>
