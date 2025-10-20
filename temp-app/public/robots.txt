@@ -1,0 +1,13 @@
+# Robots.txt for Sui Generis Technologies
+# https://suigeneris.co.zw
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://suigeneris.co.zw/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
