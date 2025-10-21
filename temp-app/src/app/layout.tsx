@@ -15,7 +15,7 @@ const siteConfig = {
   shortName: 'Sui Generis Tech',
   description: 'Zimbabwe\'s premier destination for certified refurbished laptops, desktops, and smartphones. Premium HP, Dell, Lenovo, and Samsung devices with warranty. Zero deposit laptop financing available for civil servants. Shop quality technology in Harare.',
   url: 'https://www.suigeneriszim.co.zw',
-  ogImage: 'https://www.suigeneriszim.co.zw/og-image.jpg',
+  ogImage: 'https://www.suigeneriszim.co.zw/logo.svg',
   keywords: 'laptops Zimbabwe, refurbished laptops Harare, desktops Zimbabwe, smartphones Harare, HP laptops Zimbabwe, Dell laptops Harare, Lenovo ThinkPad Zimbabwe, Samsung Galaxy Zimbabwe, laptop financing Zimbabwe, zero deposit laptops, civil servant laptops, buy laptops Harare, cheap laptops Zimbabwe, quality laptops Harare, Sui Generis Technologies, computer shop Harare, laptop shop Zimbabwe, refurbished computers Zimbabwe',
   author: 'Sui Generis Technologies',
   location: 'Harare, Zimbabwe',
