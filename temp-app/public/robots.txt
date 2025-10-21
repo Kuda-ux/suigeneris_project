@@ -1,5 +1,5 @@
 # Robots.txt for Sui Generis Technologies Zimbabwe
-# https://suigeneriszim.co.zw
+# https://www.suigeneriszim.co.zw
 
 # Allow all search engines
 User-agent: *
@@ -10,7 +10,7 @@ Disallow: /checkout/success/
 Disallow: /cart/
 
 # Sitemap
-Sitemap: https://suigeneriszim.co.zw/sitemap.xml
+Sitemap: https://www.suigeneriszim.co.zw/sitemap.xml
 
 # Crawl-delay for polite crawling
 Crawl-delay: 1

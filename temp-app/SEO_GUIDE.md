@@ -188,5 +188,5 @@ Add to structured data:
 For SEO questions or updates, refer to this guide or consult with your development team.
 
 **Last Updated:** October 21, 2024
-**Domain:** https://suigeneriszim.co.zw
+**Domain:** https://www.suigeneriszim.co.zw
 **Status:** ✅ World-Class SEO Optimized & Ready for Launch

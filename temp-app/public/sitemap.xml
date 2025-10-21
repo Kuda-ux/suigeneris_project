@@ -5,7 +5,7 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://suigeneriszim.co.zw/</loc>
+    <loc>https://www.suigeneriszim.co.zw/</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -13,7 +13,7 @@
   
   <!-- Products Page -->
   <url>
-    <loc>https://suigeneriszim.co.zw/products</loc>
+    <loc>https://www.suigeneriszim.co.zw/products</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -21,7 +21,7 @@
   
   <!-- Loan Application -->
   <url>
-    <loc>https://suigeneriszim.co.zw/loan-application</loc>
+    <loc>https://www.suigeneriszim.co.zw/loan-application</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -29,7 +29,7 @@
   
   <!-- Cart -->
   <url>
-    <loc>https://suigeneriszim.co.zw/cart</loc>
+    <loc>https://www.suigeneriszim.co.zw/cart</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -37,7 +37,7 @@
   
   <!-- Checkout -->
   <url>
-    <loc>https://suigeneriszim.co.zw/checkout</loc>
+    <loc>https://www.suigeneriszim.co.zw/checkout</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -45,7 +45,7 @@
   
   <!-- Contact -->
   <url>
-    <loc>https://suigeneriszim.co.zw/contact</loc>
+    <loc>https://www.suigeneriszim.co.zw/contact</loc>
     <lastmod>2024-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
