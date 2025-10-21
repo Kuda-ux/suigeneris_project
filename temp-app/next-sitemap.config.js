@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://suigeneris.co.zw',
+  siteUrl: process.env.SITE_URL || 'https://suigeneriszim.co.zw',
   generateRobotsTxt: true,
   generateIndexSitemap: false,
   exclude: ['/admin/*', '/api/*'],
@@ -13,7 +13,7 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      'https://suigeneris.co.zw/sitemap.xml',
+      'https://suigeneriszim.co.zw/sitemap.xml',
     ],
   },
   transform: async (config, path) => {

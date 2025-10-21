@@ -1,13 +1,27 @@
-# Robots.txt for Sui Generis Technologies
-# https://suigeneris.co.zw
+# Robots.txt for Sui Generis Technologies Zimbabwe
+# https://suigeneriszim.co.zw
 
+# Allow all search engines
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
+Disallow: /checkout/success/
+Disallow: /cart/
 
 # Sitemap
-Sitemap: https://suigeneris.co.zw/sitemap.xml
+Sitemap: https://suigeneriszim.co.zw/sitemap.xml
 
-# Crawl-delay
+# Crawl-delay for polite crawling
 Crawl-delay: 1
+
+# Specific rules for major search engines
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/

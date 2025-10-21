@@ -15,12 +15,12 @@ export function PageSEO({
   title,
   description,
   canonical,
-  ogImage = 'https://suigeneris.co.zw/og-image.jpg',
+  ogImage = 'https://suigeneriszim.co.zw/og-image.jpg',
   keywords,
   type = 'website',
 }: PageSEOProps) {
-  const fullTitle = `${title} | Sui Generis Technologies`;
-  const url = canonical || 'https://suigeneris.co.zw';
+  const fullTitle = `${title} | Sui Generis Technologies Zimbabwe`;
+  const url = canonical || 'https://suigeneriszim.co.zw';
 
   return (
     <Head>
