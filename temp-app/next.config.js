@@ -3,11 +3,15 @@
 const nextConfig = {
   // Remove 'output: export' for Vercel deployment (supports dynamic features)
   images: {
-    domains: ['supabase.co', 'your-supabase-project.supabase.co'],
+    domains: ['supabase.co', 'your-supabase-project.supabase.co', 'images.unsplash.com'],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '**.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
     ],
   },
