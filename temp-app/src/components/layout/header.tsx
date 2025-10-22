@@ -18,6 +18,7 @@ const navigation = [
       { name: 'Smartphones', href: '/products?category=Smartphones' },
     ]
   },
+  { name: 'IT Solutions', href: '/it-solutions' },
   { name: 'Categories', href: '/categories' },
   { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
