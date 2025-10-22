@@ -1,0 +1,551 @@
+'use client';
+
+import { useState, useRef } from 'react';
+import { 
+  Plus, 
+  Trash2, 
+  Download, 
+  Eye, 
+  FileText,
+  Calendar,
+  User
+} from 'lucide-react';
+
+interface QuotationItem {
+  id: string;
+  description: string;
+  unitPrice: number;
+  quantity: number;
+  total: number;
+}
+
+interface CustomerInfo {
+  name: string;
+  address: string;
+  city: string;
+  country: string;
+  website?: string;
+}
+
+interface QuotationData {
+  quoteNumber: string;
+  date: string;
+  validUntil: string;
+  currency: string;
+  customer: CustomerInfo;
+  scopeOfWork: string;
+  items: QuotationItem[];
+  notes: string;
+  subtotal: number;
+  vat: number;
+  total: number;
+}
+
+export function QuotationGenerator() {
+  const printRef = useRef<HTMLDivElement>(null);
+  const [showPreview, setShowPreview] = useState(false);
+  
+  const [quotationData, setQuotationData] = useState<QuotationData>({
+    quoteNumber: `QU${Date.now().toString().slice(-4)}`,
+    date: new Date().toLocaleDateString('en-GB'),
+    validUntil: '30 DAYS',
+    currency: 'USD',
+    customer: {
+      name: '',
+      address: '',
+      city: '',
+      country: 'Zimbabwe',
+      website: '',
+    },
+    scopeOfWork: '',
+    items: [
+      {
+        id: '1',
+        description: '',
+        unitPrice: 0,
+        quantity: 1,
+        total: 0,
+      },
+    ],
+    notes: `Banking Details\nACC NAME: SUI GENERIS\nACC NO: 4370488587187 (USD)\nBANK: FBC BANK\nBRANCH: CENTRE (BRANCH)\nBRANCH CODE: CODE: 8120\nSWIFT CODE: FBCZZWHA`,
+    subtotal: 0,
+    vat: 0,
+    total: 0,
+  });
+
+  const addItem = () => {
+    const newItem: QuotationItem = {
+      id: Date.now().toString(),
+      description: '',
+      unitPrice: 0,
+      quantity: 1,
+      total: 0,
+    };
+    setQuotationData({
+      ...quotationData,
+      items: [...quotationData.items, newItem],
+    });
+  };
+
+  const removeItem = (id: string) => {
+    if (quotationData.items.length > 1) {
+      setQuotationData({
+        ...quotationData,
+        items: quotationData.items.filter((item) => item.id !== id),
+      });
+    }
+  };
+
+  const updateItem = (id: string, field: keyof QuotationItem, value: any) => {
+    const updatedItems = quotationData.items.map((item) => {
+      if (item.id === id) {
+        const updated = { ...item, [field]: value };
+        if (field === 'unitPrice' || field === 'quantity') {
+          updated.total = updated.unitPrice * updated.quantity;
+        }
+        return updated;
+      }
+      return item;
+    });
+
+    const subtotal = updatedItems.reduce((sum, item) => sum + item.total, 0);
+    const vat = 0;
+    const total = subtotal + vat;
+
+    setQuotationData({
+      ...quotationData,
+      items: updatedItems,
+      subtotal,
+      vat,
+      total,
+    });
+  };
+
+  const handleDownloadPDF = () => {
+    setShowPreview(true);
+    setTimeout(() => {
+      window.print();
+    }, 500);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-black text-gray-900 flex items-center gap-3">
+                <FileText className="w-8 h-8 text-red-600" />
+                Quotation Generator
+              </h1>
+              <p className="text-gray-600 mt-1">Create professional quotations for Sui Generis Technologies</p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all"
+              >
+                <Eye className="w-5 h-5" />
+                {showPreview ? 'Edit' : 'Preview'}
+              </button>
+              <button
+                onClick={handleDownloadPDF}
+                className="flex items-center gap-2 px-6 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition-all"
+              >
+                <Download className="w-5 h-5" />
+                Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {!showPreview ? (
+          /* Form View - Same as Invoice */
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Left Column */}
+            <div className="lg:col-span-1 space-y-6">
+              {/* Quotation Details */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-red-600" />
+                  Quotation Details
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Quote Number</label>
+                    <input
+                      type="text"
+                      value={quotationData.quoteNumber}
+                      onChange={(e) => setQuotationData({ ...quotationData, quoteNumber: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Date</label>
+                    <input
+                      type="text"
+                      value={quotationData.date}
+                      onChange={(e) => setQuotationData({ ...quotationData, date: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Valid Until</label>
+                    <input
+                      type="text"
+                      value={quotationData.validUntil}
+                      onChange={(e) => setQuotationData({ ...quotationData, validUntil: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none font-semibold"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Currency</label>
+                    <select
+                      value={quotationData.currency}
+                      onChange={(e) => setQuotationData({ ...quotationData, currency: e.target.value })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none font-semibold"
+                    >
+                      <option value="USD">USD</option>
+                      <option value="ZWL">ZWL</option>
+                      <option value="ZAR">ZAR</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Customer Information */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-black text-gray-900 mb-4 flex items-center gap-2">
+                  <User className="w-5 h-5 text-red-600" />
+                  Customer Information
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Company/Name</label>
+                    <input
+                      type="text"
+                      value={quotationData.customer.name}
+                      onChange={(e) => setQuotationData({
+                        ...quotationData,
+                        customer: { ...quotationData.customer, name: e.target.value }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none"
+                      placeholder="Company Name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Address</label>
+                    <input
+                      type="text"
+                      value={quotationData.customer.address}
+                      onChange={(e) => setQuotationData({
+                        ...quotationData,
+                        customer: { ...quotationData.customer, address: e.target.value }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none"
+                      placeholder="Street Address"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">City</label>
+                    <input
+                      type="text"
+                      value={quotationData.customer.city}
+                      onChange={(e) => setQuotationData({
+                        ...quotationData,
+                        customer: { ...quotationData.customer, city: e.target.value }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none"
+                      placeholder="City"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Country</label>
+                    <input
+                      type="text"
+                      value={quotationData.customer.country}
+                      onChange={(e) => setQuotationData({
+                        ...quotationData,
+                        customer: { ...quotationData.customer, country: e.target.value }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Website (Optional)</label>
+                    <input
+                      type="text"
+                      value={quotationData.customer.website}
+                      onChange={(e) => setQuotationData({
+                        ...quotationData,
+                        customer: { ...quotationData.customer, website: e.target.value }
+                      })}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none"
+                      placeholder="www.example.com"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Scope of Work */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-black text-gray-900 mb-4">Scope of Work</h2>
+                <textarea
+                  value={quotationData.scopeOfWork}
+                  onChange={(e) => setQuotationData({ ...quotationData, scopeOfWork: e.target.value })}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none resize-none"
+                  rows={3}
+                  placeholder="Describe the scope of work..."
+                />
+              </div>
+
+              {/* Items */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-xl font-black text-gray-900">Quotation Items</h2>
+                  <button
+                    onClick={addItem}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Item
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {quotationData.items.map((item) => (
+                    <div key={item.id} className="border-2 border-gray-200 rounded-xl p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1 space-y-3">
+                          <div>
+                            <label className="block text-sm font-bold text-gray-700 mb-1">Description</label>
+                            <input
+                              type="text"
+                              value={item.description}
+                              onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                              className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:outline-none"
+                              placeholder="Item description"
+                            />
+                          </div>
+                          <div className="grid grid-cols-3 gap-3">
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-1">Unit Price</label>
+                              <input
+                                type="number"
+                                value={item.unitPrice}
+                                onChange={(e) => updateItem(item.id, 'unitPrice', parseFloat(e.target.value) || 0)}
+                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:outline-none"
+                                placeholder="0.00"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-1">Quantity</label>
+                              <input
+                                type="number"
+                                value={item.quantity}
+                                onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                                className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:outline-none"
+                                placeholder="1"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-bold text-gray-700 mb-1">Total</label>
+                              <input
+                                type="text"
+                                value={item.total.toFixed(2)}
+                                readOnly
+                                className="w-full px-4 py-2 border-2 border-gray-100 rounded-lg bg-gray-50 font-bold"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="mt-8 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                          disabled={quotationData.items.length === 1}
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Totals */}
+                <div className="mt-6 pt-6 border-t-2 border-gray-200">
+                  <div className="flex justify-end">
+                    <div className="w-64 space-y-3">
+                      <div className="flex justify-between text-lg font-bold">
+                        <span>TOTAL:</span>
+                        <span>{quotationData.currency} {quotationData.subtotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-2xl font-black text-red-600 pt-3 border-t-2 border-red-200">
+                        <span>GRAND TOTAL INC VAT:</span>
+                        <span>{quotationData.currency} {quotationData.total.toFixed(2)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-black text-gray-900 mb-4">Notes / Banking Details</h2>
+                <textarea
+                  value={quotationData.notes}
+                  onChange={(e) => setQuotationData({ ...quotationData, notes: e.target.value })}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-red-500 focus:outline-none resize-none font-mono text-sm"
+                  rows={8}
+                />
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* Preview/Print View */
+          <div className="bg-white rounded-2xl shadow-2xl p-8">
+            <div ref={printRef} className="quotation-print-area">
+              {/* Header */}
+              <div className="flex justify-between items-start mb-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-24 h-24 bg-red-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-black text-3xl">SG</span>
+                  </div>
+                  <div>
+                    <h1 className="text-3xl font-black text-gray-900">SUI GENERIS</h1>
+                    <p className="text-sm text-gray-600 font-semibold">TECHNOLOGIES</p>
+                  </div>
+                </div>
+                <div className="text-right text-sm space-y-1">
+                  <p className="font-semibold">+263 78 411 6938</p>
+                  <p className="font-semibold">sales@suigeneriszim.co.zw</p>
+                  <p className="font-semibold">info@suigeneriszim.co.zw</p>
+                  <p className="font-semibold">www.suigeneriszim.co.zw</p>
+                  <p className="text-xs mt-2">House, 1st floor shop 12, Construction,</p>
+                  <p className="text-xs">110 Leopold Takawira St, Harare</p>
+                </div>
+              </div>
+
+              <div className="h-1 bg-gradient-to-r from-red-600 to-red-400 mb-8"></div>
+
+              {/* Customer and Quotation Info */}
+              <div className="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">CUSTOMER</div>
+                  <div className="text-sm space-y-1">
+                    <p className="font-bold">{quotationData.customer.name}</p>
+                    <p>{quotationData.customer.address}</p>
+                    <p>{quotationData.customer.city}, {quotationData.customer.country}</p>
+                    {quotationData.customer.website && <p>{quotationData.customer.website}</p>}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <h2 className="text-5xl font-black text-red-600 mb-4">QUOTATION</h2>
+                  <div className="inline-block text-left space-y-2">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <span className="font-bold">DATE</span>
+                      <span className="border-2 border-gray-300 px-3 py-1">{quotationData.date}</span>
+                      <span className="font-bold">QUOTE #</span>
+                      <span className="border-2 border-gray-300 px-3 py-1">{quotationData.quoteNumber}</span>
+                      <span className="font-bold">Currency</span>
+                      <span className="border-2 border-gray-300 px-3 py-1">{quotationData.currency}</span>
+                      <span className="font-bold">VALID UNTIL</span>
+                      <span className="border-2 border-gray-300 px-3 py-1">{quotationData.validUntil}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {quotationData.scopeOfWork && (
+                <div className="mb-6">
+                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">Scope of Work</div>
+                  <div className="text-sm whitespace-pre-wrap">{quotationData.scopeOfWork}</div>
+                </div>
+              )}
+
+              <table className="w-full mb-6">
+                <thead>
+                  <tr className="bg-red-600 text-white">
+                    <th className="px-4 py-3 text-left font-black">DESCRIPTION</th>
+                    <th className="px-4 py-3 text-center font-black">UNIT PRICE</th>
+                    <th className="px-4 py-3 text-center font-black">QTY</th>
+                    <th className="px-4 py-3 text-right font-black">TOTAL PRICE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {quotationData.items.map((item) => (
+                    <tr key={item.id} className="border-b border-gray-200">
+                      <td className="px-4 py-3 text-sm">{item.description}</td>
+                      <td className="px-4 py-3 text-center text-sm">{quotationData.currency}$ {item.unitPrice.toFixed(2)}</td>
+                      <td className="px-4 py-3 text-center text-sm">{item.quantity}</td>
+                      <td className="px-4 py-3 text-right text-sm font-bold">{item.total.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                  {[...Array(Math.max(0, 3 - quotationData.items.length))].map((_, i) => (
+                    <tr key={`empty-${i}`} className="border-b border-gray-200">
+                      <td className="px-4 py-3 text-sm">&nbsp;</td>
+                      <td className="px-4 py-3">&nbsp;</td>
+                      <td className="px-4 py-3">&nbsp;</td>
+                      <td className="px-4 py-3">&nbsp;</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="grid grid-cols-2 gap-8">
+                <div>
+                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">NOTES</div>
+                  <div className="text-xs whitespace-pre-wrap font-semibold leading-relaxed">
+                    {quotationData.notes}
+                  </div>
+                </div>
+                <div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center py-2">
+                      <span className="font-bold">TOTAL</span>
+                      <span className="font-bold text-lg">$ {quotationData.subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="bg-red-100 border-2 border-red-600 p-4 flex justify-between items-center">
+                      <span className="font-black text-lg">GRAND TOTAL INC VAT</span>
+                      <span className="font-black text-2xl text-red-600">$ {quotationData.total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-12 text-center">
+                <p className="font-bold text-gray-700">Thank You For Your Inquiry!</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <style jsx global>{`
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .quotation-print-area,
+          .quotation-print-area * {
+            visibility: visible;
+          }
+          .quotation-print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            padding: 20mm;
+          }
+          @page {
+            size: A4;
+            margin: 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
