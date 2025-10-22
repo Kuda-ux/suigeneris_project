@@ -300,36 +300,55 @@ export function ITSolutionsPage() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
               <div
                 key={index}
-                className="group bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-red-200 transform hover:-translate-y-2"
+                className="group relative bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200 hover:border-transparent transform hover:-translate-y-3 overflow-hidden"
               >
-                <div className={`w-16 h-16 bg-gradient-to-br ${service.bgColor} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                  <service.icon className={`w-8 h-8 bg-gradient-to-br ${service.color} bg-clip-text text-transparent`} style={{ WebkitTextFillColor: 'transparent', WebkitBackgroundClip: 'text' }} />
+                {/* Gradient Background on Hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
+                
+                {/* Icon Container - Vibrant and Visible */}
+                <div className="relative mb-6">
+                  <div className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-500 relative`}>
+                    <service.icon className="w-10 h-10 text-white" strokeWidth={2.5} />
+                    {/* Glow effect */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${service.color} rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity`}></div>
+                  </div>
                 </div>
                 
-                <h3 className="text-xl font-black text-gray-900 mb-3">
+                {/* Title */}
+                <h3 className="text-xl font-black text-gray-900 mb-4 group-hover:text-gray-800 transition-colors">
                   {service.title}
                 </h3>
                 
-                <p className="text-gray-600 mb-4 leading-relaxed">
+                {/* Description */}
+                <p className="text-gray-600 mb-6 leading-relaxed text-sm">
                   {service.description}
                 </p>
                 
-                <ul className="space-y-2">
+                {/* Features List */}
+                <ul className="space-y-3 mb-6">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                      <span>{feature}</span>
+                    <li key={idx} className="flex items-center gap-3 text-sm text-gray-700">
+                      <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-3.5 h-3.5 text-green-600" strokeWidth={3} />
+                      </div>
+                      <span className="font-medium">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 
-                <button className={`mt-6 w-full bg-gradient-to-r ${service.color} text-white py-3 rounded-xl font-bold hover:shadow-lg transition-all`}>
-                  Learn More
+                {/* CTA Button */}
+                <button className={`relative w-full bg-gradient-to-r ${service.color} text-white py-4 rounded-xl font-black text-sm hover:shadow-2xl transition-all duration-300 overflow-hidden group/btn`}>
+                  <span className="relative z-10">Learn More</span>
+                  <div className="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition-opacity"></div>
+                  <ArrowRight className="inline-block ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
+                
+                {/* Corner Accent */}
+                <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${service.color} opacity-5 rounded-bl-full`}></div>
               </div>
             ))}
           </div>
