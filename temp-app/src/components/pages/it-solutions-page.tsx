@@ -162,8 +162,8 @@ export function ITSolutionsPage() {
             backgroundImage: 'url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&h=1080&fit=crop&q=80)',
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-red-900/90 to-gray-900/95"></div>
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/70 via-red-900/60 to-gray-900/75"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
         </div>
 
         <div className="container mx-auto px-4 h-full relative z-10">
