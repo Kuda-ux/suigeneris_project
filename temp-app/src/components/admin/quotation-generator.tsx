@@ -442,7 +442,7 @@ export function QuotationGenerator() {
         ) : (
           /* Preview/Print View */
           <div className="bg-white rounded-2xl shadow-2xl p-8">
-            <div ref={printRef} className="quotation-print-area">
+            <div ref={printRef} className="quotation-print-area max-w-[210mm] mx-auto bg-white p-8">
               {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-start gap-4">
@@ -507,51 +507,51 @@ export function QuotationGenerator() {
                 </div>
               )}
 
-              <table className="w-full mb-6">
+              <table className="w-full mb-6 border-collapse">
                 <thead>
                   <tr className="bg-red-600 text-white">
-                    <th className="px-4 py-3 text-left font-black">DESCRIPTION</th>
-                    <th className="px-4 py-3 text-center font-black">UNIT PRICE</th>
-                    <th className="px-4 py-3 text-center font-black">QTY</th>
-                    <th className="px-4 py-3 text-right font-black">TOTAL PRICE</th>
+                    <th className="px-3 py-3 text-left font-black text-sm w-[45%]">DESCRIPTION</th>
+                    <th className="px-3 py-3 text-center font-black text-sm w-[20%]">UNIT PRICE</th>
+                    <th className="px-3 py-3 text-center font-black text-sm w-[15%]">QTY</th>
+                    <th className="px-3 py-3 text-right font-black text-sm w-[20%]">TOTAL PRICE</th>
                   </tr>
                 </thead>
                 <tbody>
                   {quotationData.items.map((item) => (
-                    <tr key={item.id} className="border-b border-gray-200">
-                      <td className="px-4 py-3 text-sm">{item.description}</td>
-                      <td className="px-4 py-3 text-center text-sm">{quotationData.currency}$ {item.unitPrice.toFixed(2)}</td>
-                      <td className="px-4 py-3 text-center text-sm">{item.quantity}</td>
-                      <td className="px-4 py-3 text-right text-sm font-bold">{item.total.toFixed(2)}</td>
+                    <tr key={item.id} className="border-b border-gray-300">
+                      <td className="px-3 py-3 text-sm align-top">{item.description}</td>
+                      <td className="px-3 py-3 text-center text-sm align-top">{quotationData.currency}$ {item.unitPrice.toFixed(2)}</td>
+                      <td className="px-3 py-3 text-center text-sm align-top">{item.quantity}</td>
+                      <td className="px-3 py-3 text-right text-sm font-bold align-top">{item.total.toFixed(2)}</td>
                     </tr>
                   ))}
                   {[...Array(Math.max(0, 3 - quotationData.items.length))].map((_, i) => (
-                    <tr key={`empty-${i}`} className="border-b border-gray-200">
-                      <td className="px-4 py-3 text-sm">&nbsp;</td>
-                      <td className="px-4 py-3">&nbsp;</td>
-                      <td className="px-4 py-3">&nbsp;</td>
-                      <td className="px-4 py-3">&nbsp;</td>
+                    <tr key={`empty-${i}`} className="border-b border-gray-300">
+                      <td className="px-3 py-3 text-sm">&nbsp;</td>
+                      <td className="px-3 py-3">&nbsp;</td>
+                      <td className="px-3 py-3">&nbsp;</td>
+                      <td className="px-3 py-3">&nbsp;</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
 
-              <div className="grid grid-cols-2 gap-8">
-                <div>
-                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">NOTES</div>
-                  <div className="text-xs whitespace-pre-wrap font-semibold leading-relaxed">
+              <div className="grid grid-cols-2 gap-6 mt-6">
+                <div className="pr-4">
+                  <div className="bg-red-600 text-white px-3 py-2 font-black mb-2 text-sm">NOTES</div>
+                  <div className="text-[10px] whitespace-pre-wrap font-semibold leading-relaxed">
                     {quotationData.notes}
                   </div>
                 </div>
-                <div>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2">
-                      <span className="font-bold">TOTAL</span>
-                      <span className="font-bold text-lg">$ {quotationData.subtotal.toFixed(2)}</span>
+                <div className="pl-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center py-2 border-b border-gray-300">
+                      <span className="font-bold text-sm">TOTAL</span>
+                      <span className="font-bold text-base">$ {quotationData.subtotal.toFixed(2)}</span>
                     </div>
-                    <div className="bg-red-100 border-2 border-red-600 p-4 flex justify-between items-center">
-                      <span className="font-black text-lg">GRAND TOTAL INC VAT</span>
-                      <span className="font-black text-2xl text-red-600">$ {quotationData.total.toFixed(2)}</span>
+                    <div className="bg-red-100 border-2 border-red-600 p-3 flex justify-between items-center">
+                      <span className="font-black text-sm">GRAND TOTAL INC VAT</span>
+                      <span className="font-black text-xl text-red-600">$ {quotationData.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
