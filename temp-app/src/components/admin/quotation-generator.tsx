@@ -11,6 +11,8 @@ import {
   Calendar,
   User
 } from 'lucide-react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface QuotationItem {
   id: string;
@@ -122,11 +124,43 @@ export function QuotationGenerator() {
     });
   };
 
-  const handleDownloadPDF = () => {
-    setShowPreview(true);
-    setTimeout(() => {
-      window.print();
-    }, 500);
+  const handleDownloadPDF = async () => {
+    if (!printRef.current) return;
+
+    try {
+      // Show preview first
+      setShowPreview(true);
+      
+      // Wait for preview to render
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Capture the quotation as canvas
+      const canvas = await html2canvas(printRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff',
+      });
+
+      // Convert to PDF
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      
+      // Download the PDF
+      pdf.save(`Quotation-${quotationData.quoteNumber}-${quotationData.customer.name || 'Customer'}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error generating PDF. Please try again.');
+    }
   };
 
   return (
