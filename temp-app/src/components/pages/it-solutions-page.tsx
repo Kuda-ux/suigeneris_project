@@ -153,58 +153,150 @@ const process = [
 export function ITSolutionsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-red-600 to-red-700 text-white py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-3 mb-6">
-              <Laptop className="w-5 h-5" />
-              <span className="font-bold">IT Software Solutions</span>
+      {/* Hero Section with Background Image */}
+      <section className="relative min-h-screen lg:h-[900px] overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&h=1080&fit=crop&q=80)',
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-red-900/90 to-gray-900/95"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        </div>
+
+        <div className="container mx-auto px-4 h-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full py-20 lg:py-12">
+            
+            {/* Left Content */}
+            <div className="space-y-6 order-2 lg:order-1">
+              {/* Badge */}
+              <div className="inline-flex items-center space-x-2 bg-red-500/20 backdrop-blur-md border border-red-400/30 rounded-full px-6 py-3 shadow-xl w-fit">
+                <Code className="w-5 h-5 text-red-400" />
+                <span className="text-sm font-black text-white tracking-wide">PREMIUM IT SOLUTIONS</span>
+              </div>
+
+              {/* Main Heading */}
+              <div>
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-tight tracking-tight text-white drop-shadow-2xl mb-4">
+                  Transform Your Business
+                </h1>
+                <p className="text-3xl md:text-4xl lg:text-6xl font-black bg-gradient-to-r from-red-400 via-orange-400 to-red-500 bg-clip-text text-transparent drop-shadow-xl">
+                  With World-Class Software
+                </p>
+              </div>
+
+              {/* Description */}
+              <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-xl">
+                From cutting-edge websites to custom enterprise software, we deliver digital solutions that drive growth, efficiency, and innovation for businesses across Zimbabwe.
+              </p>
+
+              {/* Key Features */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <span className="text-white font-bold text-sm">Expert Developers</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <span className="text-white font-bold text-sm">Fast Delivery</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <span className="text-white font-bold text-sm">24/7 Support</span>
+                </div>
+                <div className="flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3">
+                  <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                  <span className="text-white font-bold text-sm">Proven Results</span>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Link
+                  href="/contact"
+                  className="group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-5 rounded-2xl font-black text-lg shadow-2xl hover:shadow-red-500/50 transition-all transform hover:scale-105 inline-flex items-center justify-center gap-3"
+                >
+                  <span>Get Free Consultation</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link
+                  href="#services"
+                  className="bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white/20 text-white px-8 py-5 rounded-2xl font-black text-lg transition-all inline-flex items-center justify-center gap-3"
+                >
+                  <span>View Services</span>
+                  <Code className="w-5 h-5" />
+                </Link>
+              </div>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
-              Transform Your Business with
-              <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                Premium Software Solutions
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-red-100 mb-8 leading-relaxed max-w-3xl mx-auto">
-              From websites to custom software, we build digital solutions that drive growth and efficiency for businesses across Zimbabwe.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact"
-                className="bg-white text-red-600 px-8 py-4 rounded-2xl font-black text-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 inline-flex items-center justify-center gap-2"
-              >
-                Get Started
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <button className="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-8 py-4 rounded-2xl font-black text-lg hover:bg-white/20 transition-all inline-flex items-center justify-center gap-2">
-                View Portfolio
-                <Code className="w-5 h-5" />
-              </button>
+
+            {/* Right Content - Services Preview Card */}
+            <div className="relative order-1 lg:order-2">
+              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/50 max-w-lg mx-auto">
+                <div className="absolute -top-4 -right-4 bg-gradient-to-br from-red-500 to-red-600 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl transform rotate-3">
+                  🚀 PREMIUM QUALITY
+                </div>
+
+                <h3 className="text-2xl font-black text-gray-900 mb-6">Our Services Include:</h3>
+                
+                <div className="space-y-4">
+                  {[
+                    { icon: Globe, title: 'Website Development', color: 'text-blue-600' },
+                    { icon: Code, title: 'Custom Software', color: 'text-purple-600' },
+                    { icon: Smartphone, title: 'Mobile Apps', color: 'text-green-600' },
+                    { icon: ShoppingCart, title: 'E-Commerce Solutions', color: 'text-orange-600' },
+                    { icon: Cloud, title: 'Cloud Infrastructure', color: 'text-cyan-600' },
+                    { icon: Lock, title: 'Cybersecurity', color: 'text-gray-700' },
+                  ].map((service, index) => (
+                    <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all group cursor-pointer">
+                      <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <service.icon className={`w-6 h-6 ${service.color}`} />
+                      </div>
+                      <span className="font-bold text-gray-900">{service.title}</span>
+                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 pt-6 border-t-2 border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 font-semibold">Trusted by</p>
+                      <p className="text-2xl font-black text-gray-900">50+ Businesses</p>
+                    </div>
+                    <div className="flex -space-x-2">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-red-400 to-red-600 border-2 border-white flex items-center justify-center text-white font-bold text-xs">
+                          {i === 4 ? '+' : '✓'}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
-        
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+
+        {/* Decorative Elements */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-red-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl"></div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-20">
+      <section id="services" className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
-              Our Services
+            <div className="inline-block bg-red-100 text-red-600 px-6 py-2 rounded-full font-black text-sm mb-4">
+              WHAT WE OFFER
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+              Premium IT Services
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Comprehensive IT solutions tailored to your business needs
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Comprehensive technology solutions designed to transform your business and drive measurable results
             </p>
           </div>
           
