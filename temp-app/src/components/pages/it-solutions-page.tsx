@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { 
   Code, 
   Smartphone, 
@@ -17,9 +18,67 @@ import {
   Palette,
   Users,
   TrendingUp,
-  Shield
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  Star
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+
+// Carousel slides for hero section
+const heroSlides = [
+  {
+    id: 1,
+    title: 'Website Development',
+    subtitle: 'Modern & Responsive',
+    description: 'Professional websites that convert visitors into customers',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&q=80',
+    icon: Globe,
+    color: 'from-blue-500 to-blue-600',
+    features: ['SEO Optimized', 'Mobile-First', 'Fast Loading'],
+  },
+  {
+    id: 2,
+    title: 'Custom Software',
+    subtitle: 'Tailored Solutions',
+    description: 'Enterprise software built specifically for your business needs',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&q=80',
+    icon: Code,
+    color: 'from-purple-500 to-purple-600',
+    features: ['Scalable', 'Secure', 'Cloud-Ready'],
+  },
+  {
+    id: 3,
+    title: 'Mobile Apps',
+    subtitle: 'iOS & Android',
+    description: 'Native and cross-platform apps that users love',
+    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop&q=80',
+    icon: Smartphone,
+    color: 'from-green-500 to-green-600',
+    features: ['Native Performance', 'Push Notifications', 'Offline Mode'],
+  },
+  {
+    id: 4,
+    title: 'E-Commerce Solutions',
+    subtitle: 'Online Stores',
+    description: 'Complete e-commerce platforms with payment integration',
+    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop&q=80',
+    icon: ShoppingCart,
+    color: 'from-orange-500 to-orange-600',
+    features: ['Payment Gateway', 'Inventory', 'Analytics'],
+  },
+  {
+    id: 5,
+    title: 'Cloud Solutions',
+    subtitle: 'AWS & Azure',
+    description: 'Scalable cloud infrastructure for modern businesses',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop&q=80',
+    icon: Cloud,
+    color: 'from-cyan-500 to-cyan-600',
+    features: ['Auto-Scaling', '99.9% Uptime', '24/7 Monitoring'],
+  },
+];
 
 const services = [
   {
@@ -151,6 +210,26 @@ const process = [
 ];
 
 export function ITSolutionsPage() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const currentSlideData = heroSlides[currentSlide];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
       {/* Hero Section with Background Image */}
@@ -231,48 +310,98 @@ export function ITSolutionsPage() {
               </div>
             </div>
 
-            {/* Right Content - Services Preview Card */}
+            {/* Right Content - Services Carousel */}
             <div className="relative order-1 lg:order-2">
-              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border-2 border-white/50 max-w-lg mx-auto">
-                <div className="absolute -top-4 -right-4 bg-gradient-to-br from-red-500 to-red-600 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl transform rotate-3">
-                  🚀 PREMIUM QUALITY
+              <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl overflow-hidden shadow-2xl border-2 border-white/50 max-w-lg mx-auto">
+                {/* Premium Badge */}
+                <div className="absolute top-4 right-4 z-20 bg-gradient-to-br from-red-500 to-red-600 text-white px-4 py-2 rounded-xl font-black text-xs shadow-xl flex items-center gap-2">
+                  <Star className="w-4 h-4 fill-current" />
+                  PREMIUM
                 </div>
 
-                <h3 className="text-2xl font-black text-gray-900 mb-6">Our Services Include:</h3>
-                
-                <div className="space-y-4">
-                  {[
-                    { icon: Globe, title: 'Website Development', color: 'text-blue-600' },
-                    { icon: Code, title: 'Custom Software', color: 'text-purple-600' },
-                    { icon: Smartphone, title: 'Mobile Apps', color: 'text-green-600' },
-                    { icon: ShoppingCart, title: 'E-Commerce Solutions', color: 'text-orange-600' },
-                    { icon: Cloud, title: 'Cloud Infrastructure', color: 'text-cyan-600' },
-                    { icon: Lock, title: 'Cybersecurity', color: 'text-gray-700' },
-                  ].map((service, index) => (
-                    <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-all group cursor-pointer">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <service.icon className={`w-6 h-6 ${service.color}`} />
-                      </div>
-                      <span className="font-bold text-gray-900">{service.title}</span>
-                      <ArrowRight className="w-4 h-4 text-gray-400 ml-auto group-hover:translate-x-1 transition-transform" />
+                {/* Carousel Content */}
+                <div className="relative h-[600px]">
+                  {/* Image Section */}
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={currentSlideData.image}
+                      alt={currentSlideData.title}
+                      fill
+                      className="object-cover transition-transform duration-700"
+                      priority
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-t ${currentSlideData.color} opacity-40`}></div>
+                    
+                    {/* Icon Badge on Image */}
+                    <div className={`absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br ${currentSlideData.color} rounded-2xl flex items-center justify-center shadow-xl`}>
+                      <currentSlideData.icon className="w-8 h-8 text-white" strokeWidth={2.5} />
                     </div>
-                  ))}
-                </div>
+                  </div>
 
-                <div className="mt-6 pt-6 border-t-2 border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-600 font-semibold">Trusted by</p>
-                      <p className="text-2xl font-black text-gray-900">50+ Businesses</p>
+                  {/* Content Section */}
+                  <div className="p-8">
+                    <div className="mb-6">
+                      <p className={`text-sm font-black bg-gradient-to-r ${currentSlideData.color} bg-clip-text text-transparent mb-2`}>
+                        {currentSlideData.subtitle}
+                      </p>
+                      <h3 className="text-3xl font-black text-gray-900 mb-3">
+                        {currentSlideData.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {currentSlideData.description}
+                      </p>
                     </div>
-                    <div className="flex -space-x-2">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-red-400 to-red-600 border-2 border-white flex items-center justify-center text-white font-bold text-xs">
-                          {i === 4 ? '+' : '✓'}
+
+                    {/* Features */}
+                    <div className="space-y-3 mb-6">
+                      {currentSlideData.features.map((feature, idx) => (
+                        <div key={idx} className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-green-600" strokeWidth={3} />
+                          </div>
+                          <span className="text-sm font-bold text-gray-700">{feature}</span>
                         </div>
                       ))}
                     </div>
+
+                    {/* CTA Button */}
+                    <button className={`w-full bg-gradient-to-r ${currentSlideData.color} text-white py-4 rounded-xl font-black text-sm hover:shadow-xl transition-all group/btn`}>
+                      <span>Learn More</span>
+                      <ArrowRight className="inline-block ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
                   </div>
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={prevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-10 group"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-6 h-6 text-gray-900 group-hover:scale-110 transition-transform" />
+                  </button>
+                  <button
+                    onClick={nextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all z-10 group"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-6 h-6 text-gray-900 group-hover:scale-110 transition-transform" />
+                  </button>
+                </div>
+
+                {/* Slide Indicators */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                  {heroSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentSlide(index)}
+                      className={`h-2 rounded-full transition-all ${
+                        index === currentSlide
+                          ? 'w-8 bg-gradient-to-r ' + currentSlideData.color
+                          : 'w-2 bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
