@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { 
   Plus, 
   Trash2, 
@@ -411,10 +412,16 @@ export function QuotationGenerator() {
               {/* Header */}
               <div className="flex justify-between items-start mb-8">
                 <div className="flex items-start gap-4">
-                  <div className="w-24 h-24 bg-red-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-black text-3xl">SG</span>
+                  <div className="w-32 h-32">
+                    <Image
+                      src="/logo.svg"
+                      alt="Sui Generis Technologies"
+                      width={128}
+                      height={128}
+                      className="object-contain"
+                    />
                   </div>
-                  <div>
+                  <div className="mt-4">
                     <h1 className="text-3xl font-black text-gray-900">SUI GENERIS</h1>
                     <p className="text-sm text-gray-600 font-semibold">TECHNOLOGIES</p>
                   </div>
