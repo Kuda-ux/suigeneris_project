@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) throw error;
-      setUserProfile(data);
+      setUserProfile(data as any);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
           avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
           updated_at: new Date().toISOString(),
-        }, {
+        } as any, {
           onConflict: 'id'
         });
 
