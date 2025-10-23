@@ -26,6 +26,7 @@
     "test:install-deps": "playwright install-deps"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/supabase-js": "^2.39.3",
     "clsx": "^2.1.1",
     "html2canvas": "^1.4.1",

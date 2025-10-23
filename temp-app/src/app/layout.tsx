@@ -5,6 +5,7 @@ import './globals.css'
 import '../styles/animations.css'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
+import { AuthProvider } from '@/contexts/auth-context'
 import { usePathname } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -167,9 +168,11 @@ export default function RootLayout({
         <title>{siteConfig.name} | Premium Laptops, Desktops & Smartphones | Harare, Zimbabwe</title>
       </head>
       <body className={inter.className}>
-        {!isAdminPage && <Header />}
-        <main>{children}</main>
-        {!isAdminPage && <Footer />}
+        <AuthProvider>
+          {!isAdminPage && <Header />}
+          <main>{children}</main>
+          {!isAdminPage && <Footer />}
+        </AuthProvider>
       </body>
     </html>
   )
