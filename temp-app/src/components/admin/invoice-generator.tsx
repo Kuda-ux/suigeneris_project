@@ -464,7 +464,7 @@ export function InvoiceGenerator() {
         ) : (
           /* Preview/Print View */
           <div className="bg-white rounded-2xl shadow-2xl p-8">
-            <div ref={printRef} className="invoice-print-area max-w-[210mm] mx-auto bg-white p-8">
+            <div ref={printRef} className="invoice-print-area max-w-[210mm] mx-auto bg-white p-8" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
               {/* Invoice Header */}
               <div className="flex justify-between items-start mb-8">
                 {/* Logo and Company Info */}
@@ -479,19 +479,19 @@ export function InvoiceGenerator() {
                     />
                   </div>
                   <div className="mt-4">
-                    <h1 className="text-3xl font-black text-gray-900">SUI GENERIS</h1>
-                    <p className="text-sm text-gray-600 font-semibold">TECHNOLOGIES</p>
+                    <h1 className="text-3xl font-black text-gray-900 tracking-wide">SUI GENERIS</h1>
+                    <p className="text-sm text-gray-600 font-bold tracking-wider">TECHNOLOGIES</p>
                   </div>
                 </div>
 
                 {/* Contact Info */}
                 <div className="text-right text-sm space-y-1">
-                  <p className="font-semibold">+263 78 411 6938</p>
-                  <p className="font-semibold">sales@suigeneriszim.co.zw</p>
-                  <p className="font-semibold">info@suigeneriszim.co.zw</p>
-                  <p className="font-semibold">www.suigeneriszim.co.zw</p>
-                  <p className="text-xs mt-2">House, 1st floor shop 12, Construction,</p>
-                  <p className="text-xs">110 Leopold Takawira St, Harare</p>
+                  <p className="font-semibold text-gray-700">Tel: +263 78 411 6938</p>
+                  <p className="font-semibold text-gray-700">Email: sales@suigeneriszim.co.zw</p>
+                  <p className="font-semibold text-gray-700">Email: info@suigeneriszim.co.zw</p>
+                  <p className="font-semibold text-gray-700">Web: www.suigeneriszim.co.zw</p>
+                  <p className="text-xs mt-2 text-gray-600">House 1st Floor, Shop 12</p>
+                  <p className="text-xs text-gray-600">110 Leopold Takawira Street, Harare</p>
                 </div>
               </div>
 
@@ -502,28 +502,28 @@ export function InvoiceGenerator() {
               <div className="grid grid-cols-2 gap-8 mb-8">
                 {/* Customer */}
                 <div>
-                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">CUSTOMER</div>
-                  <div className="text-sm space-y-1">
-                    <p className="font-bold">{invoiceData.customer.name}</p>
-                    <p>{invoiceData.customer.address}</p>
-                    <p>{invoiceData.customer.city}, {invoiceData.customer.country}</p>
-                    {invoiceData.customer.website && <p>{invoiceData.customer.website}</p>}
+                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2 text-sm tracking-wide">BILL TO</div>
+                  <div className="text-sm space-y-1 text-gray-700">
+                    <p className="font-bold text-gray-900">{invoiceData.customer.name || 'Customer Name'}</p>
+                    <p>{invoiceData.customer.address || 'Address'}</p>
+                    <p>{invoiceData.customer.city || 'City'}, {invoiceData.customer.country}</p>
+                    {invoiceData.customer.website && <p className="text-blue-600">{invoiceData.customer.website}</p>}
                   </div>
                 </div>
 
                 {/* Invoice Details */}
                 <div className="text-right">
-                  <h2 className="text-5xl font-black text-red-600 mb-4">INVOICE</h2>
+                  <h2 className="text-5xl font-black text-red-600 mb-4 tracking-wide">INVOICE</h2>
                   <div className="inline-block text-left space-y-2">
                     <div className="grid grid-cols-2 gap-4 text-sm">
-                      <span className="font-bold">DATE</span>
-                      <span className="border-2 border-gray-300 px-3 py-1">{invoiceData.date}</span>
-                      <span className="font-bold">QUOTE #</span>
-                      <span className="border-2 border-gray-300 px-3 py-1">{invoiceData.quoteNumber}</span>
-                      <span className="font-bold">Currency</span>
-                      <span className="border-2 border-gray-300 px-3 py-1">{invoiceData.currency}</span>
-                      <span className="font-bold">VALID UNTIL</span>
-                      <span className="border-2 border-gray-300 px-3 py-1">{invoiceData.validUntil}</span>
+                      <span className="font-bold text-gray-700">Invoice Date:</span>
+                      <span className="border-2 border-gray-300 px-3 py-1 bg-gray-50">{invoiceData.date}</span>
+                      <span className="font-bold text-gray-700">Invoice No:</span>
+                      <span className="border-2 border-gray-300 px-3 py-1 bg-gray-50">{invoiceData.quoteNumber}</span>
+                      <span className="font-bold text-gray-700">Currency:</span>
+                      <span className="border-2 border-gray-300 px-3 py-1 bg-gray-50">{invoiceData.currency}</span>
+                      <span className="font-bold text-gray-700">Payment Terms:</span>
+                      <span className="border-2 border-gray-300 px-3 py-1 bg-gray-50">{invoiceData.validUntil}</span>
                     </div>
                   </div>
                 </div>
@@ -532,8 +532,8 @@ export function InvoiceGenerator() {
               {/* Scope of Work */}
               {invoiceData.scopeOfWork && (
                 <div className="mb-6">
-                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2">Scope of Work</div>
-                  <div className="text-sm whitespace-pre-wrap">{invoiceData.scopeOfWork}</div>
+                  <div className="bg-red-600 text-white px-4 py-2 font-black mb-2 text-sm tracking-wide">PROJECT DESCRIPTION</div>
+                  <div className="text-sm whitespace-pre-wrap text-gray-700 leading-relaxed">{invoiceData.scopeOfWork}</div>
                 </div>
               )}
 
@@ -541,19 +541,19 @@ export function InvoiceGenerator() {
               <table className="w-full mb-6 border-collapse">
                 <thead>
                   <tr className="bg-red-600 text-white">
-                    <th className="px-3 py-3 text-left font-black text-sm w-[45%]">DESCRIPTION</th>
-                    <th className="px-3 py-3 text-center font-black text-sm w-[20%]">UNIT PRICE</th>
-                    <th className="px-3 py-3 text-center font-black text-sm w-[15%]">QTY</th>
-                    <th className="px-3 py-3 text-right font-black text-sm w-[20%]">TOTAL PRICE</th>
+                    <th className="px-3 py-3 text-left font-black text-sm w-[45%] tracking-wide">DESCRIPTION</th>
+                    <th className="px-3 py-3 text-center font-black text-sm w-[20%] tracking-wide">UNIT PRICE</th>
+                    <th className="px-3 py-3 text-center font-black text-sm w-[15%] tracking-wide">QTY</th>
+                    <th className="px-3 py-3 text-right font-black text-sm w-[20%] tracking-wide">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody>
                   {invoiceData.items.map((item, index) => (
                     <tr key={item.id} className="border-b border-gray-300">
-                      <td className="px-3 py-3 text-sm align-top">{item.description}</td>
-                      <td className="px-3 py-3 text-center text-sm align-top">{invoiceData.currency}$ {item.unitPrice.toFixed(2)}</td>
-                      <td className="px-3 py-3 text-center text-sm align-top">{item.quantity}</td>
-                      <td className="px-3 py-3 text-right text-sm font-bold align-top">{item.total.toFixed(2)}</td>
+                      <td className="px-3 py-3 text-sm align-top text-gray-700">{item.description || 'Service/Product Description'}</td>
+                      <td className="px-3 py-3 text-center text-sm align-top text-gray-700">{invoiceData.currency} {item.unitPrice.toFixed(2)}</td>
+                      <td className="px-3 py-3 text-center text-sm align-top text-gray-700">{item.quantity}</td>
+                      <td className="px-3 py-3 text-right text-sm font-bold align-top text-gray-900">{invoiceData.currency} {item.total.toFixed(2)}</td>
                     </tr>
                   ))}
                   {/* Empty rows for spacing */}
@@ -570,32 +570,31 @@ export function InvoiceGenerator() {
 
               {/* Notes and Total */}
               <div className="grid grid-cols-2 gap-6 mt-6">
-                {/* Notes */}
                 <div className="pr-4">
-                  <div className="bg-red-600 text-white px-3 py-2 font-black mb-2 text-sm">NOTES</div>
-                  <div className="text-[10px] whitespace-pre-wrap font-semibold leading-relaxed">
+                  <div className="bg-red-600 text-white px-3 py-2 font-black mb-2 text-sm tracking-wide">PAYMENT INFORMATION</div>
+                  <div className="text-[10px] whitespace-pre-wrap font-semibold leading-relaxed text-gray-700">
                     {invoiceData.notes}
                   </div>
                 </div>
 
-                {/* Totals */}
                 <div className="pl-4">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center py-2 border-b border-gray-300">
-                      <span className="font-bold text-sm">TOTAL</span>
-                      <span className="font-bold text-base">$ {invoiceData.subtotal.toFixed(2)}</span>
+                      <span className="font-bold text-sm text-gray-700">Subtotal:</span>
+                      <span className="font-bold text-base text-gray-900">{invoiceData.currency} {invoiceData.subtotal.toFixed(2)}</span>
                     </div>
                     <div className="bg-red-100 border-2 border-red-600 p-3 flex justify-between items-center">
-                      <span className="font-black text-sm">GRAND TOTAL INC VAT</span>
-                      <span className="font-black text-xl text-red-600">$ {invoiceData.total.toFixed(2)}</span>
+                      <span className="font-black text-sm tracking-wide">TOTAL AMOUNT DUE:</span>
+                      <span className="font-black text-xl text-red-600">{invoiceData.currency} {invoiceData.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="mt-12 text-center">
-                <p className="font-bold text-gray-700">Thank You For Your Inquiry!</p>
+              <div className="mt-12 text-center border-t-2 border-gray-200 pt-6">
+                <p className="font-bold text-gray-800 text-sm">Thank you for your business!</p>
+                <p className="text-xs text-gray-600 mt-2">For any queries regarding this invoice, please contact us at sales@suigeneriszim.co.zw</p>
               </div>
             </div>
           </div>
