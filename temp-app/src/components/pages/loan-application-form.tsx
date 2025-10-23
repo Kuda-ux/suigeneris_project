@@ -1,7 +1,34 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard } from 'lucide-react';
+import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, TrendingUp, Award, Zap, Shield, Percent, Clock, CheckSquare } from 'lucide-react';
+
+// Payment calculation for Zimbabwean civil servants (20% interest over 6 months)
+const calculateLoanDetails = (price: number) => {
+  const principal = price;
+  const interestRate = 0.20;
+  const months = 6;
+  const totalWithInterest = principal * (1 + interestRate);
+  const monthlyPayment = totalWithInterest / months;
+  
+  return {
+    principal,
+    interestAmount: principal * interestRate,
+    totalAmount: totalWithInterest,
+    monthlyPayment,
+    months
+  };
+};
+
+// Check affordability (max 30% of net salary)
+const checkAffordability = (monthlyPayment: number, netSalary: number) => {
+  const maxAffordable = netSalary * 0.30;
+  return {
+    isAffordable: monthlyPayment <= maxAffordable,
+    percentageOfSalary: (monthlyPayment / netSalary) * 100,
+    maxAffordable
+  };
+};
 
 export function LoanApplicationForm() {
   const [step, setStep] = useState(1);
@@ -85,6 +112,11 @@ export function LoanApplicationForm() {
     setFormData({ ...formData, [field]: file });
   };
 
+  const selectedLoanDetails = formData.product_price ? calculateLoanDetails(parseFloat(formData.product_price)) : null;
+  const affordability = (selectedLoanDetails && formData.net_salary) 
+    ? checkAffordability(selectedLoanDetails.monthlyPayment, parseFloat(formData.net_salary))
+    : null;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
@@ -123,27 +155,76 @@ export function LoanApplicationForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center">
-            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-12 h-12 text-red-600" />
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center border-4 border-green-200">
+            <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <CheckCircle className="w-14 h-14 text-white" strokeWidth={3} />
             </div>
-            <h1 className="text-3xl font-black text-gray-900 mb-4">Application Submitted Successfully!</h1>
-            <p className="text-lg text-gray-600 mb-6">
-              Your loan application has been received and is being processed.
-            </p>
-            <div className="bg-red-50 rounded-2xl p-6 mb-6">
-              <p className="text-sm font-semibold text-red-900 mb-2">Application Number</p>
-              <p className="text-2xl font-black text-red-600">{applicationNumber}</p>
+            <h1 className="text-4xl font-black text-gray-900 mb-4">🎉 Congratulations!</h1>
+            <p className="text-xl font-bold text-green-600 mb-6">Your Application Has Been Successfully Submitted!</p>
+            
+            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 mb-6 border-2 border-red-200">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Your Application Number</p>
+              <p className="text-3xl font-black text-red-600 tracking-wide">{applicationNumber}</p>
             </div>
-            <p className="text-gray-600 mb-8">
-              A confirmation email has been sent to <strong>{formData.email}</strong>. 
-              Our team will review your application and contact you within 3-5 business days.
-            </p>
+            
+            <div className="bg-blue-50 rounded-2xl p-6 mb-6 text-left">
+              <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-yellow-500" />
+                What Happens Next?
+              </h3>
+              <ul className="space-y-3 text-sm text-gray-700">
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <CheckSquare className="w-4 h-4 text-green-600" />
+                  </div>
+                  <div>
+                    <strong className="text-gray-900">Confirmation Email</strong>
+                    <p className="text-gray-600">Sent to {formData.email}</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Clock className="w-4 h-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <strong className="text-gray-900">Review Process</strong>
+                    <p className="text-gray-600">2-3 business days</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <User className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <div>
+                    <strong className="text-gray-900">Approval Call</strong>
+                    <p className="text-gray-600">We'll contact you on {formData.phone}</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <CreditCard className="w-4 h-4 text-orange-600" />
+                  </div>
+                  <div>
+                    <strong className="text-gray-900">Laptop Delivery</strong>
+                    <p className="text-gray-600">Within 5 working days after approval</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            {selectedLoanDetails && (
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 mb-8 border-2 border-purple-200">
+                <p className="text-sm font-bold text-purple-900 mb-2">💼 Your Monthly Salary Deduction</p>
+                <p className="text-4xl font-black text-purple-600 mb-2">${selectedLoanDetails.monthlyPayment.toFixed(2)}</p>
+                <p className="text-xs text-gray-600">Deductions start after laptop delivery • 6 months payment plan</p>
+              </div>
+            )}
+
             <button
               onClick={() => window.location.href = '/'}
-              className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+              className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg text-lg hover:scale-105 transform"
             >
               Return to Home
             </button>
@@ -154,38 +235,77 @@ export function LoanApplicationForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+      <div className="max-w-5xl mx-auto">
+        {/* Engaging Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-black text-black mb-4 uppercase">
-            Zero Deposit Laptop Application
+          <div className="inline-block bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-2 rounded-full font-black text-sm mb-4 animate-pulse shadow-lg">
+            🔥 ZERO DEPOSIT • NO UPFRONT PAYMENT
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
+            Get Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Dream Laptop</span> Today!
           </h1>
-          <p className="text-lg text-red-600 font-bold">
-            For Zimbabwe Civil Servants • No Deposit Required
+          <p className="text-xl text-gray-700 font-bold mb-2">
+            Exclusively for Zimbabwe Civil Servants 🇿🇼
           </p>
+          <p className="text-lg text-gray-600 font-medium">
+            💳 Pay through salary deductions • ⚡ Fast approval • 🚚 Quick delivery
+          </p>
+        </div>
+
+        {/* Benefits Banner */}
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center hover:scale-105 transition-transform">
+            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Shield className="w-6 h-6 text-green-600" />
+            </div>
+            <h3 className="font-black text-gray-900 mb-2">100% Secure</h3>
+            <p className="text-sm text-gray-600">Government-approved financing program</p>
+          </div>
+          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200 text-center hover:scale-105 transition-transform">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Percent className="w-6 h-6 text-blue-600" />
+            </div>
+            <h3 className="font-black text-gray-900 mb-2">Low Interest</h3>
+            <p className="text-sm text-gray-600">Only 20% over 6 months</p>
+          </div>
+          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200 text-center hover:scale-105 transition-transform">
+            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Award className="w-6 h-6 text-purple-600" />
+            </div>
+            <h3 className="font-black text-gray-900 mb-2">Quality Laptops</h3>
+            <p className="text-sm text-gray-600">Certified refurbished & brand new</p>
+          </div>
         </div>
 
         {/* Progress Steps */}
         <div className="mb-8">
-          <div className="flex items-center justify-center gap-4">
-            {[1, 2, 3, 4, 5].map((s) => (
-              <div key={s} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  step >= s ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-600'
-                }`}>
-                  {s}
+          <div className="flex items-center justify-between max-w-3xl mx-auto">
+            {[
+              { num: 1, label: 'Personal', icon: User },
+              { num: 2, label: 'Employment', icon: Briefcase },
+              { num: 3, label: 'Banking', icon: Building },
+              { num: 4, label: 'Laptop', icon: CreditCard },
+              { num: 5, label: 'Documents', icon: FileText }
+            ].map((s, idx) => (
+              <div key={s.num} className="flex items-center flex-1">
+                <div className="flex flex-col items-center flex-1">
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center font-black text-lg transition-all ${
+                    step >= s.num 
+                      ? 'bg-gradient-to-r from-red-600 to-purple-600 text-white shadow-lg scale-110' 
+                      : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    {step > s.num ? <CheckCircle className="w-7 h-7" /> : <s.icon className="w-6 h-6" />}
+                  </div>
+                  <span className={`text-xs font-bold mt-2 ${step >= s.num ? 'text-red-600' : 'text-gray-500'}`}>
+                    {s.label}
+                  </span>
                 </div>
-                {s < 5 && <div className={`w-12 h-1 ${step > s ? 'bg-red-600' : 'bg-gray-200'}`} />}
+                {idx < 4 && (
+                  <div className={`h-1 flex-1 mx-2 transition-all ${step > s.num ? 'bg-gradient-to-r from-red-600 to-purple-600' : 'bg-gray-200'}`} />
+                )}
               </div>
             ))}
-          </div>
-          <div className="flex justify-center gap-8 mt-4">
-            <span className="text-xs font-semibold text-gray-600">Personal</span>
-            <span className="text-xs font-semibold text-gray-600">Employment</span>
-            <span className="text-xs font-semibold text-gray-600">Banking</span>
-            <span className="text-xs font-semibold text-gray-600">Laptop</span>
-            <span className="text-xs font-semibold text-gray-600">Documents</span>
           </div>
         </div>
 
