@@ -310,109 +310,114 @@ export function LoanApplicationForm() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-4 border-gray-100">
           {/* Step 1: Personal Information */}
           {step === 1 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <User className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-black text-gray-900">Personal Information</h2>
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-red-200">
+                <div className="w-12 h-12 bg-gradient-to-r from-red-600 to-purple-600 rounded-xl flex items-center justify-center">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900">Personal Information</h2>
+                  <p className="text-sm text-gray-600 font-medium">Let's get to know you better</p>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Full Name *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="John Doe"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    placeholder="e.g., Tendai Moyo"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">National ID *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">National ID *</label>
                   <input
                     type="text"
                     required
                     value={formData.national_id}
                     onChange={(e) => setFormData({ ...formData, national_id: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="63-123456A63"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    placeholder="e.g., 63-123456A63"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Date of Birth *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Date of Birth *</label>
                   <input
                     type="date"
                     required
                     value={formData.date_of_birth}
                     onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Gender *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Gender *</label>
                   <select
                     required
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-bold text-lg transition-all"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
-                    <option value="other">Other</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Email Address *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Email Address *</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="john@example.com"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    placeholder="tendai@email.com"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Phone Number *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Phone Number *</label>
                   <input
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
                     placeholder="+263 77 123 4567"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">Home Address *</label>
+                <label className="block text-sm font-black text-gray-900 mb-2">Home Address *</label>
                 <textarea
                   required
                   value={formData.home_address}
                   onChange={(e) => setFormData({ ...formData, home_address: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium resize-none"
-                  placeholder="123 Main Street, Harare, Zimbabwe"
+                  className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg resize-none transition-all"
+                  placeholder="e.g., 123 Samora Machel Avenue, Harare"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="w-full px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                className="w-full px-6 py-5 bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
               >
-                Continue to Employment Information
+                Continue to Employment Details
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           )}
@@ -420,43 +425,54 @@ export function LoanApplicationForm() {
           {/* Step 2: Employment Information */}
           {step === 2 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Briefcase className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-black text-gray-900">Employment Information</h2>
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-green-200">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-600 to-blue-600 rounded-xl flex items-center justify-center">
+                  <Briefcase className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900">Employment Information</h2>
+                  <p className="text-sm text-gray-600 font-medium">Tell us about your work</p>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+                <p className="text-sm font-bold text-blue-900">
+                  💡 <strong>Tip:</strong> Your salary information helps us determine your loan eligibility and monthly payment amount.
+                </p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Employer (Ministry/Department) *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Employer (Ministry/Department) *</label>
                   <input
                     type="text"
                     required
                     value={formData.employer}
                     onChange={(e) => setFormData({ ...formData, employer: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="Ministry of Health"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    placeholder="e.g., Ministry of Health"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Job Title *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Job Title *</label>
                   <input
                     type="text"
                     required
                     value={formData.job_title}
                     onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="Senior Nurse"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    placeholder="e.g., Senior Nurse"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Employment Status *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Employment Status *</label>
                   <select
                     required
                     value={formData.employment_status}
                     onChange={(e) => setFormData({ ...formData, employment_status: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
                   >
                     <option value="permanent">Permanent</option>
                     <option value="contract">Contract</option>
@@ -465,58 +481,90 @@ export function LoanApplicationForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Payroll/SSB Number *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Payroll/SSB Number *</label>
                   <input
                     type="text"
                     required
                     value={formData.payroll_number}
                     onChange={(e) => setFormData({ ...formData, payroll_number: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-medium"
-                    placeholder="SSB123456"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    placeholder="e.g., SSB123456"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Gross Salary (USD) *</label>
-                  <input
-                    type="number"
-                    required
-                    step="0.01"
-                    value={formData.gross_salary}
-                    onChange={(e) => setFormData({ ...formData, gross_salary: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-bold text-lg"
-                    placeholder="1500.00"
-                  />
+                  <label className="block text-sm font-black text-gray-900 mb-2">Gross Salary (USD) *</label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="number"
+                      required
+                      step="0.01"
+                      min="0"
+                      value={formData.gross_salary}
+                      onChange={(e) => setFormData({ ...formData, gross_salary: e.target.value })}
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
+                      placeholder="1500.00"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Net Salary (USD) *</label>
-                  <input
-                    type="number"
-                    required
-                    step="0.01"
-                    value={formData.net_salary}
-                    onChange={(e) => setFormData({ ...formData, net_salary: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-bold text-lg"
-                    placeholder="1200.00"
-                  />
+                  <label className="block text-sm font-black text-gray-900 mb-2">Net Salary (USD) *</label>
+                  <div className="relative">
+                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="number"
+                      required
+                      step="0.01"
+                      min="0"
+                      value={formData.net_salary}
+                      onChange={(e) => setFormData({ ...formData, net_salary: e.target.value })}
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
+                      placeholder="1200.00"
+                    />
+                  </div>
                 </div>
               </div>
+
+              {formData.net_salary && parseFloat(formData.net_salary) > 0 && (
+                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border-2 border-green-200">
+                  <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
+                    <TrendingUp className="w-5 h-5 text-green-600" />
+                    Your Loan Capacity
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Maximum Monthly Payment (30% of salary)</p>
+                      <p className="text-2xl font-black text-green-600">
+                        ${(parseFloat(formData.net_salary) * 0.30).toFixed(2)}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Maximum Laptop Price</p>
+                      <p className="text-2xl font-black text-blue-600">
+                        ${((parseFloat(formData.net_salary) * 0.30 * 6) / 1.20).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="flex gap-4">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                  className="flex-1 px-6 py-5 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   Continue to Banking
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
