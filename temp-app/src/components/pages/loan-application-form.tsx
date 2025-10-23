@@ -573,21 +573,26 @@ export function LoanApplicationForm() {
           {/* Step 3: Banking Information */}
           {step === 3 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <Building className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-black text-gray-900">Banking Information</h2>
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-purple-200">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
+                  <Building className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900">Banking Information</h2>
+                  <p className="text-sm text-gray-600 font-medium">Where should we deposit your laptop funds?</p>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Bank Name *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Bank Name *</label>
                   <select
                     required
                     value={formData.bank_name}
                     onChange={(e) => setFormData({ ...formData, bank_name: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all"
                   >
-                    <option value="">Select Bank</option>
+                    <option value="">Select Your Bank</option>
                     <option value="CBZ Bank">CBZ Bank</option>
                     <option value="Stanbic Bank">Stanbic Bank</option>
                     <option value="FBC Bank">FBC Bank</option>
@@ -600,13 +605,13 @@ export function LoanApplicationForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-gray-900 mb-2">Account Number *</label>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Account Number *</label>
                   <input
                     type="text"
                     required
                     value={formData.account_number}
                     onChange={(e) => setFormData({ ...formData, account_number: e.target.value })}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none font-bold text-lg"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all"
                     placeholder="1234567890"
                   />
                 </div>
@@ -616,16 +621,17 @@ export function LoanApplicationForm() {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg"
+                  className="flex-1 px-6 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  Select Your Laptop
+                  Choose Your Laptop
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -634,16 +640,35 @@ export function LoanApplicationForm() {
           {/* Step 4: Laptop Selection */}
           {step === 4 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <CreditCard className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-black text-gray-900">Select Your Laptop</h2>
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-orange-200">
+                <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-xl flex items-center justify-center">
+                  <CreditCard className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900">Choose Your Laptop</h2>
+                  <p className="text-sm text-gray-600 font-medium">Zero deposit • Pay monthly through salary</p>
+                </div>
               </div>
 
-              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-black text-red-900 mb-2">💻 Zero Deposit - Pay Monthly</h3>
-                <p className="text-sm text-gray-700 font-medium">
-                  Choose your laptop and pay through convenient salary deductions. No upfront payment required!
-                </p>
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <h3 className="text-lg font-black text-red-900 mb-2 flex items-center gap-2">
+                  <Zap className="w-5 h-5" />
+                  💻 How It Works
+                </h3>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-600 font-bold">1.</span>
+                    <span>Select your preferred laptop below</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-600 font-bold">2.</span>
+                    <span>See instant payment breakdown</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-red-600 font-bold">3.</span>
+                    <span>Monthly deductions from your salary (20% interest, 6 months)</span>
+                  </li>
+                </ul>
               </div>
 
               {loadingProducts ? (
@@ -657,45 +682,91 @@ export function LoanApplicationForm() {
                   <p className="text-gray-600 font-semibold">No laptops available at the moment</p>
                 </div>
               ) : (
-                <div className="grid md:grid-cols-2 gap-4">
-                  {products.map((product) => (
-                    <div
-                      key={product.id}
-                      onClick={() => {
-                        setFormData({
-                          ...formData,
-                          product_id: product.id.toString(),
-                          product_name: product.name,
-                          product_price: product.price.toString()
-                        });
-                      }}
-                      className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-                        formData.product_id === product.id.toString()
-                          ? 'border-red-600 bg-red-50'
-                          : 'border-gray-200 hover:border-red-300'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <input
-                          type="radio"
-                          name="product"
-                          checked={formData.product_id === product.id.toString()}
-                          onChange={() => {}}
-                          className="mt-1 w-5 h-5 text-red-600"
-                        />
-                        <div className="flex-1">
-                          <h4 className="font-black text-gray-900">{product.name}</h4>
-                          <p className="text-sm text-gray-600 mb-2">{product.description || 'Quality refurbished laptop'}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-2xl font-black text-red-600">${product.price}</span>
-                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
-                              {product.currentStock || product.stock_count || 0} in stock
-                            </span>
+                <div className="grid md:grid-cols-2 gap-6">
+                  {products.map((product) => {
+                    const loanDetails = calculateLoanDetails(product.price);
+                    const isAffordable = formData.net_salary 
+                      ? checkAffordability(loanDetails.monthlyPayment, parseFloat(formData.net_salary))
+                      : null;
+
+                    return (
+                      <div
+                        key={product.id}
+                        onClick={() => {
+                          setFormData({
+                            ...formData,
+                            product_id: product.id.toString(),
+                            product_name: product.name,
+                            product_price: product.price.toString()
+                          });
+                        }}
+                        className={`border-4 rounded-2xl p-6 cursor-pointer transition-all ${
+                          formData.product_id === product.id.toString()
+                            ? 'border-red-600 bg-red-50 shadow-xl scale-105'
+                            : 'border-gray-200 hover:border-red-300 hover:shadow-lg'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3 mb-4">
+                          <input
+                            type="radio"
+                            name="product"
+                            checked={formData.product_id === product.id.toString()}
+                            onChange={() => {}}
+                            className="mt-1 w-6 h-6 text-red-600"
+                          />
+                          <div className="flex-1">
+                            <h4 className="font-black text-xl text-gray-900 mb-2">{product.name}</h4>
+                            <p className="text-sm text-gray-600 mb-3">{product.description || 'Quality laptop for professionals'}</p>
+                            <div className="flex items-center justify-between mb-3">
+                              <span className="text-3xl font-black text-red-600">${product.price}</span>
+                              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">
+                                {product.currentStock || product.stock_count || 0} in stock
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Payment Breakdown */}
+                        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
+                          <h5 className="font-black text-gray-900 mb-3 text-sm">💰 Payment Plan</h5>
+                          <div className="space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Laptop Price:</span>
+                              <span className="font-bold">${loanDetails.principal.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Interest (20%):</span>
+                              <span className="font-bold text-orange-600">${loanDetails.interestAmount.toFixed(2)}</span>
+                            </div>
+                            <div className="flex justify-between pt-2 border-t-2 border-gray-200">
+                              <span className="font-bold text-gray-900">Total to Pay:</span>
+                              <span className="font-black text-lg">${loanDetails.totalAmount.toFixed(2)}</span>
+                            </div>
+                            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-3 mt-3">
+                              <div className="flex justify-between items-center">
+                                <span className="font-black text-gray-900">Monthly Payment:</span>
+                                <span className="font-black text-2xl text-red-600">${loanDetails.monthlyPayment.toFixed(2)}</span>
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">For 6 months</p>
+                            </div>
+
+                            {isAffordable && (
+                              <div className={`mt-3 p-2 rounded-lg text-xs font-bold ${
+                                isAffordable.isAffordable 
+                                  ? 'bg-green-100 text-green-700' 
+                                  : 'bg-red-100 text-red-700'
+                              }`}>
+                                {isAffordable.isAffordable 
+                                  ? `✓ Affordable! (${isAffordable.percentageOfSalary.toFixed(1)}% of your salary)` 
+                                  : `⚠ ${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
+                                }
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
@@ -703,7 +774,7 @@ export function LoanApplicationForm() {
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
@@ -711,9 +782,10 @@ export function LoanApplicationForm() {
                   type="button"
                   onClick={() => setStep(5)}
                   disabled={!formData.product_id}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-6 py-5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Continue to Documents
+                  Upload Documents
+                  <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
@@ -722,44 +794,98 @@ export function LoanApplicationForm() {
           {/* Step 5: Documents & Consent */}
           {step === 5 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <FileText className="w-6 h-6 text-red-600" />
-                <h2 className="text-2xl font-black text-gray-900">Required Documents</h2>
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-blue-200">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-black text-gray-900">Upload Documents</h2>
+                  <p className="text-sm text-gray-600 font-medium">Final step! Upload your supporting documents</p>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                <h3 className="font-black text-blue-900 mb-2 flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  🔒 Your Documents Are Safe
+                </h3>
+                <p className="text-sm text-gray-700">
+                  All documents are encrypted and stored securely. We only use them to verify your application.
+                </p>
               </div>
 
               <div className="space-y-4">
                 {[
-                  { field: 'national_id_document', label: 'National ID Copy' },
-                  { field: 'payslip_document', label: 'Recent Payslip' },
-                  { field: 'bank_statement_document', label: 'Bank Statement (Last 3 months)' },
-                  { field: 'proof_of_residence_document', label: 'Proof of Residence' }
+                  { field: 'national_id_document', label: 'National ID Copy', icon: '🪪', desc: 'Clear photo or scan of your ID' },
+                  { field: 'payslip_document', label: 'Recent Payslip', icon: '💰', desc: 'Latest salary slip from your employer' },
+                  { field: 'bank_statement_document', label: 'Bank Statement', icon: '🏦', desc: 'Last 3 months statement' },
+                  { field: 'proof_of_residence_document', label: 'Proof of Residence', icon: '🏠', desc: 'Utility bill or rental agreement' }
                 ].map((doc) => (
-                  <div key={doc.field} className="border-2 border-gray-200 rounded-xl p-4">
-                    <label className="block text-sm font-bold text-gray-900 mb-2">{doc.label} *</label>
+                  <div key={doc.field} className="border-3 border-gray-300 rounded-xl p-5 hover:border-blue-400 transition-all bg-white">
+                    <div className="flex items-start gap-3 mb-3">
+                      <span className="text-2xl">{doc.icon}</span>
+                      <div className="flex-1">
+                        <label className="block text-base font-black text-gray-900 mb-1">{doc.label} *</label>
+                        <p className="text-xs text-gray-600">{doc.desc}</p>
+                      </div>
+                    </div>
                     <input
                       type="file"
                       required
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange(doc.field, e.target.files?.[0] || null)}
-                      className="w-full text-sm font-medium text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                      className="w-full text-sm font-medium text-gray-700 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-gradient-to-r file:from-blue-600 file:to-indigo-600 file:text-white hover:file:from-blue-700 hover:file:to-indigo-700 file:cursor-pointer file:transition-all"
                     />
-                    <p className="text-xs text-gray-500 mt-2">Accepted formats: PDF, JPG, PNG (Max 5MB)</p>
+                    <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
+                      <Upload className="w-3 h-3" />
+                      PDF, JPG, PNG • Max 5MB
+                    </p>
                   </div>
                 ))}
               </div>
 
-              <div className="bg-red-50 border-2 border-red-200 rounded-xl p-6">
-                <label className="flex items-start gap-3 cursor-pointer">
+              {selectedLoanDetails && (
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-3 border-green-300 rounded-xl p-6">
+                  <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
+                    <Award className="w-5 h-5 text-green-600" />
+                    📋 Application Summary
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-600 mb-1">Selected Laptop</p>
+                      <p className="font-black text-gray-900">{formData.product_name}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-1">Laptop Price</p>
+                      <p className="font-black text-gray-900">${formData.product_price}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-1">Total to Pay</p>
+                      <p className="font-black text-orange-600">${selectedLoanDetails.totalAmount.toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 mb-1">Monthly Deduction</p>
+                      <p className="font-black text-2xl text-green-600">${selectedLoanDetails.monthlyPayment.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-gradient-to-r from-red-50 to-orange-50 border-3 border-red-300 rounded-xl p-6">
+                <label className="flex items-start gap-4 cursor-pointer">
                   <input
                     type="checkbox"
                     required
                     checked={formData.data_sharing_consent}
                     onChange={(e) => setFormData({ ...formData, data_sharing_consent: e.target.checked })}
-                    className="mt-1 w-5 h-5 text-blue-600 border-2 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
+                    className="mt-1 w-6 h-6 text-red-600 border-2 border-gray-400 rounded focus:ring-4 focus:ring-red-200"
                   />
-                  <span className="text-sm font-medium text-gray-900">
-                    I consent to Sui Generis Technologies sharing my application data with partner microfinance institutions for the purpose of loan processing. I confirm that all information provided is accurate and complete. *
-                  </span>
+                  <div>
+                    <p className="text-sm font-black text-gray-900 mb-2">✓ I Agree to Terms & Conditions *</p>
+                    <p className="text-xs font-medium text-gray-700 leading-relaxed">
+                      I consent to <strong>Sui Generis Technologies</strong> sharing my application data with partner financial institutions for loan processing. I confirm that all information provided is <strong>accurate and complete</strong>. I understand that monthly deductions will be made from my salary for 6 months.
+                    </p>
+                  </div>
                 </label>
               </div>
 
@@ -767,16 +893,26 @@ export function LoanApplicationForm() {
                 <button
                   type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all"
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-6 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-8 py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-black text-xl rounded-xl transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
-                  {submitting ? 'Submitting...' : 'Submit Application'}
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      🚀 Submit Application
+                      <CheckCircle className="w-6 h-6" />
+                    </>
+                  )}
                 </button>
               </div>
             </div>
