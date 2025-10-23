@@ -32,7 +32,7 @@ import { ReportsSection } from './reports-section';
 import { AlertsSystem } from './alerts-system';
 import { OrdersManagement } from './orders-management';
 import { AnalyticsDashboard } from './analytics-dashboard';
-import { LoanApplicationsManagement } from './loan-applications-management';
+import { CivilServantsManagement } from './civil-servants-management';
 import { InvoiceGenerator } from './invoice-generator';
 import { QuotationGenerator } from './quotation-generator';
 
@@ -41,7 +41,7 @@ const sidebarItems = [
   { id: 'products', label: 'Products', icon: Package },
   { id: 'stock', label: 'Stock Management', icon: Warehouse },
   { id: 'orders', label: 'Orders', icon: ShoppingCart },
-  { id: 'loans', label: 'Loan Applications', icon: CreditCard },
+  { id: 'civil-servants', label: 'Civil Servants', icon: CreditCard },
   { id: 'invoices', label: 'Invoices', icon: Receipt },
   { id: 'quotations', label: 'Quotations', icon: FileSpreadsheet },
   { id: 'users', label: 'Users & Roles', icon: Shield },
@@ -86,8 +86,8 @@ export function AdminDashboard() {
         return <StockManagement />;
       case 'orders':
         return <OrdersManagement />;
-      case 'loans':
-        return <LoanApplicationsManagement />;
+      case 'civil-servants':
+        return <CivilServantsManagement />;
       case 'invoices':
         return <InvoiceGenerator />;
       case 'quotations':
