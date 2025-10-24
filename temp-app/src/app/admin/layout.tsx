@@ -1,7 +1,6 @@
-export const metadata = {
-  title: 'Admin Dashboard - Sui Generis Technologies',
-  description: 'Admin panel for managing Sui Generis store',
-};
+'use client';
+
+import { AdminGuard } from '@/components/auth/admin-guard';
 
 export default function AdminLayout({
   children,
@@ -9,8 +8,8 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
+    <AdminGuard>
       {children}
-    </>
+    </AdminGuard>
   );
 }

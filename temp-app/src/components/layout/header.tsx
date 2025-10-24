@@ -65,12 +65,8 @@ export function Header() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            {user ? (
+            {user && (
               <span className="font-bold">👋 Welcome, {getDisplayName()}!</span>
-            ) : (
-              <Link href="/admin" className="hover:text-red-200 transition-colors font-medium">
-                Admin Portal
-              </Link>
             )}
           </div>
         </div>
