@@ -157,8 +157,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data?.user && !data.session) {
         throw new Error('Please check your email to confirm your account before signing in.');
       }
-
-      return data;
     } catch (error) {
       console.error('Error signing up with email:', error);
       throw error;
