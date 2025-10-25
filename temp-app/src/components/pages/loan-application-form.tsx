@@ -1,34 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, TrendingUp, Award, Zap, Shield, Percent, Clock, CheckSquare } from 'lucide-react';
-
-// Payment calculation for Zimbabwean civil servants (20% interest over 6 months)
-const calculateLoanDetails = (price: number) => {
-  const principal = price;
-  const interestRate = 0.20;
-  const months = 6;
-  const totalWithInterest = principal * (1 + interestRate);
-  const monthlyPayment = totalWithInterest / months;
-  
-  return {
-    principal,
-    interestAmount: principal * interestRate,
-    totalAmount: totalWithInterest,
-    monthlyPayment,
-    months
-  };
-};
-
-// Check affordability (max 30% of net salary)
-const checkAffordability = (monthlyPayment: number, netSalary: number) => {
-  const maxAffordable = netSalary * 0.30;
-  return {
-    isAffordable: monthlyPayment <= maxAffordable,
-    percentageOfSalary: (monthlyPayment / netSalary) * 100,
-    maxAffordable
-  };
-};
+import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp } from 'lucide-react';
+import { calculateReducingBalance, checkAffordability, calculateMaxLaptopPrice } from '@/utils/loan-calculator';
 
 export function LoanApplicationForm() {
   const [step, setStep] = useState(1);
@@ -97,6 +71,7 @@ export function LoanApplicationForm() {
     product_id: '',
     product_name: '',
     product_price: '',
+    loan_term: '6', // 6 or 12 months
     
     // Documents
     national_id_document: null as File | null,
@@ -112,9 +87,14 @@ export function LoanApplicationForm() {
     setFormData({ ...formData, [field]: file });
   };
 
-  const selectedLoanDetails = formData.product_price ? calculateLoanDetails(parseFloat(formData.product_price)) : null;
+  const selectedLoanDetails = formData.product_price 
+    ? calculateReducingBalance(parseFloat(formData.product_price), 7, parseInt(formData.loan_term))
+    : null;
   const affordability = (selectedLoanDetails && formData.net_salary) 
     ? checkAffordability(selectedLoanDetails.monthlyPayment, parseFloat(formData.net_salary))
+    : null;
+  const maxLaptopPrice = formData.net_salary 
+    ? calculateMaxLaptopPrice(parseFloat(formData.net_salary), parseInt(formData.loan_term))
     : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -155,14 +135,14 @@ export function LoanApplicationForm() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-purple-50 py-12 px-4">
         <div className="max-w-3xl mx-auto">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center border-4 border-green-200">
-            <div className="w-24 h-24 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
-              <CheckCircle className="w-14 h-14 text-white" strokeWidth={3} />
+          <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 text-center border-2 border-gray-200">
+            <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-12 h-12 text-white" strokeWidth={3} />
             </div>
-            <h1 className="text-4xl font-black text-gray-900 mb-4">🎉 Congratulations!</h1>
-            <p className="text-xl font-bold text-green-600 mb-6">Your Application Has Been Successfully Submitted!</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Application Submitted Successfully</h1>
+            <p className="text-lg font-semibold text-green-600 mb-6">Thank you for applying with Sui Generis Technologies</p>
             
             <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-6 mb-6 border-2 border-red-200">
               <p className="text-sm font-semibold text-gray-700 mb-2">Your Application Number</p>
@@ -170,10 +150,7 @@ export function LoanApplicationForm() {
             </div>
             
             <div className="bg-blue-50 rounded-2xl p-6 mb-6 text-left">
-              <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-500" />
-                What Happens Next?
-              </h3>
+              <h3 className="font-bold text-gray-900 mb-4 text-lg">What Happens Next?</h3>
               <ul className="space-y-3 text-sm text-gray-700">
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -215,10 +192,10 @@ export function LoanApplicationForm() {
             </div>
 
             {selectedLoanDetails && (
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 mb-8 border-2 border-purple-200">
-                <p className="text-sm font-bold text-purple-900 mb-2">💼 Your Monthly Salary Deduction</p>
-                <p className="text-4xl font-black text-purple-600 mb-2">${selectedLoanDetails.monthlyPayment.toFixed(2)}</p>
-                <p className="text-xs text-gray-600">Deductions start after laptop delivery • 6 months payment plan</p>
+              <div className="bg-gradient-to-r from-red-50 to-purple-50 rounded-2xl p-6 mb-8 border-2 border-red-200">
+                <p className="text-sm font-bold text-gray-900 mb-2">Your Monthly Salary Deduction</p>
+                <p className="text-4xl font-bold text-red-600 mb-2">${selectedLoanDetails.monthlyPayment.toFixed(2)}</p>
+                <p className="text-sm text-gray-600">Deductions start after laptop delivery | {formData.loan_term} months payment plan</p>
               </div>
             )}
 
@@ -235,46 +212,46 @@ export function LoanApplicationForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-purple-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Engaging Header */}
-        <div className="text-center mb-8">
-          <div className="inline-block bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-2 rounded-full font-black text-sm mb-4 animate-pulse shadow-lg">
-            🔥 ZERO DEPOSIT • NO UPFRONT PAYMENT
+        {/* Professional Header */}
+        <div className="text-center mb-12">
+          <div className="inline-block bg-gradient-to-r from-red-600 to-purple-600 text-white px-8 py-3 rounded-lg font-bold text-sm mb-6 shadow-lg">
+            ZERO DEPOSIT REQUIRED
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-4 leading-tight">
-            Get Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Dream Laptop</span> Today!
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+            Civil Servants <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Laptop Financing</span>
           </h1>
-          <p className="text-xl text-gray-700 font-bold mb-2">
-            Exclusively for Zimbabwe Civil Servants 🇿🇼
+          <p className="text-xl text-gray-700 font-semibold mb-3">
+            Exclusively for Zimbabwe Government Employees
           </p>
-          <p className="text-lg text-gray-600 font-medium">
-            💳 Pay through salary deductions • ⚡ Fast approval • 🚚 Quick delivery
+          <p className="text-base text-gray-600 max-w-2xl mx-auto">
+            Affordable monthly deductions | Fast approval process | Quality certified devices
           </p>
         </div>
 
-        {/* Benefits Banner */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-green-200 text-center hover:scale-105 transition-transform">
-            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Shield className="w-6 h-6 text-green-600" />
+        {/* Key Features */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Shield className="w-7 h-7 text-red-600" />
             </div>
-            <h3 className="font-black text-gray-900 mb-2">100% Secure</h3>
-            <p className="text-sm text-gray-600">Government-approved financing program</p>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">Secure Process</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">Bank-approved financing with full data protection</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-blue-200 text-center hover:scale-105 transition-transform">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Percent className="w-6 h-6 text-blue-600" />
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <Calculator className="w-7 h-7 text-purple-600" />
             </div>
-            <h3 className="font-black text-gray-900 mb-2">Low Interest</h3>
-            <p className="text-sm text-gray-600">Only 20% over 6 months</p>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">Flexible Terms</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">Choose 6 or 12 months at 7% monthly interest</p>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-purple-200 text-center hover:scale-105 transition-transform">
-            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Award className="w-6 h-6 text-purple-600" />
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 text-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center mx-auto mb-4">
+              <TrendingUp className="w-7 h-7 text-green-600" />
             </div>
-            <h3 className="font-black text-gray-900 mb-2">Quality Laptops</h3>
-            <p className="text-sm text-gray-600">Certified refurbished & brand new</p>
+            <h3 className="font-bold text-gray-900 mb-2 text-lg">Quality Devices</h3>
+            <p className="text-sm text-gray-600 leading-relaxed">Certified laptops with warranty included</p>
           </div>
         </div>
 
@@ -527,25 +504,69 @@ export function LoanApplicationForm() {
                 </div>
               </div>
 
-              {formData.net_salary && parseFloat(formData.net_salary) > 0 && (
-                <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border-2 border-green-200">
-                  <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-green-600" />
-                    Your Loan Capacity
+              {/* Loan Term Selection */}
+              <div className="bg-gradient-to-r from-red-50 to-purple-50 rounded-xl p-6 border-2 border-red-200">
+                <h3 className="font-bold text-gray-900 mb-4 text-lg">Select Repayment Period</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, loan_term: '6' })}
+                    className={`p-6 rounded-xl border-3 transition-all ${
+                      formData.loan_term === '6'
+                        ? 'border-red-600 bg-red-50 shadow-lg'
+                        : 'border-gray-300 bg-white hover:border-red-300'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-900 mb-2">6 Months</p>
+                      <p className="text-sm text-gray-600">Higher monthly payments</p>
+                      <p className="text-sm text-gray-600">Lower total interest</p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, loan_term: '12' })}
+                    className={`p-6 rounded-xl border-3 transition-all ${
+                      formData.loan_term === '12'
+                        ? 'border-purple-600 bg-purple-50 shadow-lg'
+                        : 'border-gray-300 bg-white hover:border-purple-300'
+                    }`}
+                  >
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-gray-900 mb-2">12 Months</p>
+                      <p className="text-sm text-gray-600">Lower monthly payments</p>
+                      <p className="text-sm text-gray-600">More affordable option</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {formData.net_salary && parseFloat(formData.net_salary) > 0 && maxLaptopPrice && (
+                <div className="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-md">
+                  <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-lg">
+                    <Calculator className="w-5 h-5 text-red-600" />
+                    Your Loan Capacity ({formData.loan_term} Months)
                   </h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-gray-600 mb-1">Maximum Monthly Payment (30% of salary)</p>
-                      <p className="text-2xl font-black text-green-600">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
+                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Monthly Deduction</p>
+                      <p className="text-sm text-gray-600 mb-1">(30% of net salary)</p>
+                      <p className="text-3xl font-bold text-red-600">
                         ${(parseFloat(formData.net_salary) * 0.30).toFixed(2)}
                       </p>
                     </div>
-                    <div>
-                      <p className="text-sm text-gray-600 mb-1">Maximum Laptop Price</p>
-                      <p className="text-2xl font-black text-blue-600">
-                        ${((parseFloat(formData.net_salary) * 0.30 * 6) / 1.20).toFixed(2)}
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
+                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Laptop Price</p>
+                      <p className="text-sm text-gray-600 mb-1">(at 7% monthly interest)</p>
+                      <p className="text-3xl font-bold text-purple-600">
+                        ${maxLaptopPrice.toFixed(2)}
                       </p>
                     </div>
+                  </div>
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <p className="text-sm text-blue-900 font-medium">
+                      <strong>Note:</strong> Interest is calculated using the reducing balance method at 7% per month as per bank requirements.
+                    </p>
                   </div>
                 </div>
               )}
@@ -650,11 +671,8 @@ export function LoanApplicationForm() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-black text-red-900 mb-2 flex items-center gap-2">
-                  <Zap className="w-5 h-5" />
-                  💻 How It Works
-                </h3>
+              <div className="bg-gradient-to-r from-red-50 to-purple-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-3">How It Works</h3>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">1.</span>
@@ -662,29 +680,29 @@ export function LoanApplicationForm() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">2.</span>
-                    <span>See instant payment breakdown</span>
+                    <span>View detailed payment breakdown with reducing balance interest</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-red-600 font-bold">3.</span>
-                    <span>Monthly deductions from your salary (20% interest, 6 months)</span>
+                    <span>Monthly deductions from your salary (7% per month, {formData.loan_term} months)</span>
                   </li>
                 </ul>
               </div>
 
               {loadingProducts ? (
                 <div className="text-center py-12">
-                  <div className="text-4xl mb-4">⏳</div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600 mx-auto mb-4"></div>
                   <p className="text-gray-600 font-semibold">Loading available laptops...</p>
                 </div>
               ) : products.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-4xl mb-4">📦</div>
-                  <p className="text-gray-600 font-semibold">No laptops available at the moment</p>
+                <div className="text-center py-12 bg-gray-50 rounded-xl p-8">
+                  <p className="text-gray-600 font-semibold text-lg">No laptops available at the moment</p>
+                  <p className="text-gray-500 text-sm mt-2">Please check back later</p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
                   {products.map((product) => {
-                    const loanDetails = calculateLoanDetails(product.price);
+                    const loanDetails = calculateReducingBalance(product.price, 7, parseInt(formData.loan_term));
                     const isAffordable = formData.net_salary 
                       ? checkAffordability(loanDetails.monthlyPayment, parseFloat(formData.net_salary))
                       : null;
@@ -727,38 +745,38 @@ export function LoanApplicationForm() {
                         </div>
 
                         {/* Payment Breakdown */}
-                        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-                          <h5 className="font-black text-gray-900 mb-3 text-sm">💰 Payment Plan</h5>
+                        <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border-2 border-gray-200">
+                          <h5 className="font-bold text-gray-900 mb-3 text-sm">Payment Plan ({formData.loan_term} Months)</h5>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Laptop Price:</span>
                               <span className="font-bold">${loanDetails.principal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Interest (20%):</span>
-                              <span className="font-bold text-orange-600">${loanDetails.interestAmount.toFixed(2)}</span>
+                              <span className="text-gray-600">Total Interest (7%/month):</span>
+                              <span className="font-bold text-orange-600">${loanDetails.totalInterest.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between pt-2 border-t-2 border-gray-200">
                               <span className="font-bold text-gray-900">Total to Pay:</span>
-                              <span className="font-black text-lg">${loanDetails.totalAmount.toFixed(2)}</span>
+                              <span className="font-bold text-lg">${loanDetails.totalAmount.toFixed(2)}</span>
                             </div>
-                            <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-lg p-3 mt-3">
+                            <div className="bg-gradient-to-r from-red-50 to-purple-50 rounded-lg p-3 mt-3 border border-red-200">
                               <div className="flex justify-between items-center">
-                                <span className="font-black text-gray-900">Monthly Payment:</span>
-                                <span className="font-black text-2xl text-red-600">${loanDetails.monthlyPayment.toFixed(2)}</span>
+                                <span className="font-bold text-gray-900">Monthly Deduction:</span>
+                                <span className="font-bold text-2xl text-red-600">${loanDetails.monthlyPayment.toFixed(2)}</span>
                               </div>
-                              <p className="text-xs text-gray-600 mt-1">For 6 months</p>
+                              <p className="text-xs text-gray-600 mt-1">Reducing balance method</p>
                             </div>
 
                             {isAffordable && (
-                              <div className={`mt-3 p-2 rounded-lg text-xs font-bold ${
+                              <div className={`mt-3 p-2 rounded-lg text-xs font-semibold ${
                                 isAffordable.isAffordable 
-                                  ? 'bg-green-100 text-green-700' 
-                                  : 'bg-red-100 text-red-700'
+                                  ? 'bg-green-100 text-green-800 border border-green-300' 
+                                  : 'bg-red-100 text-red-800 border border-red-300'
                               }`}>
                                 {isAffordable.isAffordable 
-                                  ? `✓ Affordable! (${isAffordable.percentageOfSalary.toFixed(1)}% of your salary)` 
-                                  : `⚠ ${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
+                                  ? `Affordable (${isAffordable.percentageOfSalary.toFixed(1)}% of salary)` 
+                                  : `${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
                                 }
                               </div>
                             )}
@@ -845,10 +863,9 @@ export function LoanApplicationForm() {
               </div>
 
               {selectedLoanDetails && (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-3 border-green-300 rounded-xl p-6">
-                  <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-green-600" />
-                    📋 Application Summary
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl p-6">
+                  <h3 className="font-bold text-gray-900 mb-4 text-lg">
+                    Application Summary
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
