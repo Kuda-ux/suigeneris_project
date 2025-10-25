@@ -55,19 +55,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Create or update user profile
   const upsertUserProfile = async (user: User) => {
     try {
-      const { error } = await supabase
+      // First check if user exists
+      const { data: existingUser } = await supabase
         .from('users')
-        .upsert({
-          id: user.id,
-          email: user.email!,
-          full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-          updated_at: new Date().toISOString(),
-        } as any, {
-          onConflict: 'id'
-        });
+        .select('*')
+        .eq('id', user.id)
+        .single();
 
-      if (error) throw error;
+      if (existingUser) {
+        // Update existing user (preserve is_admin)
+        const { error } = await supabase
+          .from('users')
+          .update({
+            email: user.email!,
+            full_name: user.user_metadata?.full_name || user.user_metadata?.name || (existingUser as any).full_name,
+            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || (existingUser as any).avatar_url,
+            updated_at: new Date().toISOString(),
+          } as any)
+          .eq('id', user.id);
+
+        if (error) throw error;
+      } else {
+        // Insert new user
+        const { error } = await supabase
+          .from('users')
+          .insert({
+            id: user.id,
+            email: user.email!,
+            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+            is_admin: false,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as any);
+
+        if (error) throw error;
+      }
+
       await fetchUserProfile(user.id);
     } catch (error) {
       console.error('Error upserting user profile:', error);
