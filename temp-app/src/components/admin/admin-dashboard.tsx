@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useAuth } from '@/contexts/auth-context';
 import { 
   LayoutDashboard, 
   Package, 
@@ -53,26 +54,46 @@ const sidebarItems = [
 
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const router = useRouter();
+  const { user, userProfile, loading, signOut } = useAuth();
 
   useEffect(() => {
-    const auth = localStorage.getItem('adminAuth');
-    if (!auth) {
-      router.push('/admin');
-    } else {
-      setIsAuthenticated(true);
+    // Check if user is authenticated and is admin
+    if (!loading) {
+      if (!user) {
+        router.push('/');
+        return;
+      }
+      
+      if (!userProfile?.is_admin) {
+        alert('Access Denied: Admin privileges required');
+        router.push('/');
+        return;
+      }
     }
-  }, [router]);
+  }, [user, userProfile, loading, router]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
-    router.push('/admin');
+  const handleLogout = async () => {
+    await signOut();
+    router.push('/');
   };
 
-  if (!isAuthenticated) {
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 font-semibold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated or not admin
+  if (!user || !userProfile?.is_admin) {
     return null;
   }
 
