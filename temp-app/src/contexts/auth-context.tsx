@@ -56,38 +56,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const upsertUserProfile = async (user: User) => {
     try {
       // First check if user exists
-      const { data: existingUser } = await supabase
+      const { data: existingUser, error: fetchError } = await supabase
         .from('users')
         .select('*')
         .eq('id', user.id)
         .single();
 
-      if (existingUser) {
+      const userData = {
+        email: user.email!,
+        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (existingUser && !fetchError) {
         // Update existing user (preserve is_admin)
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('users')
-          .update({
-            email: user.email!,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || (existingUser as any).full_name,
-            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || (existingUser as any).avatar_url,
-            updated_at: new Date().toISOString(),
-          } as any)
+          .update(userData)
           .eq('id', user.id);
 
         if (error) throw error;
       } else {
         // Insert new user
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from('users')
           .insert({
             id: user.id,
-            email: user.email!,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+            ...userData,
             is_admin: false,
             created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          } as any);
+          });
 
         if (error) throw error;
       }
