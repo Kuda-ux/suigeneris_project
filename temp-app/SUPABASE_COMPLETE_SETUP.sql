@@ -18,16 +18,20 @@ CREATE TABLE IF NOT EXISTS public.users (
 -- STEP 2: Enable Row Level Security on users table
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
--- STEP 3: Create RLS policies for users table
+-- STEP 3: Create RLS policies for users table (drop if exists first)
+DROP POLICY IF EXISTS "Users can view their own profile" ON public.users;
 CREATE POLICY "Users can view their own profile"
   ON public.users FOR SELECT USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.users;
 CREATE POLICY "Users can update their own profile"
   ON public.users FOR UPDATE USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can insert their own profile" ON public.users;
 CREATE POLICY "Users can insert their own profile"
   ON public.users FOR INSERT WITH CHECK (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Admins can view all users" ON public.users;
 CREATE POLICY "Admins can view all users"
   ON public.users
   FOR SELECT
@@ -52,18 +56,21 @@ ADD COLUMN IF NOT EXISTS loan_term INTEGER DEFAULT 6;
 -- (Make sure you've created the 'loan-documents' bucket first in Storage UI)
 
 -- Allow authenticated users to upload their own documents
+DROP POLICY IF EXISTS "Users can upload their documents" ON storage.objects;
 CREATE POLICY "Users can upload their documents"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (bucket_id = 'loan-documents');
 
 -- Allow users to view their own documents
+DROP POLICY IF EXISTS "Users can view their documents" ON storage.objects;
 CREATE POLICY "Users can view their documents"
 ON storage.objects FOR SELECT
 TO authenticated
 USING (bucket_id = 'loan-documents');
 
 -- Allow admins to view all documents
+DROP POLICY IF EXISTS "Admins can view all documents" ON storage.objects;
 CREATE POLICY "Admins can view all documents"
 ON storage.objects FOR SELECT
 TO authenticated
@@ -75,6 +82,7 @@ USING (
 );
 
 -- Allow admins to delete documents
+DROP POLICY IF EXISTS "Admins can delete documents" ON storage.objects;
 CREATE POLICY "Admins can delete documents"
 ON storage.objects FOR DELETE
 TO authenticated
