@@ -77,10 +77,12 @@ export async function POST(request: Request) {
         product_id: applicationData.product_id ? parseInt(applicationData.product_id) : null,
         product_name: applicationData.product_name,
         product_price: parseFloat(applicationData.product_price),
-        national_id_document: applicationData.national_id_document,
-        payslip_document: applicationData.payslip_document,
-        bank_statement_document: applicationData.bank_statement_document,
-        proof_of_residence_document: applicationData.proof_of_residence_document,
+        loan_term: parseInt(applicationData.loan_term || '6'),
+        // Store document URLs from Supabase Storage
+        national_id_document_url: applicationData.national_id_document_url,
+        payslip_document_url: applicationData.payslip_document_url,
+        bank_statement_document_url: applicationData.bank_statement_document_url,
+        proof_of_residence_document_url: applicationData.proof_of_residence_document_url,
         data_sharing_consent: applicationData.data_sharing_consent,
         status: 'pending'
       })

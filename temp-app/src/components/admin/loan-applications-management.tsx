@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Download, Eye, Check, X, Search, Filter, CreditCard, User, Briefcase, Building } from 'lucide-react';
+import { Download, Eye, Check, X, Search, Filter, CreditCard, User, Briefcase, Building, FileText, ExternalLink } from 'lucide-react';
 
 export function LoanApplicationsManagement() {
   const [applications, setApplications] = useState<any[]>([]);
@@ -395,6 +395,56 @@ export function LoanApplicationsManagement() {
                     <span className="text-sm font-semibold text-gray-600">Account Number</span>
                     <p className="font-bold text-gray-900">{selectedApplication.account_number}</p>
                   </div>
+                </div>
+              </div>
+
+              {/* Uploaded Documents */}
+              <div>
+                <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
+                  <FileText className="w-5 h-5 text-purple-600" />
+                  Uploaded Documents
+                </h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {[
+                    { label: 'National ID', url: selectedApplication.national_id_document_url, name: 'National_ID' },
+                    { label: 'Payslip', url: selectedApplication.payslip_document_url, name: 'Payslip' },
+                    { label: 'Bank Statement', url: selectedApplication.bank_statement_document_url, name: 'Bank_Statement' },
+                    { label: 'Proof of Residence', url: selectedApplication.proof_of_residence_document_url, name: 'Proof_of_Residence' }
+                  ].map((doc) => (
+                    <div key={doc.label} className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-bold text-gray-900 mb-1">{doc.label}</p>
+                          {doc.url ? (
+                            <span className="text-xs text-green-600 font-semibold">✓ Uploaded</span>
+                          ) : (
+                            <span className="text-xs text-red-600 font-semibold">✗ Not uploaded</span>
+                          )}
+                        </div>
+                        {doc.url && (
+                          <div className="flex gap-2">
+                            <a
+                              href={doc.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-all"
+                              title="View document"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                            <a
+                              href={doc.url}
+                              download={`${selectedApplication.application_number}_${doc.name}`}
+                              className="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-all"
+                              title="Download document"
+                            >
+                              <Download className="w-4 h-4" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 

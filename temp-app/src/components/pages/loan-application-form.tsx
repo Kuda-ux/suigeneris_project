@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp } from 'lucide-react';
 import { calculateReducingBalance, checkAffordability, calculateMaxLaptopPrice } from '@/utils/loan-calculator';
+import { uploadLoanDocuments, validateFile } from '@/utils/file-upload';
 
 export function LoanApplicationForm() {
   const [step, setStep] = useState(1);
@@ -84,6 +85,13 @@ export function LoanApplicationForm() {
   });
 
   const handleFileChange = (field: string, file: File | null) => {
+    if (file) {
+      const validation = validateFile(file);
+      if (!validation.valid) {
+        alert(validation.error);
+        return;
+      }
+    }
     setFormData({ ...formData, [field]: file });
   };
 
@@ -102,17 +110,32 @@ export function LoanApplicationForm() {
     setSubmitting(true);
 
     try {
-      // In production, upload files to storage first
+      // Generate temporary application ID
+      const tempAppId = `TEMP_${Date.now()}`;
+
+      // Upload files to Supabase Storage
+      const documentUrls = await uploadLoanDocuments(
+        {
+          national_id: formData.national_id_document,
+          payslip: formData.payslip_document,
+          bank_statement: formData.bank_statement_document,
+          proof_of_residence: formData.proof_of_residence_document,
+        },
+        tempAppId
+      );
+
+      // Submit application with document URLs
       const res = await fetch('/api/loan-applications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          // For now, we'll store file names. In production, upload to Supabase Storage
-          national_id_document: formData.national_id_document?.name || null,
-          payslip_document: formData.payslip_document?.name || null,
-          bank_statement_document: formData.bank_statement_document?.name || null,
-          proof_of_residence_document: formData.proof_of_residence_document?.name || null,
+          ...documentUrls,
+          // Remove file objects, keep only URLs
+          national_id_document: undefined,
+          payslip_document: undefined,
+          bank_statement_document: undefined,
+          proof_of_residence_document: undefined,
         })
       });
 
@@ -125,9 +148,9 @@ export function LoanApplicationForm() {
 
       setApplicationNumber(data.application_number);
       setSubmitted(true);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error submitting application:', err);
-      alert('Failed to submit application. Please try again.');
+      alert(err.message || 'Failed to submit application. Please try again.');
     } finally {
       setSubmitting(false);
     }
