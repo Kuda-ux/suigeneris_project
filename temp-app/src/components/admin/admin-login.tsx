@@ -2,7 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { createClient } from '@supabase/supabase-js';
 import { Shield, Eye, EyeOff, Lock, User, CheckCircle, ArrowRight, AlertCircle } from 'lucide-react';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 export function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -15,17 +20,61 @@ export function AdminLogin() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate authentication - in real app, this would call your API
-    setTimeout(() => {
-      if (email === 'admin@suigeneris.com' && password === 'admin123') {
-        // In real app, you'd set authentication tokens/cookies here
+    if (!supabase) {
+      alert('Authentication is not configured on this deployment. Please contact the site administrator.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // Sign in with Supabase (email + password)
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        // Supabase error (invalid credentials, etc.)
+        console.error('Sign in error:', signInError);
+        alert(signInError.message || 'Login failed. Check your credentials.');
+        setIsLoading(false);
+        return;
+      }
+
+      const sessionUser = signInData.user;
+      if (!sessionUser || !sessionUser.email) {
+        alert('Login succeeded but user information was not returned. Contact administrator.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Verify admin status in public.users table
+      const { data: userRow, error: userRowError } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('email', sessionUser.email)
+        .single();
+
+      if (userRowError) {
+        console.error('Error reading users table:', userRowError);
+        alert('Logged in but could not verify admin status. Ask the site owner to mark your account as admin.');
+        setIsLoading(false);
+        return;
+      }
+
+      if (userRow && userRow.is_admin) {
+        // Mark frontend session / allow access to admin dashboard
         localStorage.setItem('adminAuth', 'true');
         router.push('/admin/dashboard');
       } else {
-        alert('Invalid credentials. Use admin@suigeneris.com / admin123');
+        alert('Your account is not marked as an admin. Ask the site owner to run the SQL to grant admin rights.');
       }
+    } catch (err) {
+      console.error('Unexpected login error:', err);
+      alert('An unexpected error occurred during login. Check the browser console for details.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -133,12 +182,12 @@ export function AdminLogin() {
             </div>
           </div>
 
-          {/* Demo Credentials */}
+          {/* Demo Credentials (informational only) */}
           <div className="mt-6 bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-2xl p-5">
             <div className="flex items-start gap-3">
               <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-black text-yellow-900 mb-2">Demo Credentials</p>
+                <p className="text-sm font-black text-yellow-900 mb-2">Demo Credentials (for testing)</p>
                 <div className="space-y-1 text-xs">
                   <p className="text-yellow-800"><span className="font-bold">Email:</span> admin@suigeneris.com</p>
                   <p className="text-yellow-800"><span className="font-bold">Password:</span> admin123</p>
