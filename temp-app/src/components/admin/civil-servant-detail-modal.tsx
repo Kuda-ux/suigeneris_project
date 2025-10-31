@@ -213,10 +213,10 @@ export function CivilServantDetailModal({ application, onClose, onUpdateStatus }
             </h4>
             <div className="grid md:grid-cols-2 gap-4">
               {[
-                { label: 'National ID Document', field: 'national_id_document' },
-                { label: 'Recent Payslip', field: 'payslip_document' },
-                { label: 'Bank Statement', field: 'bank_statement_document' },
-                { label: 'Proof of Residence', field: 'proof_of_residence_document' }
+                { label: 'National ID Document', field: 'national_id_document_url' },
+                { label: 'Recent Payslip', field: 'payslip_document_url' },
+                { label: 'Bank Statement', field: 'bank_statement_document_url' },
+                { label: 'Proof of Residence', field: 'proof_of_residence_document_url' }
               ].map((doc) => (
                 <div key={doc.field} className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
                   <div className="flex items-center justify-between">
@@ -226,7 +226,7 @@ export function CivilServantDetailModal({ application, onClose, onUpdateStatus }
                         <span className="text-xs font-semibold text-gray-600">{doc.label}</span>
                       </div>
                       <p className="text-xs text-gray-500 font-medium">
-                        {application[doc.field] ? 'Available' : 'Not uploaded'}
+                        {application[doc.field] ? '✅ Available' : '❌ Not uploaded'}
                       </p>
                     </div>
                     {application[doc.field] && (
