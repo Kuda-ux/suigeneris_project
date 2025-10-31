@@ -56,22 +56,42 @@ export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>('');
   const router = useRouter();
   const { user, userProfile, loading, signOut } = useAuth();
 
   useEffect(() => {
+    // Debug logging
+    console.log('Admin Dashboard - Auth State:', {
+      loading,
+      user: user ? 'Present' : 'None',
+      userProfile,
+      isAdmin: userProfile?.is_admin
+    });
+
+    setDebugInfo(`Loading: ${loading}, User: ${user ? 'Yes' : 'No'}, Profile: ${userProfile ? 'Yes' : 'No'}, Admin: ${userProfile?.is_admin}`);
+
     // Check if user is authenticated and is admin
     if (!loading) {
       if (!user) {
+        console.log('No user found, redirecting to home');
         router.push('/');
         return;
       }
       
+      if (!userProfile) {
+        console.log('User profile not loaded yet');
+        return;
+      }
+      
       if (!userProfile?.is_admin) {
-        alert('Access Denied: Admin privileges required');
+        console.log('User is not admin, redirecting');
+        alert('Access Denied: Admin privileges required. Please contact support.');
         router.push('/');
         return;
       }
+      
+      console.log('Admin access granted!');
     }
   }, [user, userProfile, loading, router]);
 
@@ -81,12 +101,24 @@ export function AdminDashboard() {
   };
 
   // Show loading state
-  if (loading) {
+  if (loading || !userProfile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
+        <div className="text-center max-w-md">
           <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-semibold">Loading...</p>
+          <p className="text-gray-600 font-semibold mb-2">Loading Admin Dashboard...</p>
+          <p className="text-xs text-gray-500">{debugInfo}</p>
+          {!loading && !userProfile && (
+            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">Profile is taking longer than expected to load.</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-2 px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm hover:bg-yellow-700"
+              >
+                Refresh Page
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -94,7 +126,22 @@ export function AdminDashboard() {
 
   // Don't render if not authenticated or not admin
   if (!user || !userProfile?.is_admin) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md p-8 bg-white rounded-xl shadow-lg">
+          <div className="text-6xl mb-4">🚫</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600 mb-4">You don't have admin privileges.</p>
+          <p className="text-sm text-gray-500 mb-4">{debugInfo}</p>
+          <button
+            onClick={() => router.push('/')}
+            className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Return to Home
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const renderContent = () => {
