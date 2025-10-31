@@ -756,8 +756,39 @@ export function LoanApplicationForm() {
                             className="mt-1 w-6 h-6 text-red-600"
                           />
                           <div className="flex-1">
-                            <h4 className="font-black text-xl text-gray-900 mb-2">{product.name}</h4>
-                            <p className="text-sm text-gray-600 mb-3">{product.description || 'Quality laptop for professionals'}</p>
+                            <div className="flex items-start justify-between mb-2">
+                              <h4 className="font-black text-xl text-gray-900">{product.name}</h4>
+                              {product.brand && (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">
+                                  {product.brand}
+                                </span>
+                              )}
+                            </div>
+                            
+                            {/* Laptop Specifications */}
+                            <div className="space-y-1 mb-3">
+                              {product.processor && (
+                                <p className="text-xs text-gray-700">
+                                  <span className="font-semibold">Processor:</span> {product.processor}
+                                </p>
+                              )}
+                              {product.ram && product.storage && (
+                                <p className="text-xs text-gray-700">
+                                  <span className="font-semibold">Memory:</span> {product.ram} RAM / {product.storage}
+                                </p>
+                              )}
+                              {product.display && (
+                                <p className="text-xs text-gray-700">
+                                  <span className="font-semibold">Display:</span> {product.display}
+                                </p>
+                              )}
+                              {product.warranty && (
+                                <p className="text-xs text-green-700 font-semibold">
+                                  ✓ Warranty Included
+                                </p>
+                              )}
+                            </div>
+                            
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-3xl font-black text-red-600">${product.price}</span>
                               <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">
