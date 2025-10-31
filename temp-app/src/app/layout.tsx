@@ -77,12 +77,13 @@ export default function RootLayout({
         <meta name="twitter:image" content={siteConfig.ogImage} />
         <meta name="twitter:image:alt" content="Sui Generis Technologies - Quality Laptops & Technology" />
         
-        {/* Favicon & Icons */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        {/* Favicon & Icons - Using Sui Generis Logo */}
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/logo.svg" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/logo.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
         <link rel="manifest" href="/site.webmanifest" />
+        <link rel="shortcut icon" href="/logo.svg" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#dc2626" />
