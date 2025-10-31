@@ -15,26 +15,39 @@ export function Footer() {
     <footer className="bg-black text-white border-t border-gray-800">
       {/* Newsletter Section */}
       <div className="border-b border-gray-700">
-        <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-center md:text-left">
-              <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
+        <div className="container mx-auto px-4 py-8 sm:py-10 md:py-12">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
+            {/* Newsletter Text */}
+            <div className="text-center lg:text-left w-full lg:w-auto">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
                 Stay Updated!
               </h3>
-              <p className="text-gray-400">Subscribe to get special offers, free giveaways, and updates.</p>
+              <p className="text-gray-400 text-sm sm:text-base">
+                Subscribe to get special offers, free giveaways, and updates.
+              </p>
             </div>
-            <div className="w-full md:w-auto">
-              <div className="flex gap-2 max-w-md">
+            
+            {/* Newsletter Form */}
+            <div className="w-full lg:w-auto lg:flex-1 lg:max-w-xl">
+              <form className="flex flex-col sm:flex-row gap-3 sm:gap-2">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 bg-gray-900 border-2 border-gray-800 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none text-white placeholder-gray-500"
+                  className="w-full sm:flex-1 px-4 py-3 sm:py-3.5 bg-gray-900 border-2 border-gray-800 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none text-white placeholder-gray-500 text-sm sm:text-base"
+                  required
                 />
-                <button className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
-                  <Send className="h-5 w-5" />
-                  Subscribe
+                <button 
+                  type="submit"
+                  className="w-full sm:w-auto px-6 py-3 sm:py-3.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
+                >
+                  <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="hidden sm:inline">Subscribe</span>
+                  <span className="sm:hidden">Subscribe Now</span>
                 </button>
-              </div>
+              </form>
+              <p className="text-xs text-gray-500 mt-2 text-center sm:text-left">
+                We respect your privacy. Unsubscribe at any time.
+              </p>
             </div>
           </div>
         </div>
