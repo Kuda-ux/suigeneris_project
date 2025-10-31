@@ -41,7 +41,14 @@ export async function GET() {
               product.in_stock ? 'active' : 'inactive',
       images: product.images || [product.image],
       createdAt: product.created_at || new Date().toISOString(),
-      updatedAt: product.updated_at || new Date().toISOString()
+      updatedAt: product.updated_at || new Date().toISOString(),
+      // Include laptop specifications
+      brand: product.brand,
+      processor: product.processor,
+      ram: product.ram,
+      storage: product.storage,
+      display: product.display,
+      warranty: product.warranty
     }));
 
     return NextResponse.json(adminProducts);
