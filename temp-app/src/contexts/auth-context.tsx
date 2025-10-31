@@ -93,10 +93,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             id: user.id,
             ...userData,
             is_admin: false,
+            role: 'customer',
+            password_hash: null, // Handle password_hash column if it exists
             created_at: new Date().toISOString(),
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error inserting user:', error);
+          throw error;
+        }
       }
 
       await fetchUserProfile(user.id);
