@@ -63,6 +63,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Create or update user profile
   const upsertUserProfile = async (user: User) => {
     try {
+      console.log('Upserting user profile for:', user.id);
+      
       // First check if user exists
       const { data: existingUser, error: fetchError } = await supabase
         .from('users')
@@ -70,43 +72,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('id', user.id)
         .single();
 
-      const userData = {
-        email: user.email!,
-        full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-        avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-        updated_at: new Date().toISOString(),
-      };
-
       if (existingUser && !fetchError) {
-        // Update existing user (preserve is_admin)
+        console.log('User exists, updating profile');
+        // User exists, just update basic info (preserve is_admin and role)
+        const userData = {
+          email: user.email!,
+          full_name: user.user_metadata?.full_name || user.user_metadata?.name || (existingUser as any).full_name,
+          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || (existingUser as any).avatar_url,
+          updated_at: new Date().toISOString(),
+        };
+
         const { error } = await (supabase as any)
           .from('users')
           .update(userData)
           .eq('id', user.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error updating user:', error);
+          // Don't throw, just log - user can still function
+        }
+      } else if (fetchError && fetchError.code !== 'PGRST116') {
+        // PGRST116 means "not found", which is fine
+        // Any other error is a problem
+        console.error('Error checking user existence:', fetchError);
       } else {
-        // Insert new user
+        console.log('User does not exist, creating new profile');
+        // User doesn't exist, create new profile
         const { error } = await (supabase as any)
           .from('users')
           .insert({
             id: user.id,
-            ...userData,
+            email: user.email!,
+            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
             is_admin: false,
             role: 'customer',
-            password_hash: null, // Handle password_hash column if it exists
+            password_hash: null,
             created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           });
 
         if (error) {
           console.error('Error inserting user:', error);
-          throw error;
+          // Don't throw - user might already exist due to race condition
         }
       }
 
+      // Always try to fetch the profile
       await fetchUserProfile(user.id);
     } catch (error) {
       console.error('Error upserting user profile:', error);
+      // Still try to fetch profile even if upsert failed
+      try {
+        await fetchUserProfile(user.id);
+      } catch (e) {
+        console.error('Failed to fetch profile after upsert error:', e);
+      }
     }
   };
 
