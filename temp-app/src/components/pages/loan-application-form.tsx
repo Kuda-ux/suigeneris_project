@@ -33,8 +33,16 @@ export function LoanApplicationForm() {
                           p.name?.toLowerCase().includes('lenovo');
           return hasStock && isLaptop;
         });
-        console.log('Filtered laptops:', laptops);
-        setProducts(laptops);
+        
+        // Sort laptops by price (lowest to highest)
+        const sortedLaptops = laptops.sort((a: any, b: any) => {
+          const priceA = parseFloat(a.price) || 0;
+          const priceB = parseFloat(b.price) || 0;
+          return priceA - priceB;
+        });
+        
+        console.log('Filtered and sorted laptops:', sortedLaptops);
+        setProducts(sortedLaptops);
       }
     } catch (err) {
       console.error('Error loading products:', err);
@@ -756,42 +764,58 @@ export function LoanApplicationForm() {
                             className="mt-1 w-6 h-6 text-red-600"
                           />
                           <div className="flex-1">
-                            <div className="flex items-start justify-between mb-2">
-                              <h4 className="font-black text-xl text-gray-900">{product.name}</h4>
-                              {product.brand && (
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold">
-                                  {product.brand}
-                                </span>
-                              )}
+                            {/* Header with Name and Badges */}
+                            <div className="flex items-start justify-between gap-2 mb-3">
+                              <h4 className="font-black text-lg sm:text-xl text-gray-900 flex-1">{product.name}</h4>
+                              <div className="flex flex-col gap-1">
+                                {product.brand && (
+                                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-bold whitespace-nowrap">
+                                    {product.brand}
+                                  </span>
+                                )}
+                                {product.price <= 200 && (
+                                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-bold whitespace-nowrap">
+                                    💰 Budget
+                                  </span>
+                                )}
+                              </div>
                             </div>
                             
                             {/* Laptop Specifications */}
-                            <div className="space-y-1 mb-3">
+                            <div className="bg-gray-50 rounded-lg p-3 space-y-1.5 mb-3 border border-gray-200">
+                              <p className="text-xs font-bold text-gray-500 uppercase mb-2">Specifications</p>
                               {product.processor && (
-                                <p className="text-xs text-gray-700">
-                                  <span className="font-semibold">Processor:</span> {product.processor}
+                                <p className="text-xs text-gray-700 flex items-start gap-2">
+                                  <span className="font-semibold text-gray-900 min-w-[70px]">Processor:</span> 
+                                  <span className="flex-1">{product.processor}</span>
                                 </p>
                               )}
                               {product.ram && product.storage && (
-                                <p className="text-xs text-gray-700">
-                                  <span className="font-semibold">Memory:</span> {product.ram} RAM / {product.storage}
+                                <p className="text-xs text-gray-700 flex items-start gap-2">
+                                  <span className="font-semibold text-gray-900 min-w-[70px]">Memory:</span> 
+                                  <span className="flex-1">{product.ram} RAM / {product.storage}</span>
                                 </p>
                               )}
                               {product.display && (
-                                <p className="text-xs text-gray-700">
-                                  <span className="font-semibold">Display:</span> {product.display}
+                                <p className="text-xs text-gray-700 flex items-start gap-2">
+                                  <span className="font-semibold text-gray-900 min-w-[70px]">Display:</span> 
+                                  <span className="flex-1">{product.display}</span>
                                 </p>
                               )}
                               {product.warranty && (
-                                <p className="text-xs text-green-700 font-semibold">
-                                  ✓ Warranty Included
+                                <p className="text-xs text-green-700 font-semibold flex items-center gap-1 pt-1">
+                                  <span className="text-green-600">✓</span> Warranty Included
                                 </p>
                               )}
                             </div>
                             
+                            {/* Price and Stock */}
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-3xl font-black text-red-600">${product.price}</span>
-                              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">
+                              <div>
+                                <p className="text-xs text-gray-500 font-semibold mb-1">Laptop Price</p>
+                                <span className="text-3xl font-black text-red-600">${product.price}</span>
+                              </div>
+                              <span className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-bold">
                                 {product.currentStock || product.stock_count || 0} in stock
                               </span>
                             </div>
