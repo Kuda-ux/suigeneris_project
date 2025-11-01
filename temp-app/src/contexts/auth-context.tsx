@@ -83,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         console.log('User does not exist, creating new profile');
         // User doesn't exist, create new profile
-        const { data: newUser, error: insertError } = await supabase
+        const { data: newUser, error: insertError } = await (supabase as any)
           .from('users')
           .insert({
             id: user.id,
