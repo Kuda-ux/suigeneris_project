@@ -93,9 +93,16 @@ export function LoanApplicationForm() {
     data_sharing_consent: false
   });
 
-  // Scroll to form section when step changes
+  // Scroll behavior when step changes
   useEffect(() => {
-    if (formRef.current) {
+    if (step === 1) {
+      // For step 1, scroll to top to show the header and introduction
+      window.scrollTo({ 
+        top: 0, 
+        behavior: 'smooth' 
+      });
+    } else if (formRef.current) {
+      // For steps 2-5, scroll to form section to show the current step header
       const formTop = formRef.current.getBoundingClientRect().top + window.pageYOffset;
       const offset = 100; // Offset from top for better visibility
       window.scrollTo({ 
