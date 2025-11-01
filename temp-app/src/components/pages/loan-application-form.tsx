@@ -1,20 +1,88 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp } from 'lucide-react';
+import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp, Save, RotateCcw } from 'lucide-react';
 import { calculateReducingBalance, checkAffordability, calculateMaxLaptopPrice } from '@/utils/loan-calculator';
 import { uploadLoanDocuments, validateFile } from '@/utils/file-upload';
+
+const STORAGE_KEY = 'loan_application_draft';
+const STEP_KEY = 'loan_application_step';
 
 export function LoanApplicationForm() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState('');
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [showSaveNotification, setShowSaveNotification] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   
   useEffect(() => {
     loadProducts();
+    loadSavedData();
   }, []);
+
+  // Load saved data from localStorage
+  const loadSavedData = () => {
+    try {
+      const savedData = localStorage.getItem(STORAGE_KEY);
+      const savedStep = localStorage.getItem(STEP_KEY);
+      
+      if (savedData) {
+        const parsed = JSON.parse(savedData);
+        setFormData(prev => ({ ...prev, ...parsed }));
+        setLastSaved(new Date(parsed.savedAt || Date.now()));
+      }
+      
+      if (savedStep) {
+        setStep(parseInt(savedStep));
+      }
+    } catch (err) {
+      console.error('Error loading saved data:', err);
+    }
+  };
+
+  // Auto-save form data to localStorage
+  const saveFormData = () => {
+    try {
+      const dataToSave = {
+        ...formData,
+        // Don't save file objects, only metadata
+        national_id_document: formData.national_id_document ? 'uploaded' : null,
+        payslip_document: formData.payslip_document ? 'uploaded' : null,
+        bank_statement_document: formData.bank_statement_document ? 'uploaded' : null,
+        proof_of_residence_document: formData.proof_of_residence_document ? 'uploaded' : null,
+        savedAt: new Date().toISOString()
+      };
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+      localStorage.setItem(STEP_KEY, step.toString());
+      setLastSaved(new Date());
+      
+      // Show save notification
+      setShowSaveNotification(true);
+      setTimeout(() => setShowSaveNotification(false), 2000);
+    } catch (err) {
+      console.error('Error saving data:', err);
+    }
+  };
+
+  // Clear saved data
+  const clearSavedData = () => {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STEP_KEY);
+  };
+
+  // Auto-save when form data changes
+  useEffect(() => {
+    if (formData.full_name || formData.email) {
+      const timeoutId = setTimeout(() => {
+        saveFormData();
+      }, 1000); // Debounce for 1 second
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [formData, step]);
   
   const loadProducts = async () => {
     setLoadingProducts(true);
@@ -176,12 +244,34 @@ export function LoanApplicationForm() {
 
       setApplicationNumber(data.application_number);
       setSubmitted(true);
+      
+      // Clear saved data after successful submission
+      clearSavedData();
     } catch (err: any) {
       console.error('Error submitting application:', err);
       alert(err.message || 'Failed to submit application. Please try again.');
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Calculate progress percentage
+  const calculateProgress = () => {
+    let completed = 0;
+    const total = 5;
+    
+    // Step 1: Personal Info
+    if (formData.full_name && formData.email && formData.phone) completed++;
+    // Step 2: Employment
+    if (formData.employer && formData.net_salary) completed++;
+    // Step 3: Banking
+    if (formData.bank_name && formData.account_number) completed++;
+    // Step 4: Product
+    if (formData.product_id) completed++;
+    // Step 5: Documents
+    if (formData.data_sharing_consent) completed++;
+    
+    return Math.round((completed / total) * 100);
   };
 
   if (submitted) {
@@ -265,6 +355,39 @@ export function LoanApplicationForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-red-50 to-purple-50 py-12 px-4">
       <div className="max-w-5xl mx-auto">
+        {/* Auto-save notification */}
+        {showSaveNotification && (
+          <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
+            <Save className="w-5 h-5" />
+            <span className="font-semibold">Progress saved!</span>
+          </div>
+        )}
+
+        {/* Progress bar and save status */}
+        {lastSaved && (
+          <div className="mb-8 bg-white rounded-xl shadow-md p-4 border-2 border-gray-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Save className="w-5 h-5 text-green-600" />
+                <span className="text-sm font-bold text-gray-900">Application Progress: {calculateProgress()}%</span>
+              </div>
+              <span className="text-xs text-gray-600">
+                Last saved: {lastSaved.toLocaleTimeString()}
+              </span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div 
+                className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500"
+                style={{ width: `${calculateProgress()}%` }}
+              />
+            </div>
+            <p className="text-xs text-gray-600 mt-2 flex items-center gap-1">
+              <Shield className="w-3 h-3" />
+              Your progress is automatically saved. You can close this page and return anytime.
+            </p>
+          </div>
+        )}
+
         {/* Professional Header */}
         <div className="text-center mb-12">
           <div className="inline-block bg-gradient-to-r from-red-600 to-purple-600 text-white px-8 py-3 rounded-lg font-bold text-sm mb-6 shadow-lg">
@@ -439,14 +562,27 @@ export function LoanApplicationForm() {
                 />
               </div>
 
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                className="w-full px-6 py-5 bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
-              >
-                Continue to Employment Details
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    saveFormData();
+                    alert('✅ Progress saved! You can return anytime to continue your application.');
+                  }}
+                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2"
+                >
+                  <Save className="w-5 h-5" />
+                  Save & Continue Later
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  className="flex-1 px-6 py-5 bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-700 hover:to-purple-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                >
+                  Continue to Employment Details
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           )}
 
@@ -622,18 +758,29 @@ export function LoanApplicationForm() {
                 </div>
               )}
 
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
+                  className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="button"
+                  onClick={() => {
+                    saveFormData();
+                    alert('✅ Progress saved! You can return anytime to continue your application.');
+                  }}
+                  className="px-6 py-4 bg-blue-50 hover:bg-blue-100 text-blue-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2 border-2 border-blue-200"
+                >
+                  <Save className="w-5 h-5" />
+                  Save & Exit
+                </button>
+                <button
+                  type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 px-6 py-5 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  className="px-6 py-5 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   Continue to Banking
                   <ArrowRight className="w-5 h-5" />
@@ -689,18 +836,29 @@ export function LoanApplicationForm() {
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
+                  className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="button"
+                  onClick={() => {
+                    saveFormData();
+                    alert('✅ Progress saved! You can return anytime to continue your application.');
+                  }}
+                  className="px-6 py-4 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2 border-2 border-purple-200"
+                >
+                  <Save className="w-5 h-5" />
+                  Save & Exit
+                </button>
+                <button
+                  type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 px-6 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  className="px-6 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
                   Choose Your Laptop
                   <ArrowRight className="w-5 h-5" />
@@ -886,19 +1044,30 @@ export function LoanApplicationForm() {
                 </div>
               )}
 
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="button"
                   onClick={() => setStep(3)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
+                  className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
                   type="button"
+                  onClick={() => {
+                    saveFormData();
+                    alert('✅ Progress saved! You can return anytime to continue your application.');
+                  }}
+                  className="px-6 py-4 bg-orange-50 hover:bg-orange-100 text-orange-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2 border-2 border-orange-200"
+                >
+                  <Save className="w-5 h-5" />
+                  Save & Exit
+                </button>
+                <button
+                  type="button"
                   onClick={() => setStep(5)}
                   disabled={!formData.product_id}
-                  className="flex-1 px-6 py-5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="px-6 py-5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   Upload Documents
                   <ArrowRight className="w-5 h-5" />
@@ -925,9 +1094,15 @@ export function LoanApplicationForm() {
                   <Shield className="w-5 h-5" />
                   🔒 Your Documents Are Safe
                 </h3>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-700 mb-3">
                   All documents are encrypted and stored securely. We only use them to verify your application.
                 </p>
+                <div className="bg-white rounded-lg p-3 border border-blue-300">
+                  <p className="text-sm font-bold text-blue-900 mb-1">📸 Need to take photos?</p>
+                  <p className="text-xs text-gray-700">
+                    No problem! Click "Save & Exit" below, take your photos, then return to this page. Your progress is saved automatically.
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-4">
@@ -1004,18 +1179,29 @@ export function LoanApplicationForm() {
                 </label>
               </div>
 
-              <div className="flex gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
                   type="button"
                   onClick={() => setStep(4)}
-                  className="flex-1 px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
+                  className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
                 >
                   Back
                 </button>
                 <button
+                  type="button"
+                  onClick={() => {
+                    saveFormData();
+                    alert('✅ Progress saved! You can return anytime to complete your application.');
+                  }}
+                  className="px-6 py-4 bg-green-50 hover:bg-green-100 text-green-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2 border-2 border-green-200"
+                >
+                  <Save className="w-5 h-5" />
+                  Save & Exit
+                </button>
+                <button
                   type="submit"
                   disabled={submitting}
-                  className="flex-1 px-8 py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-black text-xl rounded-xl transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="px-8 py-5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-black text-xl rounded-xl transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {submitting ? (
                     <>
