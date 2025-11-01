@@ -92,6 +92,11 @@ export function LoanApplicationForm() {
     data_sharing_consent: false
   });
 
+  // Scroll to top when step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
+
   const handleFileChange = (field: string, file: File | null) => {
     if (file) {
       const validation = validateFile(file);
@@ -340,7 +345,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.full_name}
                     onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="e.g., Tendai Moyo"
                   />
                 </div>
@@ -352,7 +357,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.national_id}
                     onChange={(e) => setFormData({ ...formData, national_id: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="e.g., 63-123456A63"
                   />
                 </div>
@@ -364,7 +369,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.date_of_birth}
                     onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                   />
                 </div>
 
@@ -374,7 +379,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-bold text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -389,7 +394,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="tendai@email.com"
                   />
                 </div>
@@ -401,7 +406,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="+263 77 123 4567"
                   />
                 </div>
@@ -414,7 +419,7 @@ export function LoanApplicationForm() {
                   value={formData.home_address}
                   onChange={(e) => setFormData({ ...formData, home_address: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg resize-none transition-all"
+                  className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg resize-none transition-all text-gray-900 bg-white"
                   placeholder="e.g., 123 Samora Machel Avenue, Harare"
                 />
               </div>
@@ -457,7 +462,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.employer}
                     onChange={(e) => setFormData({ ...formData, employer: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="e.g., Ministry of Health"
                   />
                 </div>
@@ -469,7 +474,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.job_title}
                     onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="e.g., Senior Nurse"
                   />
                 </div>
@@ -480,7 +485,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.employment_status}
                     onChange={(e) => setFormData({ ...formData, employment_status: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                   >
                     <option value="permanent">Permanent</option>
                     <option value="contract">Contract</option>
@@ -495,7 +500,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.payroll_number}
                     onChange={(e) => setFormData({ ...formData, payroll_number: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-medium text-lg transition-all text-gray-900 bg-white"
                     placeholder="e.g., SSB123456"
                   />
                 </div>
@@ -511,7 +516,7 @@ export function LoanApplicationForm() {
                       min="0"
                       value={formData.gross_salary}
                       onChange={(e) => setFormData({ ...formData, gross_salary: e.target.value })}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                       placeholder="1500.00"
                     />
                   </div>
@@ -528,7 +533,7 @@ export function LoanApplicationForm() {
                       min="0"
                       value={formData.net_salary}
                       onChange={(e) => setFormData({ ...formData, net_salary: e.target.value })}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all"
+                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                       placeholder="1200.00"
                     />
                   </div>
@@ -642,7 +647,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.bank_name}
                     onChange={(e) => setFormData({ ...formData, bank_name: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                   >
                     <option value="">Select Your Bank</option>
                     <option value="CBZ Bank">CBZ Bank</option>
@@ -663,7 +668,7 @@ export function LoanApplicationForm() {
                     required
                     value={formData.account_number}
                     onChange={(e) => setFormData({ ...formData, account_number: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all"
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-purple-200 focus:border-purple-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
                     placeholder="1234567890"
                   />
                 </div>
