@@ -163,31 +163,29 @@ export function AdminDashboard() {
   }
 
   const renderContent = () => {
-    const contentProps = { darkMode };
-    
     switch (activeTab) {
       case 'overview':
-        return <OverviewDashboard {...contentProps} />;
+        return <OverviewDashboard />;
       case 'products':
-        return <ProductManagement {...contentProps} />;
+        return <ProductManagement />;
       case 'stock':
-        return <StockManagement {...contentProps} />;
+        return <StockManagement />;
       case 'orders':
-        return <OrdersManagement {...contentProps} />;
+        return <OrdersManagement />;
       case 'civil-servants':
-        return <CivilServantsManagement {...contentProps} />;
+        return <CivilServantsManagement />;
       case 'invoices':
-        return <InvoiceGenerator {...contentProps} />;
+        return <InvoiceGenerator />;
       case 'quotations':
-        return <QuotationGenerator {...contentProps} />;
+        return <QuotationGenerator />;
       case 'users':
-        return <RolesPermissions {...contentProps} />;
+        return <RolesPermissions />;
       case 'reports':
-        return <ReportsSection {...contentProps} />;
+        return <ReportsSection />;
       case 'alerts':
-        return <AlertsSystem {...contentProps} />;
+        return <AlertsSystem />;
       case 'analytics':
-        return <AnalyticsDashboard {...contentProps} />;
+        return <AnalyticsDashboard />;
       default:
         return (
           <div className="flex items-center justify-center h-96">
