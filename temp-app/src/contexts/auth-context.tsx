@@ -70,35 +70,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('users')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle(); // Use maybeSingle() instead of single() to avoid errors when not found
 
-      if (existingUser && !fetchError) {
-        console.log('User exists, updating profile');
-        // User exists, just update basic info (preserve is_admin and role)
-        const userData = {
-          email: user.email!,
-          full_name: user.user_metadata?.full_name || user.user_metadata?.name || (existingUser as any).full_name,
-          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || (existingUser as any).avatar_url,
-          updated_at: new Date().toISOString(),
-        };
-
-        const { error } = await (supabase as any)
-          .from('users')
-          .update(userData)
-          .eq('id', user.id);
-
-        if (error) {
-          console.error('Error updating user:', error);
-          // Don't throw, just log - user can still function
-        }
-      } else if (fetchError && fetchError.code !== 'PGRST116') {
-        // PGRST116 means "not found", which is fine
-        // Any other error is a problem
+      if (existingUser) {
+        console.log('User exists, fetching profile');
+        // User exists, just fetch the profile (don't update to preserve is_admin)
+        setUserProfile(existingUser as any);
+      } else if (fetchError) {
         console.error('Error checking user existence:', fetchError);
+        // If there's an error, set profile to null so loading completes
+        setUserProfile(null);
       } else {
         console.log('User does not exist, creating new profile');
         // User doesn't exist, create new profile
-        const { error } = await (supabase as any)
+        const { data: newUser, error: insertError } = await supabase
           .from('users')
           .insert({
             id: user.id,
@@ -110,36 +95,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             password_hash: null,
             created_at: new Date().toISOString(),
             updated_at: new Date().toISOString(),
-          });
+          })
+          .select()
+          .single();
 
-        if (error) {
-          console.error('Error inserting user:', error);
-          // Don't throw - user might already exist due to race condition
+        if (insertError) {
+          console.error('Error inserting user:', insertError);
+          // Try to fetch anyway in case of race condition
+          await fetchUserProfile(user.id);
+        } else {
+          console.log('New user created:', newUser);
+          setUserProfile(newUser as any);
         }
       }
-
-      // Always try to fetch the profile
-      await fetchUserProfile(user.id);
     } catch (error) {
       console.error('Error upserting user profile:', error);
-      // Still try to fetch profile even if upsert failed
-      try {
-        await fetchUserProfile(user.id);
-      } catch (e) {
-        console.error('Failed to fetch profile after upsert error:', e);
-      }
+      // Set profile to null so loading completes
+      setUserProfile(null);
     }
   };
 
   useEffect(() => {
+    // Set a timeout to prevent infinite loading
+    const loadingTimeout = setTimeout(() => {
+      if (loading) {
+        console.warn('Loading timeout reached, forcing loading to complete');
+        setLoading(false);
+      }
+    }, 10000); // 10 second timeout
+
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        upsertUserProfile(session.user);
+        await upsertUserProfile(session.user);
+      } else {
+        setUserProfile(null);
       }
       setLoading(false);
+      clearTimeout(loadingTimeout);
     });
 
     // Listen for auth changes
@@ -158,7 +153,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(loadingTimeout);
+    };
   }, []);
 
   const signInWithGoogle = async () => {
