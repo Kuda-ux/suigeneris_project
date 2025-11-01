@@ -15,12 +15,47 @@ export function LoanApplicationForm() {
   const [applicationNumber, setApplicationNumber] = useState('');
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [showSaveNotification, setShowSaveNotification] = useState(false);
+  const [products, setProducts] = useState<any[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   
-  useEffect(() => {
-    loadProducts();
-    loadSavedData();
-  }, []);
+  const [formData, setFormData] = useState({
+    // Personal Information
+    full_name: '',
+    national_id: '',
+    date_of_birth: '',
+    gender: '',
+    email: '',
+    phone: '',
+    home_address: '',
+    
+    // Employment Information
+    employer: '',
+    job_title: '',
+    employment_status: 'permanent',
+    payroll_number: '',
+    gross_salary: '',
+    net_salary: '',
+    
+    // Banking Information
+    bank_name: '',
+    account_number: '',
+    
+    // Product Selection
+    product_id: '',
+    product_name: '',
+    product_price: '',
+    loan_term: '6', // 6 or 12 months
+    
+    // Documents
+    national_id_document: null as File | null,
+    payslip_document: null as File | null,
+    bank_statement_document: null as File | null,
+    proof_of_residence_document: null as File | null,
+    
+    // Consent
+    data_sharing_consent: false
+  });
 
   // Load saved data from localStorage
   const loadSavedData = () => {
@@ -73,17 +108,6 @@ export function LoanApplicationForm() {
     localStorage.removeItem(STEP_KEY);
   };
 
-  // Auto-save when form data changes
-  useEffect(() => {
-    if (formData.full_name || formData.email) {
-      const timeoutId = setTimeout(() => {
-        saveFormData();
-      }, 1000); // Debounce for 1 second
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [formData, step]);
-  
   const loadProducts = async () => {
     setLoadingProducts(true);
     try {
@@ -119,47 +143,24 @@ export function LoanApplicationForm() {
       setLoadingProducts(false);
     }
   };
-  
-  const [products, setProducts] = useState<any[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
-  
-  const [formData, setFormData] = useState({
-    // Personal Information
-    full_name: '',
-    national_id: '',
-    date_of_birth: '',
-    gender: '',
-    email: '',
-    phone: '',
-    home_address: '',
-    
-    // Employment Information
-    employer: '',
-    job_title: '',
-    employment_status: 'permanent',
-    payroll_number: '',
-    gross_salary: '',
-    net_salary: '',
-    
-    // Banking Information
-    bank_name: '',
-    account_number: '',
-    
-    // Product Selection
-    product_id: '',
-    product_name: '',
-    product_price: '',
-    loan_term: '6', // 6 or 12 months
-    
-    // Documents
-    national_id_document: null as File | null,
-    payslip_document: null as File | null,
-    bank_statement_document: null as File | null,
-    proof_of_residence_document: null as File | null,
-    
-    // Consent
-    data_sharing_consent: false
-  });
+
+  // Load products and saved data on mount
+  useEffect(() => {
+    loadProducts();
+    loadSavedData();
+  }, []);
+
+  // Auto-save when form data changes
+  useEffect(() => {
+    if (formData.full_name || formData.email) {
+      const timeoutId = setTimeout(() => {
+        saveFormData();
+      }, 1000); // Debounce for 1 second
+      
+      return () => clearTimeout(timeoutId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, step]);
 
   // Scroll behavior when step changes
   useEffect(() => {
