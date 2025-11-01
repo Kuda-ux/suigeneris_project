@@ -23,7 +23,9 @@ import {
   User,
   CreditCard,
   Receipt,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { ProductManagement } from './product-management';
 import { StockManagement } from './stock-management';
@@ -57,8 +59,24 @@ export function AdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [debugInfo, setDebugInfo] = useState<string>('');
+  const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
   const { user, userProfile, loading, signOut } = useAuth();
+
+  // Load theme preference from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('admin-theme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+    }
+  }, []);
+
+  // Toggle theme and save to localStorage
+  const toggleTheme = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('admin-theme', newMode ? 'dark' : 'light');
+  };
 
   useEffect(() => {
     // Debug logging
@@ -145,36 +163,38 @@ export function AdminDashboard() {
   }
 
   const renderContent = () => {
+    const contentProps = { darkMode };
+    
     switch (activeTab) {
       case 'overview':
-        return <OverviewDashboard />;
+        return <OverviewDashboard {...contentProps} />;
       case 'products':
-        return <ProductManagement />;
+        return <ProductManagement {...contentProps} />;
       case 'stock':
-        return <StockManagement />;
+        return <StockManagement {...contentProps} />;
       case 'orders':
-        return <OrdersManagement />;
+        return <OrdersManagement {...contentProps} />;
       case 'civil-servants':
-        return <CivilServantsManagement />;
+        return <CivilServantsManagement {...contentProps} />;
       case 'invoices':
-        return <InvoiceGenerator />;
+        return <InvoiceGenerator {...contentProps} />;
       case 'quotations':
-        return <QuotationGenerator />;
+        return <QuotationGenerator {...contentProps} />;
       case 'users':
-        return <RolesPermissions />;
+        return <RolesPermissions {...contentProps} />;
       case 'reports':
-        return <ReportsSection />;
+        return <ReportsSection {...contentProps} />;
       case 'alerts':
-        return <AlertsSystem />;
+        return <AlertsSystem {...contentProps} />;
       case 'analytics':
-        return <AnalyticsDashboard />;
+        return <AnalyticsDashboard {...contentProps} />;
       default:
         return (
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <div className="text-6xl mb-4">🚧</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Coming Soon</h3>
-              <p className="text-gray-600">This section is under development</p>
+              <h3 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'} mb-2`}>Coming Soon</h3>
+              <p className={darkMode ? 'text-gray-400' : 'text-gray-600'}>This section is under development</p>
             </div>
           </div>
         );
@@ -182,10 +202,10 @@ export function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       {/* Modern Sidebar */}
       <aside className={`fixed top-0 left-0 z-40 h-screen transition-transform ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 ${sidebarOpen ? 'w-64' : 'w-20'}`}>
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gradient-to-b from-gray-900 to-black border-r border-gray-800">
+        <div className={`h-full px-3 py-4 overflow-y-auto ${darkMode ? 'bg-gradient-to-b from-gray-950 to-black border-r border-gray-800' : 'bg-gradient-to-b from-gray-900 to-black border-r border-gray-800'}`}>
           {/* Logo */}
           <div className="flex items-center justify-between mb-8 px-3">
             {sidebarOpen && (
@@ -229,7 +249,7 @@ export function AdminDashboard() {
                     className={`flex items-center w-full p-3 rounded-xl transition-all group ${
                       isActive
                         ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg'
-                        : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                        : `text-gray-400 ${darkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-800'} hover:text-white`
                     }`}
                   >
                     <Icon className={`w-5 h-5 ${sidebarOpen ? 'mr-3' : 'mx-auto'}`} />
@@ -266,20 +286,20 @@ export function AdminDashboard() {
       {/* Main Content */}
       <div className={`transition-all ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}`}>
         {/* Modern Header */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
+        <header className={`${darkMode ? 'bg-gray-800 border-b border-gray-700' : 'bg-white border-b border-gray-200'} sticky top-0 z-20`}>
           <div className="px-4 py-4">
             <div className="flex items-center justify-between">
               {/* Left Side */}
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setMobileSidebarOpen(true)}
-                  className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                  className={`lg:hidden p-2 ${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'} rounded-lg`}
                 >
                   <Menu className="w-6 h-6" />
                 </button>
                 <div>
-                  <h1 className="text-2xl font-black text-gray-900">Admin Dashboard</h1>
-                  <p className="text-sm text-gray-500 font-medium">Welcome back, Admin</p>
+                  <h1 className={`text-2xl font-black ${darkMode ? 'text-white' : 'text-gray-900'}`}>Admin Dashboard</h1>
+                  <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Welcome back, Admin</p>
                 </div>
               </div>
 
@@ -288,26 +308,35 @@ export function AdminDashboard() {
                 {/* Search */}
                 <div className="hidden md:flex items-center">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${darkMode ? 'text-gray-500' : 'text-gray-400'}`} />
                     <input
                       type="text"
                       placeholder="Search..."
-                      className="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none w-64 font-medium"
+                      className={`pl-10 pr-4 py-2 border-2 ${darkMode ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400' : 'border-gray-200 bg-white text-gray-900'} rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none w-64 font-medium`}
                     />
                   </div>
                 </div>
 
+                {/* Theme Toggle */}
+                <button 
+                  onClick={toggleTheme}
+                  className={`p-2 ${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'} rounded-xl transition-all`}
+                  title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                >
+                  {darkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+                </button>
+
                 {/* Notifications */}
-                <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-xl transition-all">
+                <button className={`relative p-2 ${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'} rounded-xl transition-all`}>
                   <Bell className="w-6 h-6" />
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-600 rounded-full"></span>
                 </button>
 
                 {/* Profile */}
-                <div className="flex items-center gap-3 pl-3 border-l border-gray-200">
+                <div className={`flex items-center gap-3 pl-3 ${darkMode ? 'border-l border-gray-700' : 'border-l border-gray-200'}`}>
                   <div className="hidden md:block text-right">
-                    <div className="text-sm font-bold text-gray-900">Admin User</div>
-                    <div className="text-xs text-gray-500 font-medium">Super Admin</div>
+                    <div className={`text-sm font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Admin User</div>
+                    <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>Super Admin</div>
                   </div>
                   <div className="w-10 h-10 bg-gradient-to-r from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-bold">
                     <User className="w-5 h-5" />
