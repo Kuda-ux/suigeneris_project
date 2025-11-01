@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp } from 'lucide-react';
 import { calculateReducingBalance, checkAffordability, calculateMaxLaptopPrice } from '@/utils/loan-calculator';
 import { uploadLoanDocuments, validateFile } from '@/utils/file-upload';
@@ -10,6 +10,7 @@ export function LoanApplicationForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [applicationNumber, setApplicationNumber] = useState('');
+  const formRef = useRef<HTMLFormElement>(null);
   
   useEffect(() => {
     loadProducts();
@@ -92,9 +93,16 @@ export function LoanApplicationForm() {
     data_sharing_consent: false
   });
 
-  // Scroll to top when step changes
+  // Scroll to form section when step changes
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (formRef.current) {
+      const formTop = formRef.current.getBoundingClientRect().top + window.pageYOffset;
+      const offset = 100; // Offset from top for better visibility
+      window.scrollTo({ 
+        top: formTop - offset, 
+        behavior: 'smooth' 
+      });
+    }
   }, [step]);
 
   const handleFileChange = (field: string, file: File | null) => {
@@ -323,7 +331,7 @@ export function LoanApplicationForm() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-4 border-gray-100">
+        <form ref={formRef} onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-4 border-gray-100">
           {/* Step 1: Personal Information */}
           {step === 1 && (
             <div className="space-y-6">
