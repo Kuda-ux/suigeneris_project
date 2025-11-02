@@ -410,13 +410,34 @@ export function LoanApplicationsManagement() {
                     { label: 'Payslip', url: selectedApplication.payslip_document_url, name: 'Payslip' },
                     { label: 'Bank Statement', url: selectedApplication.bank_statement_document_url, name: 'Bank_Statement' },
                     { label: 'Proof of Residence', url: selectedApplication.proof_of_residence_document_url, name: 'Proof_of_Residence' }
-                  ].map((doc) => (
+                  ].map((doc) => {
+                    // Extract file extension from URL
+                    const getFileExtension = (url: string) => {
+                      const parts = url.split('.');
+                      const ext = parts[parts.length - 1].split('?')[0];
+                      return ext;
+                    };
+                    
+                    // Get file type for display
+                    const getFileType = (url: string) => {
+                      const ext = getFileExtension(url).toLowerCase();
+                      if (ext === 'pdf') return 'PDF';
+                      if (['jpg', 'jpeg'].includes(ext)) return 'JPG';
+                      if (ext === 'png') return 'PNG';
+                      return ext.toUpperCase();
+                    };
+                    
+                    const fileExt = doc.url ? getFileExtension(doc.url) : '';
+                    const fileType = doc.url ? getFileType(doc.url) : '';
+                    const downloadName = `${selectedApplication.application_number}_${doc.name}.${fileExt}`;
+                    
+                    return (
                     <div key={doc.label} className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-bold text-gray-900 mb-1">{doc.label}</p>
                           {doc.url ? (
-                            <span className="text-xs text-green-600 font-semibold">✓ Uploaded</span>
+                            <span className="text-xs text-green-600 font-semibold">✓ Uploaded ({fileType})</span>
                           ) : (
                             <span className="text-xs text-red-600 font-semibold">✗ Not uploaded</span>
                           )}
@@ -434,9 +455,9 @@ export function LoanApplicationsManagement() {
                             </a>
                             <a
                               href={doc.url}
-                              download={`${selectedApplication.application_number}_${doc.name}`}
+                              download={downloadName}
                               className="p-2 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-all"
-                              title="Download document"
+                              title={`Download ${fileType}`}
                             >
                               <Download className="w-4 h-4" />
                             </a>
@@ -444,7 +465,7 @@ export function LoanApplicationsManagement() {
                         )}
                       </div>
                     </div>
-                  ))}
+                  )})}
                 </div>
               </div>
 
