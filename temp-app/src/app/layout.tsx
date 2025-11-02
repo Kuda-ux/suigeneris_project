@@ -91,11 +91,10 @@ export default function RootLayout({
         <meta name="twitter:image:alt" content="Sui Generis Technologies - Quality Laptops & Technology" />
         
         {/* Favicon & Icons - Using Sui Generis Logo */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-        <link rel="apple-touch-icon" href="/logo.svg" />
+        <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="shortcut icon" href="/favicon.ico" />
         <meta name="msapplication-TileImage" content="/logo.svg" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
         
