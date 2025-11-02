@@ -19,7 +19,7 @@ const siteConfig = {
   description: 'Zimbabwe\'s premier destination for certified refurbished laptops, desktops, and smartphones. Premium HP, Dell, Lenovo, and Samsung devices with warranty. Zero deposit laptop financing available for civil servants. Shop quality technology in Harare.',
   url: 'https://www.suigeneriszim.co.zw',
   ogImage: 'https://www.suigeneriszim.co.zw/logo.svg',
-  keywords: 'laptops Zimbabwe, refurbished laptops Harare, desktops Zimbabwe, smartphones Harare, HP laptops Zimbabwe, Dell laptops Harare, Lenovo ThinkPad Zimbabwe, Samsung Galaxy Zimbabwe, laptop financing Zimbabwe, zero deposit laptops, civil servant laptops, buy laptops Harare, cheap laptops Zimbabwe, quality laptops Harare, Sui Generis Technologies, computer shop Harare, laptop shop Zimbabwe, refurbished computers Zimbabwe',
+  keywords: 'laptops Zimbabwe, laptops Harare, buy laptops Zimbabwe, refurbished laptops Harare, desktops Zimbabwe, computers Harare, smartphones Harare, HP laptops Zimbabwe, Dell laptops Harare, Lenovo laptops Zimbabwe, ThinkPad Zimbabwe, Samsung Galaxy Zimbabwe, laptop shop Harare, computer shop Harare, laptop financing Zimbabwe, zero deposit laptops, civil servant laptops Zimbabwe, government employee laptops, cheap laptops Zimbabwe, affordable laptops Harare, quality laptops Zimbabwe, certified refurbished laptops, laptop deals Zimbabwe, laptop prices Harare, best laptop shop Zimbabwe, Sui Generis Technologies, tech shop Harare, electronics store Zimbabwe, laptop repair Harare, computer accessories Zimbabwe, laptop warranty Zimbabwe, buy laptop online Zimbabwe, laptop delivery Harare, laptop store near me, technology Zimbabwe, IT equipment Harare',
   author: 'Sui Generis Technologies',
   location: 'Harare, Zimbabwe',
   businessType: 'Electronics Store',
@@ -46,9 +46,20 @@ export default function RootLayout({
         <meta name="keywords" content={siteConfig.keywords} />
         <meta name="author" content={siteConfig.author} />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="googlebot" content="index, follow" />
+        <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="bingbot" content="index, follow" />
+        <meta name="google" content="nositelinkssearchbox" />
+        <meta name="google" content="notranslate" />
         <link rel="canonical" href={siteConfig.url} />
+        
+        {/* Business & Local SEO */}
+        <meta name="business:contact_data:street_address" content="109 Leopold Takawira Street" />
+        <meta name="business:contact_data:locality" content="Harare" />
+        <meta name="business:contact_data:region" content="Harare Province" />
+        <meta name="business:contact_data:postal_code" content="00263" />
+        <meta name="business:contact_data:country_name" content="Zimbabwe" />
+        <meta name="business:contact_data:phone_number" content="+263784116938" />
+        <meta name="business:contact_data:website" content="https://www.suigeneriszim.co.zw" />
         
         {/* Geo Tags for Zimbabwe */}
         <meta name="geo.region" content="ZW" />
@@ -80,12 +91,13 @@ export default function RootLayout({
         <meta name="twitter:image:alt" content="Sui Generis Technologies - Quality Laptops & Technology" />
         
         {/* Favicon & Icons - Using Sui Generis Logo */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/logo.svg" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/logo.svg" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/logo.svg" />
+        <link rel="apple-touch-icon" href="/logo.svg" />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="shortcut icon" href="/logo.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <meta name="msapplication-TileImage" content="/logo.svg" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#dc2626" />
