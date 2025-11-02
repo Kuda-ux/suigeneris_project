@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { sendApplicationConfirmationEmail, sendAdminNotificationEmail, sendApplicationStatusUpdateEmail } from '@/lib/email';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -96,8 +97,37 @@ export async function POST(request: Request) {
 
     console.log('Application created successfully:', newApplication);
 
-    // TODO: Send email notification
-    // await sendApplicationConfirmationEmail(applicationData.email, applicationNumber);
+    // Send confirmation email to applicant
+    try {
+      await sendApplicationConfirmationEmail({
+        email: applicationData.email,
+        full_name: applicationData.full_name,
+        application_number: applicationNumber,
+        product_name: applicationData.product_name,
+        product_price: applicationData.product_price,
+        loan_term: applicationData.loan_term || '6'
+      });
+      console.log('Confirmation email sent to applicant');
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError);
+      // Don't fail the application if email fails
+    }
+
+    // Send notification email to admin
+    try {
+      await sendAdminNotificationEmail({
+        email: applicationData.email,
+        full_name: applicationData.full_name,
+        application_number: applicationNumber,
+        product_name: applicationData.product_name,
+        product_price: applicationData.product_price,
+        loan_term: applicationData.loan_term || '6'
+      });
+      console.log('Notification email sent to admin');
+    } catch (emailError) {
+      console.error('Failed to send admin notification:', emailError);
+      // Don't fail the application if email fails
+    }
 
     return NextResponse.json(newApplication);
   } catch (error: any) {
@@ -131,6 +161,23 @@ export async function PATCH(request: Request) {
       .single();
 
     if (error) throw error;
+
+    // Send status update email to applicant
+    if (data && data.email) {
+      try {
+        await sendApplicationStatusUpdateEmail({
+          email: data.email,
+          full_name: data.full_name,
+          application_number: data.application_number,
+          status: status,
+          admin_notes: admin_notes
+        });
+        console.log('Status update email sent to applicant');
+      } catch (emailError) {
+        console.error('Failed to send status update email:', emailError);
+        // Don't fail the update if email fails
+      }
+    }
 
     return NextResponse.json(data);
   } catch (error: any) {
