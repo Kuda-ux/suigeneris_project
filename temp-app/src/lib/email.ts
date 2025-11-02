@@ -1,6 +1,9 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend only if API key is available
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 interface ApplicationConfirmationData {
   email: string;
@@ -23,6 +26,12 @@ interface ApplicationStatusUpdateData {
  * Send confirmation email when application is submitted
  */
 export async function sendApplicationConfirmationEmail(data: ApplicationConfirmationData) {
+  // Skip if Resend is not configured
+  if (!resend) {
+    console.warn('Resend API key not configured. Skipping confirmation email.');
+    return null;
+  }
+
   try {
     const { email, full_name, application_number, product_name, product_price, loan_term } = data;
 
@@ -226,6 +235,12 @@ export async function sendApplicationConfirmationEmail(data: ApplicationConfirma
  * Send email when application status is updated
  */
 export async function sendApplicationStatusUpdateEmail(data: ApplicationStatusUpdateData) {
+  // Skip if Resend is not configured
+  if (!resend) {
+    console.warn('Resend API key not configured. Skipping status update email.');
+    return null;
+  }
+
   try {
     const { email, full_name, application_number, status, admin_notes } = data;
 
@@ -411,6 +426,12 @@ export async function sendApplicationStatusUpdateEmail(data: ApplicationStatusUp
  * Send notification to admin when new application is submitted
  */
 export async function sendAdminNotificationEmail(data: ApplicationConfirmationData) {
+  // Skip if Resend is not configured
+  if (!resend) {
+    console.warn('Resend API key not configured. Skipping admin notification email.');
+    return null;
+  }
+
   try {
     const { full_name, application_number, product_name, product_price, email, loan_term } = data;
 
