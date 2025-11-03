@@ -151,7 +151,7 @@ export function HeroSection() {
             
             {/* Subheading */}
             <p className="text-sm md:text-base lg:text-lg text-gray-200 font-medium leading-relaxed max-w-xl">
-              Certified refurbished <span className="text-red-400 font-bold">laptops</span>, 
+              Brand new and certified refurbished <span className="text-red-400 font-bold">laptops</span>, 
               <span className="text-red-400 font-bold"> desktops</span>, and 
               <span className="text-red-400 font-bold"> smartphones</span> with warranty included.
             </p>

@@ -44,7 +44,7 @@ export function FeaturedProducts() {
             Featured Products
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Handpicked premium refurbished technology with <span className="text-red-600 font-bold">full warranty coverage</span> and certified quality.
+            Handpicked premium brand new and refurbished technology with <span className="text-red-600 font-bold">full warranty coverage</span> and certified quality.
           </p>
         </div>
 

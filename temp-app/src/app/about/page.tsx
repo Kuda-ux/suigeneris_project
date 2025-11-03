@@ -21,7 +21,7 @@ export default function AboutPage() {
               Sui Generis Technologies
             </h1>
             <p className="text-lg md:text-xl text-red-100 leading-relaxed">
-              Zimbabwe's trusted source for <span className="font-bold text-white">premium refurbished technology</span> with warranty protection and certified quality.
+              Zimbabwe's trusted source for <span className="font-bold text-white">premium brand new and refurbished technology</span> with warranty protection and certified quality.
             </p>
           </div>
         </div>
@@ -37,7 +37,7 @@ export default function AboutPage() {
             </div>
             <h2 className="text-3xl font-black text-gray-900 mb-4">Our Mission</h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              To provide affordable, high-quality refurbished technology to businesses and individuals across Zimbabwe, making premium devices accessible to everyone while promoting sustainability and reducing electronic waste.
+              To provide affordable, high-quality brand new and refurbished technology to businesses and individuals across Zimbabwe, making premium devices accessible to everyone while promoting sustainability and reducing electronic waste.
             </p>
           </div>
 
@@ -75,10 +75,10 @@ export default function AboutPage() {
               Sui Generis Technologies was established to address a critical need in Zimbabwe's technology market: access to reliable, affordable computing devices. We recognized that many businesses and individuals were priced out of the new technology market, yet they needed quality devices to succeed in today's digital world.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed mb-6">
-              Our journey began with a simple belief: everyone deserves access to premium technology. By specializing in certified refurbished laptops, desktops, smartphones, and accessories, we've made it possible for countless Zimbabweans to own high-quality devices at prices they can afford.
+              Our journey began with a simple belief: everyone deserves access to premium technology. By offering both brand new and certified refurbished laptops, desktops, smartphones, and accessories, we've made it possible for countless Zimbabweans to own high-quality devices at prices they can afford.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Today, we're proud to serve customers across Zimbabwe, offering an extensive selection of refurbished technology from trusted brands like HP, Dell, Lenovo, Samsung, and more—all backed by our comprehensive warranty and quality guarantee.
+              Today, we're proud to serve customers across Zimbabwe, offering an extensive selection of brand new and refurbished technology from trusted brands like HP, Dell, Lenovo, Samsung, and more—all backed by our comprehensive warranty and quality guarantee.
             </p>
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6">What We Offer</h2>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Premium refurbished technology with unbeatable value
+              Premium brand new and refurbished technology with unbeatable value
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">

@@ -89,7 +89,7 @@ export function ProductsPage() {
               All Products
             </h1>
             <p className="text-lg md:text-xl text-red-100 leading-relaxed">
-              Discover our complete collection of <span className="font-bold text-white">certified refurbished technology</span> with warranty protection.
+              Discover our complete collection of <span className="font-bold text-white">brand new and certified refurbished technology</span> with warranty protection.
             </p>
           </div>
         </div>

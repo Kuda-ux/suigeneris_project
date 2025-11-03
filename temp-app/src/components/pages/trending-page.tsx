@@ -128,7 +128,7 @@ export function TrendingPage() {
           </div>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
             Discover Sui Generis' <span className="text-sg-aqua font-semibold">hottest products</span> - 
-            Premium refurbished technology that's flying off our shelves!
+            Premium brand new and refurbished technology that's flying off our shelves!
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
             <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
@@ -197,7 +197,7 @@ export function TrendingPage() {
             </h2>
             <p className="text-xl text-sg-gray-600 max-w-3xl mx-auto leading-relaxed">
               These <span className="text-sg-red font-semibold">Sui Generis products</span> are experiencing massive growth in popularity. 
-              Premium refurbished technology with full warranty coverage.
+              Premium brand new and refurbished technology with full warranty coverage.
             </p>
           </div>
 
@@ -316,7 +316,7 @@ export function TrendingPage() {
           <div className="text-center mt-16">
             <div className="bg-gradient-to-r from-sg-gray-50 to-white rounded-2xl p-8 border border-gray-200">
               <h3 className="text-2xl font-bold text-sg-black mb-4">Want to see more?</h3>
-              <p className="text-sg-gray-600 mb-6">Browse our complete collection of premium refurbished technology</p>
+              <p className="text-sg-gray-600 mb-6">Browse our complete collection of premium brand new and refurbished technology</p>
               <Link href="/products">
                 <button className="bg-gradient-to-r from-sg-red to-red-600 hover:from-sg-red/90 hover:to-red-700 text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center mx-auto shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                   <TrendingUp className="mr-2 h-5 w-5" />
