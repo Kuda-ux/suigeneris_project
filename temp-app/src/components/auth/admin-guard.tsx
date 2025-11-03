@@ -27,7 +27,21 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-purple-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-semibold">Loading...</p>
+          <p className="text-gray-600 font-semibold text-lg mb-2">Loading Admin Dashboard...</p>
+          <p className="text-gray-500 text-sm">Verifying credentials...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // Show loading if user exists but profile not loaded yet
+  if (user && !userProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-purple-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 font-semibold text-lg mb-2">Loading Profile...</p>
+          <p className="text-gray-500 text-sm">Please wait...</p>
         </div>
       </div>
     );

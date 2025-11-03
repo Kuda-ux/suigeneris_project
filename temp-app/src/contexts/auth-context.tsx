@@ -116,20 +116,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Set a timeout to prevent infinite loading
+    // Set a shorter timeout to prevent infinite loading
     const loadingTimeout = setTimeout(() => {
       if (loading) {
         console.warn('Loading timeout reached, forcing loading to complete');
         setLoading(false);
       }
-    }, 10000); // 10 second timeout
+    }, 3000); // Reduced to 3 second timeout for faster loading
 
     // Get initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
-        await upsertUserProfile(session.user);
+        // Use Promise.race to timeout profile loading after 2 seconds
+        const profilePromise = upsertUserProfile(session.user);
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000));
+        await Promise.race([profilePromise, timeoutPromise]);
       } else {
         setUserProfile(null);
       }
@@ -145,7 +148,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        await upsertUserProfile(session.user);
+        // Use Promise.race to timeout profile loading after 2 seconds
+        const profilePromise = upsertUserProfile(session.user);
+        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000));
+        await Promise.race([profilePromise, timeoutPromise]);
       } else {
         setUserProfile(null);
       }
