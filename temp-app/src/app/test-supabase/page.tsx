@@ -76,7 +76,11 @@ export default function TestSupabase() {
           <div className="space-y-2 text-sm">
             <div className="flex">
               <span className="font-medium w-32">Project URL:</span>
-              <span className="text-gray-600">https://dtdpxfqepyjiyhejrcsl.supabase.co</span>
+              <span className="text-gray-600">{process.env.NEXT_PUBLIC_SUPABASE_URL || 'Not configured'}</span>
+            </div>
+            <div className="flex">
+              <span className="font-medium w-32">Project ID:</span>
+              <span className="text-gray-600">flmyvxwsnjzizgsosntl</span>
             </div>
             <div className="flex">
               <span className="font-medium w-32">Status:</span>
