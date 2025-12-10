@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Star, Package, TrendingUp, Award, Zap } from 'lucide-react';
-import { categories as realCategories } from '@/data/products';
+import { getProductsByCategory } from '@/data/products';
 
 const categories = [
   {
@@ -10,7 +10,7 @@ const categories = [
     description: 'Professional and personal laptops',
     subtitle: 'HP, Dell, Lenovo, Toshiba & more',
     image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: realCategories.find(c => c.id === 'laptops')?.count || 67,
+    productCount: getProductsByCategory('Laptops').length || 35,
     gradient: 'from-red-600 to-red-700'
   },
   {
@@ -20,7 +20,7 @@ const categories = [
     description: 'Desktop computers and workstations',
     subtitle: 'Reliable performance guaranteed',
     image: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: realCategories.find(c => c.id === 'desktops')?.count || 20,
+    productCount: getProductsByCategory('Desktops').length || 6,
     gradient: 'from-gray-700 to-gray-800'
   },
   {
@@ -30,27 +30,27 @@ const categories = [
     description: 'Latest smartphones',
     subtitle: 'Samsung and Xiaomi',
     image: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: realCategories.find(c => c.id === 'smartphones')?.count || 11,
+    productCount: getProductsByCategory('Smartphones').length || 8,
     gradient: 'from-red-600 to-red-700'
   },
   {
-    id: 'printers',
-    name: 'Printers',
-    icon: '🖨️',
-    description: 'All-in-one printers',
-    subtitle: 'For home and office',
-    image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: realCategories.find(c => c.id === 'printers')?.count || 1,
+    id: 'monitors',
+    name: 'Monitors',
+    icon: '🖥️',
+    description: 'Professional displays',
+    subtitle: 'For work and gaming',
+    image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=600&h=400&fit=crop&crop=center&q=80',
+    productCount: getProductsByCategory('Monitors').length || 9,
     gradient: 'from-gray-600 to-gray-700'
   },
   {
-    id: 'monitors',
-    name: 'Monitors & AIOs',
-    icon: '🖥️',
-    description: 'Professional displays',
-    subtitle: 'All-in-One computers',
-    image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: realCategories.find(c => c.id === 'monitors')?.count || 9,
+    id: 'processors',
+    name: 'Processors',
+    icon: '⚡',
+    description: 'CPUs and chipsets',
+    subtitle: 'Intel and AMD processors',
+    image: 'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=600&h=400&fit=crop&crop=center&q=80',
+    productCount: getProductsByCategory('Processors').length || 9,
     gradient: 'from-red-500 to-red-600'
   },
   {
@@ -60,7 +60,7 @@ const categories = [
     description: 'Tech accessories & peripherals',
     subtitle: 'Complete your setup',
     image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=600&h=400&fit=crop&crop=center&q=80',
-    productCount: 15,
+    productCount: getProductsByCategory('Accessories').length || 19,
     gradient: 'from-gray-700 to-gray-800'
   }
 ];
