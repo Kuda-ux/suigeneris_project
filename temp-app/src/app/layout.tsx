@@ -12,7 +12,7 @@ import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// SEO Metadata - World-Class Configuration
+// SEO Metadata - World-Class Configuration (v0.1.3)
 const siteConfig = {
   name: 'Sui Generis Technologies Zimbabwe',
   shortName: 'Sui Generis Tech',
