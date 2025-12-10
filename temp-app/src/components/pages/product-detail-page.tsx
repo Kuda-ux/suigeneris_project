@@ -119,9 +119,21 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
           {/* Product Info */}
           <div className="space-y-6">
             <div>
-              <div className="flex items-center gap-3 mb-4">
+              <div className="flex flex-wrap items-center gap-3 mb-4">
                 <span className="bg-red-100 text-red-700 px-4 py-1.5 rounded-full text-sm font-bold">{product.brand}</span>
                 <span className="bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-bold">{product.category}</span>
+                {product.condition && (
+                  <span className={`px-4 py-1.5 rounded-full text-sm font-bold ${
+                    product.condition === 'Brand New' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {product.condition}
+                  </span>
+                )}
+                {product.badge && (
+                  <span className="bg-yellow-100 text-yellow-700 px-4 py-1.5 rounded-full text-sm font-bold">{product.badge}</span>
+                )}
               </div>
               <h1 className="text-4xl md:text-5xl font-black text-black mb-4 leading-tight">{product.name}</h1>
               

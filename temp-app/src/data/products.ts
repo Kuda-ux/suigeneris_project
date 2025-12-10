@@ -145,7 +145,7 @@ export const products: Product[] = [
 ];
 
 // Helper functions
-export const getProductById = (id: number): Product | undefined => products.find(p => p.id === id);
+export const getProductById = (id: number | string): Product | undefined => products.find(p => p.id === Number(id));
 export const getProductsByCategory = (category: string): Product[] => products.filter(p => p.category.toLowerCase() === category.toLowerCase());
 export const getProductsByBrand = (brand: string): Product[] => products.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
 export const getFeaturedProducts = (): Product[] => products.filter(p => p.badge);
