@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp, Save, RotateCcw, Search, Smartphone, Laptop, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { calculateFlatInterest, checkLoanAffordability, calculateMaxProductPrice, getPaymentTerms, formatCurrency } from '@/utils/loan-calculator-new';
+import { calculateFlatInterest, formatCurrency } from '@/utils/loan-calculator-new';
 import { uploadLoanDocuments, validateFile } from '@/utils/file-upload';
 
 const STORAGE_KEY = 'loan_application_draft';
@@ -232,12 +232,6 @@ export function LoanApplicationForm() {
   // Calculate loan using 5% flat interest
   const selectedLoanDetails = formData.product_price 
     ? calculateFlatInterest(parseFloat(formData.product_price), parseInt(formData.loan_term))
-    : null;
-  const affordability = (selectedLoanDetails && formData.net_salary) 
-    ? checkLoanAffordability(selectedLoanDetails.monthlyPayment, parseFloat(formData.net_salary))
-    : null;
-  const maxProductPrice = formData.net_salary 
-    ? calculateMaxProductPrice(parseFloat(formData.net_salary), parseInt(formData.loan_term))
     : null;
   
   // Filter products based on search and category
@@ -1004,9 +998,6 @@ export function LoanApplicationForm() {
                 <div className="space-y-4">
                   {filteredProducts.map((product) => {
                     const loanDetails = calculateFlatInterest(product.price, parseInt(formData.loan_term));
-                    const isAffordable = formData.net_salary 
-                      ? checkLoanAffordability(loanDetails.monthlyPayment, parseFloat(formData.net_salary))
-                      : null;
 
                     return (
                       <div
@@ -1126,18 +1117,6 @@ export function LoanApplicationForm() {
                               <p className="text-xs text-gray-500 mt-1">per month for {formData.loan_term} months</p>
                             </div>
 
-                            {isAffordable && (
-                              <div className={`mt-2 p-2 rounded-lg text-xs font-semibold ${
-                                isAffordable.isAffordable 
-                                  ? 'bg-green-100 text-green-800 border border-green-300' 
-                                  : 'bg-red-100 text-red-800 border border-red-300'
-                              }`}>
-                                {isAffordable.isAffordable 
-                                  ? `✓ Affordable (${isAffordable.percentageOfSalary.toFixed(1)}% of salary)` 
-                                  : `⚠ ${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
-                                }
-                              </div>
-                            )}
                           </div>
                         </div>
                       </div>
