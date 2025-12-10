@@ -307,7 +307,7 @@ export function LoanApplicationForm() {
     // Step 1: Personal Info
     if (formData.full_name && formData.email && formData.phone) completed++;
     // Step 2: Employment
-    if (formData.employer && formData.net_salary) completed++;
+    if (formData.employer && formData.years_of_service) completed++;
     // Step 3: Banking
     if (formData.bank_name && formData.account_number) completed++;
     // Step 4: Product
