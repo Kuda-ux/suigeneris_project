@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// Smartphones to add
+// Smartphones to add - matching the actual database schema
 const smartphones = [
   {
     name: 'Xiaomi Redmi A3',
@@ -15,7 +15,12 @@ const smartphones = [
     stock_count: 5,
     in_stock: true,
     sku: 'SG-SMA-0001',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '128GB',
+    display: '6.7"',
+    processor: 'MediaTek Helio',
+    image: '/smartphones/xiaomi-redmi-a3.jpg',
+    images: ['/smartphones/xiaomi-redmi-a3.jpg']
   },
   {
     name: 'Samsung Galaxy A30',
@@ -26,7 +31,12 @@ const smartphones = [
     stock_count: 3,
     in_stock: true,
     sku: 'SG-SMA-0002',
-    warranty: '3 months'
+    ram: '4GB',
+    storage: '64GB',
+    display: '6.4" AMOLED',
+    processor: 'Exynos 7904',
+    image: '/smartphones/samsung-galaxy-a30.jpg',
+    images: ['/smartphones/samsung-galaxy-a30.jpg']
   },
   {
     name: 'Xiaomi Redmi 14C',
@@ -37,7 +47,12 @@ const smartphones = [
     stock_count: 4,
     in_stock: true,
     sku: 'SG-SMA-0003',
-    warranty: '12 months'
+    ram: '16GB',
+    storage: '256GB',
+    display: '6.88"',
+    processor: 'MediaTek Helio G81',
+    image: '/smartphones/xiaomi-redmi-14c.jpg',
+    images: ['/smartphones/xiaomi-redmi-14c.jpg']
   },
   {
     name: 'Samsung Galaxy A05',
@@ -48,7 +63,12 @@ const smartphones = [
     stock_count: 5,
     in_stock: true,
     sku: 'SG-SMA-0004',
-    warranty: '12 months'
+    ram: '6GB',
+    storage: '128GB',
+    display: '6.7" PLS LCD',
+    processor: 'MediaTek Helio G85',
+    image: '/smartphones/samsung-galaxy-a05.jpg',
+    images: ['/smartphones/samsung-galaxy-a05.jpg']
   },
   {
     name: 'Xiaomi Redmi 13',
@@ -59,7 +79,12 @@ const smartphones = [
     stock_count: 4,
     in_stock: true,
     sku: 'SG-SMA-0005',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '256GB',
+    display: '6.79" FHD+',
+    processor: 'Snapdragon 4 Gen 2',
+    image: '/smartphones/xiaomi-redmi-13.jpg',
+    images: ['/smartphones/xiaomi-redmi-13.jpg']
   },
   {
     name: 'Samsung Galaxy M14 5G',
@@ -70,7 +95,12 @@ const smartphones = [
     stock_count: 3,
     in_stock: true,
     sku: 'SG-SMA-0006',
-    warranty: '12 months'
+    ram: '6GB',
+    storage: '128GB',
+    display: '6.6" PLS LCD',
+    processor: 'Exynos 1330 5G',
+    image: '/smartphones/samsung-galaxy-m14-5g.jpg',
+    images: ['/smartphones/samsung-galaxy-m14-5g.jpg']
   },
   {
     name: 'Samsung Galaxy A06',
@@ -81,7 +111,12 @@ const smartphones = [
     stock_count: 4,
     in_stock: true,
     sku: 'SG-SMA-0007',
-    warranty: '12 months'
+    ram: '6GB',
+    storage: '128GB',
+    display: '6.7" PLS LCD',
+    processor: 'MediaTek Helio G85',
+    image: '/smartphones/samsung-galaxy-a06.jpg',
+    images: ['/smartphones/samsung-galaxy-a06.jpg']
   },
   {
     name: 'Samsung Galaxy A05s',
@@ -92,7 +127,12 @@ const smartphones = [
     stock_count: 4,
     in_stock: true,
     sku: 'SG-SMA-0008',
-    warranty: '12 months'
+    ram: '6GB',
+    storage: '128GB',
+    display: '6.7" FHD+ PLS',
+    processor: 'Snapdragon 680',
+    image: '/smartphones/samsung-galaxy-a05s.jpg',
+    images: ['/smartphones/samsung-galaxy-a05s.jpg']
   },
   {
     name: 'Xiaomi Redmi Note 13',
@@ -103,7 +143,12 @@ const smartphones = [
     stock_count: 5,
     in_stock: true,
     sku: 'SG-SMA-0009',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '256GB',
+    display: '6.67" AMOLED',
+    processor: 'Snapdragon 685',
+    image: '/smartphones/xiaomi-redmi-note-13.jpg',
+    images: ['/smartphones/xiaomi-redmi-note-13.jpg']
   },
   {
     name: 'Samsung Galaxy A15',
@@ -114,7 +159,12 @@ const smartphones = [
     stock_count: 4,
     in_stock: true,
     sku: 'SG-SMA-0010',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '256GB',
+    display: '6.5" Super AMOLED',
+    processor: 'MediaTek Helio G99',
+    image: '/smartphones/samsung-galaxy-a15.jpg',
+    images: ['/smartphones/samsung-galaxy-a15.jpg']
   },
   {
     name: 'Samsung Galaxy A25 5G',
@@ -125,7 +175,12 @@ const smartphones = [
     stock_count: 3,
     in_stock: true,
     sku: 'SG-SMA-0011',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '256GB',
+    display: '6.5" Super AMOLED',
+    processor: 'Exynos 1280 5G',
+    image: '/smartphones/samsung-galaxy-a25-5g.jpg',
+    images: ['/smartphones/samsung-galaxy-a25-5g.jpg']
   },
   {
     name: 'Samsung Galaxy A35 5G',
@@ -136,7 +191,12 @@ const smartphones = [
     stock_count: 3,
     in_stock: true,
     sku: 'SG-SMA-0012',
-    warranty: '12 months'
+    ram: '8GB',
+    storage: '256GB',
+    display: '6.6" Super AMOLED',
+    processor: 'Exynos 1380 5G',
+    image: '/smartphones/samsung-galaxy-a35-5g.jpg',
+    images: ['/smartphones/samsung-galaxy-a35-5g.jpg']
   }
 ];
 
