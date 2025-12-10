@@ -6,7 +6,7 @@ import { Search, Filter, Grid, List, Star, ShoppingCart, CheckCircle, SlidersHor
 import { useCartStore } from '@/store/cart-store';
 import { products as allProducts, getProductsByCategory, searchProducts } from '@/data/products';
 
-const categories = ['All', 'Laptops', 'Desktops', 'Smartphones', 'Printers', 'Monitors'];
+const categories = ['All', 'Laptops', 'Smartphones'];
 const sortOptions = [
   { value: 'featured', label: 'Featured' },
   { value: 'price-low', label: 'Price: Low to High' },
