@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
@@ -187,20 +187,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithEmail = async (email: string, password: string) => {
     try {
+      // Check if Supabase is properly configured
+      if (!isSupabaseConfigured()) {
+        throw new Error('Authentication service is not properly configured. Please contact support.');
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (error) throw error;
-    } catch (error) {
+      if (error) {
+        // Provide user-friendly error messages
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          throw new Error('Unable to connect to authentication service. Please check your internet connection and try again.');
+        }
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('Invalid email or password. Please try again.');
+        }
+        throw error;
+      }
+    } catch (error: any) {
       console.error('Error signing in with email:', error);
+      // Re-throw with user-friendly message if it's a network error
+      if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
+        throw new Error('Unable to connect to authentication service. Please check your internet connection and try again.');
+      }
       throw error;
     }
   };
 
   const signUpWithEmail = async (email: string, password: string, fullName: string) => {
     try {
+      // Check if Supabase is properly configured
+      if (!isSupabaseConfigured()) {
+        throw new Error('Authentication service is not properly configured. Please contact support.');
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -212,14 +235,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Provide user-friendly error messages
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          throw new Error('Unable to connect to authentication service. Please check your internet connection and try again.');
+        }
+        if (error.message.includes('already registered')) {
+          throw new Error('This email is already registered. Please sign in instead.');
+        }
+        throw error;
+      }
 
       // Check if email confirmation is required
       if (data?.user && !data.session) {
         throw new Error('Please check your email to confirm your account before signing in.');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing up with email:', error);
+      // Re-throw with user-friendly message if it's a network error
+      if (error.message?.includes('Failed to fetch') || error.name === 'AuthRetryableFetchError') {
+        throw new Error('Unable to connect to authentication service. Please check your internet connection and try again.');
+      }
       throw error;
     }
   };
