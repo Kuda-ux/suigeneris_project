@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp, Save, RotateCcw } from 'lucide-react';
-import { calculateReducingBalance, checkAffordability, calculateMaxLaptopPrice } from '@/utils/loan-calculator';
+import { Upload, CheckCircle, AlertCircle, FileText, User, Briefcase, Building, CreditCard, DollarSign, ArrowRight, Shield, Clock, CheckSquare, Calculator, TrendingUp, Save, RotateCcw, Search, Smartphone, Laptop, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { calculateFlatInterest, checkLoanAffordability, calculateMaxProductPrice, getPaymentTerms, formatCurrency } from '@/utils/loan-calculator-new';
 import { uploadLoanDocuments, validateFile } from '@/utils/file-upload';
 
 const STORAGE_KEY = 'loan_application_draft';
@@ -17,6 +17,10 @@ export function LoanApplicationForm() {
   const [showSaveNotification, setShowSaveNotification] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
+  const [productSearch, setProductSearch] = useState('');
+  const [productCategory, setProductCategory] = useState<'all' | 'laptops' | 'smartphones'>('all');
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [showProductModal, setShowProductModal] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   
   const [formData, setFormData] = useState({
@@ -45,7 +49,8 @@ export function LoanApplicationForm() {
     product_id: '',
     product_name: '',
     product_price: '',
-    loan_term: '6', // 6 or 12 months
+    product_category: '',
+    loan_term: '6', // 2-24 months
     
     // Documents
     national_id_document: null as File | null,
@@ -115,27 +120,60 @@ export function LoanApplicationForm() {
       if (res.ok) {
         const data = await res.json();
         console.log('Loaded products:', data);
-        // Filter for laptops/computers with stock
-        const laptops = data.filter((p: any) => {
+        // Filter for laptops and smartphones with stock
+        const eligibleProducts = data.filter((p: any) => {
           const hasStock = (p.currentStock || p.stock_count || 0) > 0;
-          const isLaptop = p.category?.toLowerCase().includes('laptop') || 
-                          p.category?.toLowerCase().includes('computer') ||
-                          p.name?.toLowerCase().includes('laptop') ||
-                          p.name?.toLowerCase().includes('hp') ||
-                          p.name?.toLowerCase().includes('dell') ||
-                          p.name?.toLowerCase().includes('lenovo');
-          return hasStock && isLaptop;
+          const category = p.category?.toLowerCase() || '';
+          const name = p.name?.toLowerCase() || '';
+          
+          const isLaptop = category.includes('laptop') || 
+                          category.includes('computer') ||
+                          name.includes('laptop') ||
+                          name.includes('thinkpad') ||
+                          name.includes('elitebook') ||
+                          name.includes('latitude') ||
+                          name.includes('macbook') ||
+                          name.includes('vostro') ||
+                          name.includes('precision') ||
+                          name.includes('surface') ||
+                          name.includes('travelmate') ||
+                          name.includes('dynabook');
+          
+          const isSmartphone = category.includes('smartphone') ||
+                              category.includes('phone') ||
+                              name.includes('samsung') ||
+                              name.includes('galaxy') ||
+                              name.includes('xiaomi') ||
+                              name.includes('redmi');
+          
+          return hasStock && (isLaptop || isSmartphone);
         });
         
-        // Sort laptops by price (lowest to highest)
-        const sortedLaptops = laptops.sort((a: any, b: any) => {
+        // Add category tag to each product
+        const taggedProducts = eligibleProducts.map((p: any) => {
+          const category = p.category?.toLowerCase() || '';
+          const name = p.name?.toLowerCase() || '';
+          const isSmartphone = category.includes('smartphone') || 
+                              category.includes('phone') ||
+                              name.includes('samsung') ||
+                              name.includes('galaxy') ||
+                              name.includes('xiaomi') ||
+                              name.includes('redmi');
+          return {
+            ...p,
+            productType: isSmartphone ? 'smartphone' : 'laptop'
+          };
+        });
+        
+        // Sort by price (lowest to highest)
+        const sortedProducts = taggedProducts.sort((a: any, b: any) => {
           const priceA = parseFloat(a.price) || 0;
           const priceB = parseFloat(b.price) || 0;
           return priceA - priceB;
         });
         
-        console.log('Filtered and sorted laptops:', sortedLaptops);
-        setProducts(sortedLaptops);
+        console.log('Filtered and sorted products:', sortedProducts);
+        setProducts(sortedProducts);
       }
     } catch (err) {
       console.error('Error loading products:', err);
@@ -192,15 +230,27 @@ export function LoanApplicationForm() {
     setFormData({ ...formData, [field]: file });
   };
 
+  // Calculate loan using 5% flat interest
   const selectedLoanDetails = formData.product_price 
-    ? calculateReducingBalance(parseFloat(formData.product_price), 7, parseInt(formData.loan_term))
+    ? calculateFlatInterest(parseFloat(formData.product_price), parseInt(formData.loan_term))
     : null;
   const affordability = (selectedLoanDetails && formData.net_salary) 
-    ? checkAffordability(selectedLoanDetails.monthlyPayment, parseFloat(formData.net_salary))
+    ? checkLoanAffordability(selectedLoanDetails.monthlyPayment, parseFloat(formData.net_salary))
     : null;
-  const maxLaptopPrice = formData.net_salary 
-    ? calculateMaxLaptopPrice(parseFloat(formData.net_salary), parseInt(formData.loan_term))
+  const maxProductPrice = formData.net_salary 
+    ? calculateMaxProductPrice(parseFloat(formData.net_salary), parseInt(formData.loan_term))
     : null;
+  
+  // Filter products based on search and category
+  const filteredProducts = products.filter((p: any) => {
+    const matchesSearch = !productSearch || 
+      p.name?.toLowerCase().includes(productSearch.toLowerCase()) ||
+      p.brand?.toLowerCase().includes(productSearch.toLowerCase());
+    const matchesCategory = productCategory === 'all' || 
+      (productCategory === 'laptops' && p.productType === 'laptop') ||
+      (productCategory === 'smartphones' && p.productType === 'smartphone');
+    return matchesSearch && matchesCategory;
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -395,7 +445,7 @@ export function LoanApplicationForm() {
             ZERO DEPOSIT REQUIRED
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-            Civil Servants <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Laptop Financing</span>
+            Civil Servants <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-purple-600">Device Financing</span>
           </h1>
           <p className="text-xl text-gray-700 font-semibold mb-3">
             Exclusively for Zimbabwe Government Employees
@@ -419,14 +469,14 @@ export function LoanApplicationForm() {
               <Calculator className="w-7 h-7 text-purple-600" />
             </div>
             <h3 className="font-bold text-gray-900 mb-2 text-lg">Flexible Terms</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">Choose 6 or 12 months at 7% monthly interest</p>
+            <p className="text-sm text-gray-600 leading-relaxed">Choose 2-24 months at only 5% flat interest</p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 text-center">
             <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="font-bold text-gray-900 mb-2 text-lg">Quality Devices</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">Certified laptops with warranty included</p>
+            <p className="text-sm text-gray-600 leading-relaxed">Certified laptops & smartphones with warranty</p>
           </div>
         </div>
 
@@ -437,7 +487,7 @@ export function LoanApplicationForm() {
               { num: 1, label: 'Personal', icon: User },
               { num: 2, label: 'Employment', icon: Briefcase },
               { num: 3, label: 'Banking', icon: Building },
-              { num: 4, label: 'Laptop', icon: CreditCard },
+              { num: 4, label: 'Device', icon: Smartphone },
               { num: 5, label: 'Documents', icon: FileText }
             ].map((s, idx) => (
               <div key={s.num} className="flex items-center flex-1">
@@ -692,44 +742,64 @@ export function LoanApplicationForm() {
                 </div>
               </div>
 
-              {/* Loan Term Selection */}
-              <div className="bg-gradient-to-r from-red-50 to-purple-50 rounded-xl p-6 border-2 border-red-200">
-                <h3 className="font-bold text-gray-900 mb-4 text-lg">Select Repayment Period</h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, loan_term: '6' })}
-                    className={`p-6 rounded-xl border-3 transition-all ${
-                      formData.loan_term === '6'
-                        ? 'border-red-600 bg-red-50 shadow-lg'
-                        : 'border-gray-300 bg-white hover:border-red-300'
-                    }`}
+              {/* Loan Term Selection - 2 to 24 months */}
+              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border-2 border-green-200">
+                <h3 className="font-bold text-gray-900 mb-2 text-lg flex items-center gap-2">
+                  <Calculator className="w-5 h-5 text-green-600" />
+                  Select Repayment Period
+                </h3>
+                <p className="text-sm text-gray-600 mb-4">Choose how many months you want to pay (2-24 months)</p>
+                
+                {/* Quick Select Buttons */}
+                <div className="grid grid-cols-4 md:grid-cols-7 gap-2 mb-4">
+                  {[2, 3, 4, 6, 9, 12, 24].map((months) => (
+                    <button
+                      key={months}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, loan_term: months.toString() })}
+                      className={`py-3 px-2 rounded-lg font-bold text-sm transition-all ${
+                        formData.loan_term === months.toString()
+                          ? 'bg-green-600 text-white shadow-lg scale-105'
+                          : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-green-400'
+                      }`}
+                    >
+                      {months}m
+                    </button>
+                  ))}
+                </div>
+
+                {/* Custom Select */}
+                <div className="flex items-center gap-3">
+                  <label className="text-sm font-semibold text-gray-700">Or choose:</label>
+                  <select
+                    value={formData.loan_term}
+                    onChange={(e) => setFormData({ ...formData, loan_term: e.target.value })}
+                    className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg text-gray-900 bg-white"
                   >
-                    <div className="text-center">
-                      <p className="text-3xl font-bold text-gray-900 mb-2">6 Months</p>
-                      <p className="text-sm text-gray-600">Higher monthly payments</p>
-                      <p className="text-sm text-gray-600">Lower total interest</p>
+                    {Array.from({ length: 23 }, (_, i) => i + 2).map((months) => (
+                      <option key={months} value={months.toString()}>
+                        {months} months
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Interest Info */}
+                <div className="mt-4 p-4 bg-white rounded-lg border border-green-300">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-bold text-gray-900">5% Flat Interest Rate</p>
+                      <p className="text-xs text-gray-600">Same low rate for all payment terms</p>
                     </div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({ ...formData, loan_term: '12' })}
-                    className={`p-6 rounded-xl border-3 transition-all ${
-                      formData.loan_term === '12'
-                        ? 'border-purple-600 bg-purple-50 shadow-lg'
-                        : 'border-gray-300 bg-white hover:border-purple-300'
-                    }`}
-                  >
-                    <div className="text-center">
-                      <p className="text-3xl font-bold text-gray-900 mb-2">12 Months</p>
-                      <p className="text-sm text-gray-600">Lower monthly payments</p>
-                      <p className="text-sm text-gray-600">More affordable option</p>
+                    <div className="text-right">
+                      <p className="text-2xl font-black text-green-600">{formData.loan_term} months</p>
+                      <p className="text-xs text-gray-500">selected</p>
                     </div>
-                  </button>
+                  </div>
                 </div>
               </div>
 
-              {formData.net_salary && parseFloat(formData.net_salary) > 0 && maxLaptopPrice && (
+              {formData.net_salary && parseFloat(formData.net_salary) > 0 && maxProductPrice && (
                 <div className="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-md">
                   <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-lg">
                     <Calculator className="w-5 h-5 text-red-600" />
@@ -744,16 +814,16 @@ export function LoanApplicationForm() {
                       </p>
                     </div>
                     <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Laptop Price</p>
-                      <p className="text-sm text-gray-600 mb-1">(at 7% monthly interest)</p>
+                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Product Price</p>
+                      <p className="text-sm text-gray-600 mb-1">(at 5% flat interest)</p>
                       <p className="text-3xl font-bold text-purple-600">
-                        ${maxLaptopPrice.toFixed(2)}
+                        ${maxProductPrice.toFixed(2)}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-blue-900 font-medium">
-                      <strong>Note:</strong> Interest is calculated using the reducing balance method at 7% per month as per bank requirements.
+                  <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <p className="text-sm text-green-900 font-medium">
+                      <strong>✓ Simple Interest:</strong> Only 5% flat interest on the product price. No compound interest!
                     </p>
                   </div>
                 </div>
@@ -861,14 +931,14 @@ export function LoanApplicationForm() {
                   onClick={() => setStep(4)}
                   className="px-6 py-5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  Choose Your Laptop
+                  Choose Your Device
                   <ArrowRight className="w-5 h-5" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* Step 4: Laptop Selection */}
+          {/* Step 4: Product Selection - Mobile Friendly */}
           {step === 4 && (
             <div className="space-y-6">
               <div className="flex items-center gap-3 mb-6 pb-4 border-b-4 border-orange-200">
@@ -876,45 +946,113 @@ export function LoanApplicationForm() {
                   <CreditCard className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-3xl font-black text-gray-900">Choose Your Laptop</h2>
-                  <p className="text-sm text-gray-600 font-medium">Zero deposit • Pay monthly through salary</p>
+                  <h2 className="text-2xl md:text-3xl font-black text-gray-900">Choose Your Device</h2>
+                  <p className="text-sm text-gray-600 font-medium">Laptops & Smartphones • Zero deposit</p>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-red-50 to-purple-50 border-2 border-red-200 rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3">How It Works</h3>
-                <ul className="text-sm text-gray-700 space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-600 font-bold">1.</span>
-                    <span>Select your preferred laptop below</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-600 font-bold">2.</span>
-                    <span>View detailed payment breakdown with reducing balance interest</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-600 font-bold">3.</span>
-                    <span>Monthly deductions from your salary (7% per month, {formData.loan_term} months)</span>
-                  </li>
-                </ul>
+              {/* Interest Info Banner */}
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 text-white">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div>
+                    <p className="font-bold text-lg">5% Flat Interest Only!</p>
+                    <p className="text-sm text-green-100">Simple calculation • No hidden fees</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-black">{formData.loan_term} months</p>
+                    <p className="text-xs text-green-100">payment plan</p>
+                  </div>
+                </div>
               </div>
+
+              {/* Category Tabs - Mobile Friendly */}
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                <button
+                  type="button"
+                  onClick={() => setProductCategory('all')}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${
+                    productCategory === 'all'
+                      ? 'bg-red-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  All ({products.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProductCategory('laptops')}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${
+                    productCategory === 'laptops'
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Laptop className="w-4 h-4" />
+                  Laptops ({products.filter((p: any) => p.productType === 'laptop').length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProductCategory('smartphones')}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${
+                    productCategory === 'smartphones'
+                      ? 'bg-purple-600 text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <Smartphone className="w-4 h-4" />
+                  Phones ({products.filter((p: any) => p.productType === 'smartphone').length})
+                </button>
+              </div>
+
+              {/* Search Bar - Mobile Optimized */}
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search by name or brand..."
+                  value={productSearch}
+                  onChange={(e) => setProductSearch(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-red-200 focus:border-red-500 outline-none font-medium text-lg text-gray-900 bg-white"
+                />
+                {productSearch && (
+                  <button
+                    type="button"
+                    onClick={() => setProductSearch('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
+                  >
+                    <X className="w-5 h-5 text-gray-400" />
+                  </button>
+                )}
+              </div>
+
+              {/* Results Count */}
+              <p className="text-sm text-gray-600 font-medium">
+                Showing {filteredProducts.length} of {products.length} products
+              </p>
 
               {loadingProducts ? (
                 <div className="text-center py-12">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600 font-semibold">Loading available laptops...</p>
+                  <p className="text-gray-600 font-semibold">Loading available products...</p>
                 </div>
-              ) : products.length === 0 ? (
+              ) : filteredProducts.length === 0 ? (
                 <div className="text-center py-12 bg-gray-50 rounded-xl p-8">
-                  <p className="text-gray-600 font-semibold text-lg">No laptops available at the moment</p>
-                  <p className="text-gray-500 text-sm mt-2">Please check back later</p>
+                  <p className="text-gray-600 font-semibold text-lg">No products found</p>
+                  <p className="text-gray-500 text-sm mt-2">Try adjusting your search or filters</p>
+                  <button
+                    type="button"
+                    onClick={() => { setProductSearch(''); setProductCategory('all'); }}
+                    className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg font-bold text-sm"
+                  >
+                    Clear Filters
+                  </button>
                 </div>
               ) : (
-                <div className="grid md:grid-cols-2 gap-6">
-                  {products.map((product) => {
-                    const loanDetails = calculateReducingBalance(product.price, 7, parseInt(formData.loan_term));
+                <div className="space-y-4">
+                  {filteredProducts.map((product) => {
+                    const loanDetails = calculateFlatInterest(product.price, parseInt(formData.loan_term));
                     const isAffordable = formData.net_salary 
-                      ? checkAffordability(loanDetails.monthlyPayment, parseFloat(formData.net_salary))
+                      ? checkLoanAffordability(loanDetails.monthlyPayment, parseFloat(formData.net_salary))
                       : null;
 
                     return (
@@ -991,49 +1129,59 @@ export function LoanApplicationForm() {
                             {/* Price and Stock */}
                             <div className="flex items-center justify-between mb-3">
                               <div>
-                                <p className="text-xs text-gray-500 font-semibold mb-1">Laptop Price</p>
-                                <span className="text-3xl font-black text-red-600">${product.price}</span>
+                                <p className="text-xs text-gray-500 font-semibold mb-1">Product Price</p>
+                                <span className="text-2xl font-black text-red-600">${product.price}</span>
                               </div>
-                              <span className="text-xs bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-bold">
-                                {product.currentStock || product.stock_count || 0} in stock
-                              </span>
+                              <div className="flex flex-col items-end gap-1">
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
+                                  {product.currentStock || product.stock_count || 0} in stock
+                                </span>
+                                {product.productType === 'smartphone' && (
+                                  <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-bold">
+                                    Smartphone
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Payment Breakdown */}
-                        <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border-2 border-gray-200">
-                          <h5 className="font-bold text-gray-900 mb-3 text-sm">Payment Plan ({formData.loan_term} Months)</h5>
+                        {/* Payment Breakdown - 5% Flat Interest */}
+                        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-200">
+                          <h5 className="font-bold text-gray-900 mb-3 text-sm flex items-center gap-2">
+                            <Calculator className="w-4 h-4 text-green-600" />
+                            Payment Plan ({formData.loan_term} Months)
+                          </h5>
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Laptop Price:</span>
+                              <span className="text-gray-600">Product Price:</span>
                               <span className="font-bold">${loanDetails.principal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Total Interest (7%/month):</span>
-                              <span className="font-bold text-orange-600">${loanDetails.totalInterest.toFixed(2)}</span>
+                              <span className="text-gray-600">Interest (5% flat):</span>
+                              <span className="font-bold text-green-600">+${loanDetails.totalInterest.toFixed(2)}</span>
                             </div>
-                            <div className="flex justify-between pt-2 border-t-2 border-gray-200">
+                            <div className="flex justify-between pt-2 border-t-2 border-green-200">
                               <span className="font-bold text-gray-900">Total to Pay:</span>
                               <span className="font-bold text-lg">${loanDetails.totalAmount.toFixed(2)}</span>
                             </div>
-                            <div className="bg-gradient-to-r from-red-50 to-purple-50 rounded-lg p-3 mt-3 border border-red-200">
+                            <div className="bg-white rounded-lg p-3 mt-3 border-2 border-green-300">
                               <div className="flex justify-between items-center">
-                                <span className="font-bold text-gray-900">Monthly Deduction:</span>
-                                <span className="font-bold text-2xl text-red-600">${loanDetails.monthlyPayment.toFixed(2)}</span>
+                                <span className="font-bold text-gray-900">Monthly:</span>
+                                <span className="font-black text-2xl text-green-600">${loanDetails.monthlyPayment.toFixed(2)}</span>
                               </div>
-                              <p className="text-xs text-gray-600 mt-1">Reducing balance method</p>
+                              <p className="text-xs text-gray-500 mt-1">per month for {formData.loan_term} months</p>
                             </div>
 
                             {isAffordable && (
-                              <div className={`mt-3 p-2 rounded-lg text-xs font-semibold ${
+                              <div className={`mt-2 p-2 rounded-lg text-xs font-semibold ${
                                 isAffordable.isAffordable 
                                   ? 'bg-green-100 text-green-800 border border-green-300' 
                                   : 'bg-red-100 text-red-800 border border-red-300'
                               }`}>
                                 {isAffordable.isAffordable 
-                                  ? `Affordable (${isAffordable.percentageOfSalary.toFixed(1)}% of salary)` 
-                                  : `${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
+                                  ? `✓ Affordable (${isAffordable.percentageOfSalary.toFixed(1)}% of salary)` 
+                                  : `⚠ ${isAffordable.percentageOfSalary.toFixed(1)}% of salary (Max 30%)`
                                 }
                               </div>
                             )}
