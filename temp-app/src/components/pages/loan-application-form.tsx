@@ -38,8 +38,7 @@ export function LoanApplicationForm() {
     job_title: '',
     employment_status: 'permanent',
     payroll_number: '',
-    gross_salary: '',
-    net_salary: '',
+    years_of_service: '',
     
     // Banking Information
     bank_name: '',
@@ -652,7 +651,7 @@ export function LoanApplicationForm() {
 
               <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
                 <p className="text-sm font-bold text-blue-900">
-                  💡 <strong>Tip:</strong> Your salary information helps us determine your loan eligibility and monthly payment amount.
+                  💡 <strong>Note:</strong> Please provide your employment details. We will verify your information with your employer.
                 </p>
               </div>
 
@@ -708,37 +707,20 @@ export function LoanApplicationForm() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-black text-gray-900 mb-2">Gross Salary (USD) *</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="number"
-                      required
-                      step="0.01"
-                      min="0"
-                      value={formData.gross_salary}
-                      onChange={(e) => setFormData({ ...formData, gross_salary: e.target.value })}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
-                      placeholder="1500.00"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-black text-gray-900 mb-2">Net Salary (USD) *</label>
-                  <div className="relative">
-                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="number"
-                      required
-                      step="0.01"
-                      min="0"
-                      value={formData.net_salary}
-                      onChange={(e) => setFormData({ ...formData, net_salary: e.target.value })}
-                      className="w-full pl-12 pr-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
-                      placeholder="1200.00"
-                    />
-                  </div>
+                  <label className="block text-sm font-black text-gray-900 mb-2">Years of Service *</label>
+                  <select
+                    required
+                    value={formData.years_of_service || ''}
+                    onChange={(e) => setFormData({ ...formData, years_of_service: e.target.value })}
+                    className="w-full px-4 py-4 border-2 border-gray-300 rounded-xl focus:ring-4 focus:ring-green-200 focus:border-green-500 outline-none font-bold text-lg transition-all text-gray-900 bg-white"
+                  >
+                    <option value="">Select Years</option>
+                    <option value="less_than_1">Less than 1 year</option>
+                    <option value="1_to_3">1 - 3 years</option>
+                    <option value="3_to_5">3 - 5 years</option>
+                    <option value="5_to_10">5 - 10 years</option>
+                    <option value="more_than_10">More than 10 years</option>
+                  </select>
                 </div>
               </div>
 
@@ -799,35 +781,6 @@ export function LoanApplicationForm() {
                 </div>
               </div>
 
-              {formData.net_salary && parseFloat(formData.net_salary) > 0 && maxProductPrice && (
-                <div className="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-md">
-                  <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2 text-lg">
-                    <Calculator className="w-5 h-5 text-red-600" />
-                    Your Loan Capacity ({formData.loan_term} Months)
-                  </h3>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4">
-                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Monthly Deduction</p>
-                      <p className="text-sm text-gray-600 mb-1">(30% of net salary)</p>
-                      <p className="text-3xl font-bold text-red-600">
-                        ${(parseFloat(formData.net_salary) * 0.30).toFixed(2)}
-                      </p>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4">
-                      <p className="text-sm text-gray-700 mb-2 font-semibold">Maximum Product Price</p>
-                      <p className="text-sm text-gray-600 mb-1">(at 5% flat interest)</p>
-                      <p className="text-3xl font-bold text-purple-600">
-                        ${maxProductPrice.toFixed(2)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm text-green-900 font-medium">
-                      <strong>✓ Simple Interest:</strong> Only 5% flat interest on the product price. No compound interest!
-                    </p>
-                  </div>
-                </div>
-              )}
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button
