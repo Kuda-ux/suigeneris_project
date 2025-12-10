@@ -8,10 +8,10 @@ import { products } from '@/data/products';
 
 // Get featured products from our real product data
 const featuredProducts = [
-  products.find(p => p.id === 1), // HP EliteBook x360 1030 G3
-  products.find(p => p.id === 6), // Apple MacBook Pro 2017
-  products.find(p => p.id === 201), // Samsung Galaxy A05
-  products.find(p => p.id === 102), // Dell Vostro 3888 Desktop
+  products.find(p => p.id === 26), // Lenovo ThinkPad T480 - Top Rated
+  products.find(p => p.id === 40), // HP 15 (i5) - Latest Gen
+  products.find(p => p.id === 54), // Xiaomi Redmi Note 13 - Best Seller
+  products.find(p => p.id === 51), // Samsung Galaxy M14 5G - 5G Ready
 ].filter((p): p is NonNullable<typeof p> => p !== undefined);
 
 export function FeaturedProducts() {
