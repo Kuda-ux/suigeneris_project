@@ -16,1227 +16,1668 @@ export interface Product {
   specifications: Record<string, string>;
   warranty: boolean;
   badge?: string;
+  condition?: string;
 }
 
+// High-quality product images from Unsplash
+const laptopImages = {
+  hp: [
+    "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&q=80"
+  ],
+  dell: [
+    "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&q=80"
+  ],
+  lenovo: [
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&q=80"
+  ],
+  toshiba: [
+    "https://images.unsplash.com/photo-1602080858428-57174f9431cf?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&q=80"
+  ],
+  microsoft: [
+    "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop&q=80"
+  ]
+};
+
+const smartphoneImages = {
+  samsung: [
+    "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1565849904461-04a58ad377e0?w=800&h=800&fit=crop&q=80"
+  ],
+  xiaomi: [
+    "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&q=80"
+  ]
+};
+
 export const products: Product[] = [
-  // LAPTOPS
+  // ==================== LAPTOPS - BUDGET ($100-$200) ====================
   {
-    id: 1,
-    name: "HP EliteBook x360 1030 G3",
-    price: 360,
-    rating: 4.7,
-    reviews: 45,
-    image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    id: 9,
+    name: "Microsoft Surface SE",
+    price: 105,
+    rating: 4.2,
+    reviews: 18,
+    image: laptopImages.microsoft[0],
+    images: laptopImages.microsoft,
     category: "Laptops",
-    brand: "HP",
+    brand: "Microsoft",
     inStock: true,
-    stockCount: 8,
-    description: "Professional 2-in-1 laptop with 360-degree hinge design. Perfect for business professionals who need versatility and performance.",
+    stockCount: 5,
+    description: "Compact and lightweight laptop perfect for students and basic computing. Features Intel Celeron processor with 11.6\" display.",
     features: [
-      "360-degree convertible design",
-      "8th Gen Intel Core i5 processor",
-      "Fast SSD storage",
-      "13.3-inch touchscreen display",
-      "Business-grade security features",
+      "Intel Celeron N4020 processor",
+      "Compact 11.6\" display",
+      "Lightweight design",
+      "Perfect for students",
+      "Windows 11 ready",
       "Long battery life"
     ],
     specifications: {
-      "Processor": "Intel Core i5 8th Gen @1.70GHz",
-      "RAM": "8GB",
-      "Storage": "256GB SSD",
-      "Display": "13.3-inch",
+      "Processor": "Intel Celeron N4020",
+      "RAM": "4GB",
+      "Storage": "64GB eMMC",
+      "Display": "11.6\"",
       "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.35kg"
+      "Operating System": "Windows 11"
     },
-    warranty: true
-  },
-  {
-    id: 2,
-    name: "HP 250 G10 (i5)",
-    price: 620,
-    rating: 4.5,
-    reviews: 32,
-    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "HP",
-    inStock: true,
-    stockCount: 12,
-    description: "Latest HP 250 G10 with 13th Gen Intel processor. Ideal for productivity and everyday computing tasks.",
-    features: [
-      "13th Gen Intel Core i5",
-      "Fast 512GB SSD storage",
-      "15.6-inch display",
-      "Modern design",
-      "Enhanced performance",
-      "Full warranty coverage"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 13th Gen",
-      "RAM": "8GB DDR4",
-      "Storage": "512GB SSD",
-      "Display": "15.6-inch HD",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11",
-      "Weight": "1.74kg"
-    },
-    warranty: true
-  },
-  {
-    id: 3,
-    name: "HP 250 G10 (i7)",
-    price: 800,
-    rating: 4.8,
-    reviews: 28,
-    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "HP",
-    inStock: true,
-    stockCount: 6,
-    description: "High-performance HP 250 G10 with 13th Gen Intel i7 processor. Perfect for demanding applications and multitasking.",
-    features: [
-      "13th Gen Intel Core i7",
-      "High-speed 512GB SSD",
-      "15.6-inch display",
-      "Superior performance",
-      "Enhanced graphics",
-      "Professional grade"
-    ],
-    specifications: {
-      "Processor": "Intel Core i7 13th Gen",
-      "RAM": "8GB DDR4",
-      "Storage": "512GB SSD",
-      "Display": "15.6-inch HD",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.74kg"
-    },
-    warranty: true
-  },
-  {
-    id: 4,
-    name: "Dell Latitude 5410",
-    price: 320,
-    rating: 4.6,
-    reviews: 67,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Dell",
-    inStock: true,
-    stockCount: 15,
-    description: "Reliable Dell Latitude business laptop with 10th Gen Intel processor. Built for productivity and durability.",
-    features: [
-      "10th Gen Intel Core i5",
-      "Business-grade build quality",
-      "14-inch professional display",
-      "Fast SSD storage",
-      "Enhanced security features",
-      "Durable design"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 10th Gen",
-      "RAM": "8GB DDR4",
-      "Storage": "256GB SSD",
-      "Display": "14-inch HD",
-      "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.6kg"
-    },
-    warranty: true
-  },
-  {
-    id: 5,
-    name: "Lenovo ThinkPad T480",
-    price: 300,
-    rating: 4.7,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Lenovo",
-    inStock: true,
-    stockCount: 10,
-    description: "Classic ThinkPad reliability with modern performance. Perfect for business users who demand quality and durability.",
-    features: [
-      "8th Gen Intel Core i5",
-      "Legendary ThinkPad keyboard",
-      "14-inch display",
-      "Military-grade durability",
-      "TrackPoint navigation",
-      "Enterprise security"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 8th Gen",
-      "RAM": "8GB DDR4",
-      "Storage": "256GB SSD",
-      "Display": "14-inch FHD",
-      "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.58kg"
-    },
-    warranty: true
-  },
-  {
-    id: 6,
-    name: "Apple MacBook Pro 2017",
-    price: 520,
-    rating: 4.9,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Apple",
-    inStock: true,
-    stockCount: 4,
-    description: "Premium MacBook Pro with Retina display and Touch Bar. Perfect for creative professionals and power users.",
-    features: [
-      "Intel Core i7 @2.9GHz",
-      "15-inch Retina display",
-      "Touch Bar and Touch ID",
-      "Premium aluminum build",
-      "macOS optimized",
-      "Professional grade performance"
-    ],
-    specifications: {
-      "Processor": "Intel Core i7 @2.9GHz",
-      "RAM": "16GB",
-      "Storage": "500GB SSD",
-      "Display": "15-inch Retina",
-      "Graphics": "Radeon Pro 555",
-      "Operating System": "macOS",
-      "Weight": "1.83kg"
-    },
-    warranty: true
-  },
-  {
-    id: 7,
-    name: "MSI GF63 Thin 11SC Gaming",
-    price: 750,
-    rating: 4.8,
-    reviews: 94,
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "MSI",
-    inStock: true,
-    stockCount: 7,
-    description: "High-performance gaming laptop with dedicated graphics. Perfect for gaming, content creation, and demanding applications.",
-    features: [
-      "11th Gen Intel Core i7",
-      "Dedicated 8GB GPU",
-      "15-inch gaming display",
-      "1TB SSD storage",
-      "Gaming-optimized cooling",
-      "RGB keyboard backlight"
-    ],
-    specifications: {
-      "Processor": "Intel Core i7 11th Gen",
-      "RAM": "16GB DDR4",
-      "Storage": "1TB SSD",
-      "Display": "15.6-inch FHD 144Hz",
-      "Graphics": "NVIDIA GTX 1650 8GB",
-      "Operating System": "Windows 11",
-      "Weight": "2.1kg"
-    },
-    warranty: true
-  },
-  {
-    id: 8,
-    name: "Asus ZenBook 14",
-    price: 550,
-    rating: 4.6,
-    reviews: 73,
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Asus",
-    inStock: true,
-    stockCount: 9,
-    description: "Ultra-portable ZenBook with premium design and powerful performance. Ideal for professionals on the go.",
-    features: [
-      "11th Gen Intel Core i7",
-      "Ultra-portable design",
-      "14-inch NanoEdge display",
-      "Fast 512GB SSD",
-      "All-day battery life",
-      "Premium build quality"
-    ],
-    specifications: {
-      "Processor": "Intel Core i7 11th Gen",
-      "RAM": "16GB",
-      "Storage": "512GB SSD",
-      "Display": "14-inch FHD",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11",
-      "Weight": "1.39kg"
-    },
-    warranty: true
-  },
-  {
-    id: 9,
-    name: "HP 15 (i5)",
-    price: 600,
-    rating: 4.5,
-    reviews: 42,
-    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "HP",
-    inStock: true,
-    stockCount: 10,
-    description: "HP 15 laptop with 13th Gen Intel i5 processor. Great for productivity and everyday computing.",
-    features: [
-      "13th Gen Intel Core i5",
-      "8GB RAM",
-      "512GB SSD storage",
-      "15.6-inch display",
-      "Full warranty coverage",
-      "Modern design"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 13th Gen",
-      "RAM": "8GB",
-      "Storage": "512GB SSD",
-      "Display": "15.6-inch",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11",
-      "Weight": "1.75kg"
-    },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)",
+    badge: "Budget Pick"
   },
   {
     id: 10,
-    name: "HP 15 (i7)",
-    price: 620,
-    rating: 4.6,
-    reviews: 38,
-    image: "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    name: "Lenovo x131e / x140e",
+    price: 115,
+    rating: 4.3,
+    reviews: 24,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
     category: "Laptops",
-    brand: "HP",
+    brand: "Lenovo",
     inStock: true,
-    stockCount: 8,
-    description: "HP 15 laptop with 13th Gen Intel i7 processor. Enhanced performance for demanding tasks.",
+    stockCount: 4,
+    description: "Durable ThinkPad-class laptop with upgraded RAM and SSD storage. Ideal for everyday productivity.",
     features: [
-      "13th Gen Intel Core i7",
-      "8GB RAM",
-      "512GB SSD storage",
-      "15.6-inch display",
-      "Full warranty coverage",
-      "Superior performance"
+      "ThinkPad durability",
+      "Upgraded 8GB RAM",
+      "Fast 500GB SSD",
+      "11.6\" display",
+      "Business-grade build",
+      "Reliable performance"
     ],
     specifications: {
-      "Processor": "Intel Core i7 13th Gen",
+      "Processor": "Intel Celeron 1007U",
       "RAM": "8GB",
-      "Storage": "512GB SSD",
-      "Display": "15.6-inch",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11",
-      "Weight": "1.75kg"
+      "Storage": "500GB SSD",
+      "Display": "11.6\"",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
     id: 11,
-    name: "Dell Latitude 7200",
-    price: 260,
+    name: "Dell Latitude 3150",
+    price: 120,
     rating: 4.4,
-    reviews: 56,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Dell",
-    inStock: true,
-    stockCount: 12,
-    description: "Compact Dell Latitude 2-in-1 tablet laptop. Perfect for mobile professionals.",
-    features: [
-      "8th Gen Intel Core i5",
-      "2-in-1 convertible design",
-      "12.3-inch touchscreen",
-      "256GB SSD storage",
-      "Business-grade security",
-      "Lightweight design"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 8th Gen",
-      "RAM": "8GB",
-      "Storage": "256GB SSD",
-      "Display": "12.3-inch",
-      "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.2kg"
-    },
-    warranty: true
-  },
-  {
-    id: 12,
-    name: "Dell Latitude E7250",
-    price: 160,
-    rating: 4.2,
-    reviews: 78,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Dell",
-    inStock: true,
-    stockCount: 15,
-    description: "Reliable Dell Latitude ultrabook with 5th Gen Intel processor. Great value for business use.",
-    features: [
-      "5th Gen Intel Core i5",
-      "Ultrabook design",
-      "12.5-inch display",
-      "256GB SSD storage",
-      "Business durability",
-      "Long battery life"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 5th @2.30GHz",
-      "RAM": "8GB",
-      "Storage": "256GB SSD",
-      "Display": "12.5-inch",
-      "Graphics": "Intel HD Graphics",
-      "Operating System": "Windows 11",
-      "Weight": "1.25kg"
-    },
-    warranty: true
-  },
-  {
-    id: 13,
-    name: "Dell Latitude 5400",
-    price: 265,
-    rating: 4.5,
-    reviews: 64,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Laptops",
-    brand: "Dell",
-    inStock: true,
-    stockCount: 11,
-    description: "Dell Latitude 5400 business laptop with 8th Gen Intel processor. Professional grade performance.",
-    features: [
-      "8th Gen Intel Core i5",
-      "Business laptop design",
-      "14-inch display",
-      "256GB SSD storage",
-      "Enhanced security",
-      "Durable construction"
-    ],
-    specifications: {
-      "Processor": "Intel Core i5 8th @1.60GHz",
-      "RAM": "8GB",
-      "Storage": "256GB SSD",
-      "Display": "14-inch",
-      "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.6kg"
-    },
-    warranty: true
-  },
-  {
-    id: 14,
-    name: "Dell Latitude 5430 Rugged",
-    price: 1200,
-    rating: 4.9,
-    reviews: 23,
-    image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    reviews: 31,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
     category: "Laptops",
     brand: "Dell",
     inStock: true,
     stockCount: 3,
-    description: "Rugged Dell Latitude 5430 built for extreme conditions. Military-grade durability and performance.",
+    description: "Reliable Dell business laptop with SSD storage for fast boot times and responsive performance.",
     features: [
-      "12th Gen Intel Core i5",
-      "Rugged military-grade design",
-      "14-inch display",
-      "512GB SSD storage",
-      "16GB RAM",
-      "Extreme durability"
+      "Intel Pentium processor",
+      "Fast 128GB SSD",
+      "8GB RAM",
+      "11.6\" display",
+      "Dell reliability",
+      "Business-grade"
     ],
     specifications: {
-      "Processor": "Intel Core i5 12th Gen",
-      "RAM": "16GB",
-      "Storage": "512GB SSD",
-      "Display": "14-inch",
-      "Graphics": "Intel Iris Xe",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.8kg"
+      "Processor": "Intel Pentium N3540",
+      "RAM": "8GB",
+      "Storage": "128GB SSD",
+      "Display": "11.6\"",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
-    id: 15,
-    name: "Lenovo ThinkPad T490",
-    price: 330,
-    rating: 4.7,
-    reviews: 71,
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    id: 12,
+    name: "Lenovo ThinkPad Yoga 11e",
+    price: 120,
+    rating: 4.5,
+    reviews: 42,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
     category: "Laptops",
     brand: "Lenovo",
     inStock: true,
-    stockCount: 9,
-    description: "Lenovo ThinkPad T490 with modern design and reliable performance. Perfect for business professionals.",
+    stockCount: 4,
+    description: "Versatile 2-in-1 ThinkPad with touchscreen. Perfect for flexible work and study environments.",
     features: [
-      "8th Gen Intel Core i5",
+      "2-in-1 convertible design",
+      "Touchscreen display",
+      "ThinkPad durability",
+      "Flexible usage modes",
+      "Compact and portable",
+      "Student-friendly"
+    ],
+    specifications: {
+      "Processor": "Intel Celeron",
+      "RAM": "4GB",
+      "Storage": "128GB SSD",
+      "Display": "11.6\" Touch",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 13,
+    name: "Dell Latitude 3189 / 3190",
+    price: 125,
+    rating: 4.3,
+    reviews: 28,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 4,
+    description: "Compact Dell laptop with modern Celeron processor. Great for light office work and web browsing.",
+    features: [
+      "Intel Celeron N4120",
+      "Compact design",
+      "128GB SSD storage",
+      "11.6\" display",
+      "Modern processor",
+      "Everyday computing"
+    ],
+    specifications: {
+      "Processor": "Intel Celeron N4120",
+      "RAM": "4GB",
+      "Storage": "128GB SSD",
+      "Display": "11.6\"",
+      "Graphics": "Intel UHD Graphics",
+      "Operating System": "Windows 10"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 14,
+    name: "Dell Latitude 3340 (i3)",
+    price: 140,
+    rating: 4.4,
+    reviews: 35,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 5,
+    description: "Business-class Dell with Intel Core i3 processor. Reliable performance for office tasks.",
+    features: [
+      "Intel Core i3 processor",
+      "Business-grade build",
+      "13.3\" display",
+      "Fast SSD storage",
+      "Professional design",
+      "Reliable performance"
+    ],
+    specifications: {
+      "Processor": "Intel Core i3 4th Gen",
+      "RAM": "8GB",
+      "Storage": "128GB SSD",
+      "Display": "13.3\"",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 15,
+    name: "Dell Latitude 3340 (i5)",
+    price: 150,
+    rating: 4.5,
+    reviews: 41,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 4,
+    description: "Enhanced Dell Latitude with Intel Core i5. Better performance for demanding tasks.",
+    features: [
+      "Intel Core i5 processor",
+      "Enhanced performance",
+      "13.3\" display",
+      "Fast SSD storage",
+      "Business-grade",
+      "Multitasking capable"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 4th Gen",
+      "RAM": "8GB",
+      "Storage": "128GB SSD",
+      "Display": "13.3\"",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 16,
+    name: "Dell Latitude E7250",
+    price: 160,
+    rating: 4.6,
+    reviews: 52,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 3,
+    description: "Premium ultrabook with 5th Gen Intel Core i5. Lightweight and powerful for professionals.",
+    features: [
+      "Intel Core i5 5th Gen",
+      "Ultrabook design",
+      "12.5\" display",
+      "Lightweight build",
+      "Premium quality",
+      "Professional grade"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 5th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "12.5\"",
+      "Graphics": "Intel HD Graphics",
+      "Operating System": "Windows 10"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+
+  // ==================== LAPTOPS - MID-RANGE ($200-$350) ====================
+  {
+    id: 17,
+    name: "Lenovo ThinkPad X270",
+    price: 220,
+    rating: 4.7,
+    reviews: 68,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 5,
+    description: "Compact business powerhouse with 7th Gen Intel Core i5. Perfect for mobile professionals.",
+    features: [
+      "Intel Core i5 7th Gen",
+      "Compact 12.5\" display",
       "ThinkPad reliability",
-      "14-inch display",
-      "256GB SSD storage",
-      "Enhanced keyboard",
+      "Business-grade security",
+      "Excellent keyboard",
+      "All-day battery"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 7th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "12.5\"",
+      "Graphics": "Intel HD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)",
+    badge: "Popular"
+  },
+  {
+    id: 18,
+    name: "Lenovo V15",
+    price: 250,
+    rating: 4.4,
+    reviews: 45,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 6,
+    description: "Modern 15.6\" laptop with 10th Gen Intel processor. Great for everyday productivity.",
+    features: [
+      "Intel Core i5 10th Gen",
+      "Large 15.6\" display",
+      "Modern design",
+      "512GB SSD storage",
+      "Full-size keyboard",
+      "Everyday computing"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 10th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel UHD Graphics",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 19,
+    name: "Dell Latitude 7200",
+    price: 260,
+    rating: 4.6,
+    reviews: 38,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 4,
+    description: "Premium 2-in-1 detachable with 8th Gen Intel Core i5. Versatile tablet and laptop in one.",
+    features: [
+      "2-in-1 detachable design",
+      "Intel Core i5 8th Gen",
+      "12.3\" touchscreen",
+      "Tablet mode",
+      "Premium build",
       "Business features"
     ],
     specifications: {
       "Processor": "Intel Core i5 8th Gen",
       "RAM": "8GB",
       "Storage": "256GB SSD",
-      "Display": "14-inch FHD",
-      "Graphics": "Intel UHD Graphics",
-      "Operating System": "Windows 11 Pro",
-      "Weight": "1.55kg"
+      "Display": "12.3\" Touch",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
-
-  // DESKTOPS
   {
-    id: 101,
-    name: "Dell Inspiron 3668 Desktop",
-    price: 180,
-    rating: 4.3,
-    reviews: 34,
-    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Desktops",
-    brand: "Dell",
+    id: 20,
+    name: "Lenovo ThinkPad X280",
+    price: 260,
+    rating: 4.7,
+    reviews: 55,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
     inStock: true,
-    stockCount: 12,
-    description: "Compact desktop computer perfect for home or office use. Reliable performance for everyday computing tasks.",
+    stockCount: 5,
+    description: "Ultra-portable ThinkPad with 8th Gen Intel Core i5. Premium business ultrabook.",
     features: [
-      "7th Gen Intel Core i3",
-      "Compact tower design",
-      "Fast SSD storage",
-      "Multiple connectivity ports",
-      "Energy efficient",
-      "Quiet operation"
+      "Intel Core i5 8th Gen",
+      "Ultra-portable design",
+      "12.5\" display",
+      "ThinkPad quality",
+      "Fingerprint reader",
+      "Business security"
     ],
     specifications: {
-      "Processor": "Intel Core i3 7th Gen",
-      "RAM": "8GB DDR4",
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
       "Storage": "256GB SSD",
-      "Graphics": "Intel HD Graphics",
-      "Ports": "USB 3.0, HDMI, VGA",
-      "Operating System": "Windows 11",
-      "Form Factor": "Mini Tower"
+      "Display": "12.5\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
-    id: 102,
-    name: "Dell Vostro 3888 Desktop",
-    price: 250,
+    id: 21,
+    name: "Dell Latitude 5400",
+    price: 265,
     rating: 4.5,
-    reviews: 28,
-    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Desktops",
+    reviews: 62,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
     brand: "Dell",
-    inStock: true,
-    stockCount: 8,
-    description: "Business desktop with modern 10th Gen processor. Designed for productivity and reliability in office environments.",
-    features: [
-      "10th Gen Intel Core i3",
-      "Business-grade reliability",
-      "Fast SSD storage",
-      "Expandable design",
-      "Professional support",
-      "Energy Star certified"
-    ],
-    specifications: {
-      "Processor": "Intel Core i3 10th Gen",
-      "RAM": "8GB DDR4",
-      "Storage": "256GB SSD",
-      "Graphics": "Intel UHD Graphics",
-      "Ports": "USB 3.1, HDMI, DisplayPort",
-      "Operating System": "Windows 11 Pro",
-      "Form Factor": "Mini Tower"
-    },
-    warranty: true
-  },
-  {
-    id: 103,
-    name: "CPU MSI-MS-7846",
-    price: 160,
-    rating: 4.2,
-    reviews: 18,
-    image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Desktops",
-    brand: "MSI",
     inStock: true,
     stockCount: 6,
-    description: "MSI desktop CPU unit with 4th Gen Intel processor. Reliable performance for basic computing needs.",
+    description: "Mainstream business laptop with 8th Gen Intel Core i5. Reliable performance for professionals.",
     features: [
-      "4th Gen Intel Core i3",
-      "Compact design",
-      "1TB HDD storage",
-      "Integrated graphics",
-      "Multiple ports",
-      "Energy efficient"
+      "Intel Core i5 8th Gen",
+      "14\" display",
+      "Business-grade build",
+      "Fast SSD storage",
+      "Dell reliability",
+      "Professional design"
     ],
     specifications: {
-      "Processor": "Intel Core i3 4th Gen",
-      "RAM": "4GB",
-      "Storage": "1TB HDD",
-      "Graphics": "1GB VRAM",
-      "Ports": "USB, HDMI, VGA",
-      "Operating System": "Windows 11",
-      "Form Factor": "Desktop CPU"
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
-    id: 104,
-    name: "CPU Microsoft i3 7th Gen",
-    price: 180,
+    id: 22,
+    name: "Toshiba Dynabook Tecra A50-EC (i5)",
+    price: 265,
     rating: 4.4,
-    reviews: 25,
-    image: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Desktops",
-    brand: "Microsoft",
-    inStock: true,
-    stockCount: 8,
-    description: "Microsoft desktop CPU with 7th Gen Intel processor. Enhanced performance with larger storage capacity.",
-    features: [
-      "7th Gen Intel Core i3 @3.90GHz",
-      "12GB RAM",
-      "2TB HDD storage",
-      "Integrated graphics",
-      "High-speed processor",
-      "Expandable storage"
-    ],
-    specifications: {
-      "Processor": "Intel Core i3 7th Gen @3.90GHz",
-      "RAM": "12GB",
-      "Storage": "2TB HDD",
-      "Graphics": "1GB VRAM",
-      "Ports": "USB 3.0, HDMI, VGA",
-      "Operating System": "Windows 11",
-      "Form Factor": "Desktop CPU"
-    },
-    warranty: true
-  },
-
-  // MONITORS & AIOS
-  {
-    id: 151,
-    name: "Apple MacBook Pro 2017 (AIO)",
-    price: 520,
-    rating: 4.9,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Monitors",
-    brand: "Apple",
+    reviews: 29,
+    image: laptopImages.toshiba[0],
+    images: laptopImages.toshiba,
+    category: "Laptops",
+    brand: "Toshiba",
     inStock: true,
     stockCount: 4,
-    description: "Premium MacBook Pro that can function as an all-in-one workstation. Perfect for creative professionals.",
+    description: "Japanese engineering excellence with 8th Gen Intel Core i5. Premium business laptop.",
     features: [
-      "Intel Core i7 processor",
-      "15-inch Retina display",
-      "16GB RAM",
-      "500GB SSD storage",
-      "Premium aluminum build",
-      "All-in-one functionality"
+      "Intel Core i5 8th Gen",
+      "Japanese quality",
+      "15.6\" display",
+      "Business features",
+      "Durable build",
+      "Professional grade"
     ],
     specifications: {
-      "Processor": "Intel Core i7",
-      "RAM": "16GB",
-      "Storage": "500GB SSD",
-      "Display": "15-inch Retina",
-      "Graphics": "Radeon Pro 555",
-      "Operating System": "macOS",
-      "Weight": "1.83kg"
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
-    id: 152,
-    name: "MSI GF63 Gaming AIO",
-    price: 750,
-    rating: 4.8,
-    reviews: 94,
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1625948515291-69613efd103f?w=800&h=800&fit=crop&crop=center&q=80"
+    id: 23,
+    name: "Lenovo IdeaPad 3",
+    price: 270,
+    rating: 4.5,
+    reviews: 78,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 8,
+    description: "Popular consumer laptop with modern design. Great for home and student use.",
+    features: [
+      "Intel Core i5 10th Gen",
+      "Modern slim design",
+      "15.6\" FHD display",
+      "512GB SSD",
+      "Dolby Audio",
+      "Privacy shutter"
     ],
-    category: "Monitors",
-    brand: "MSI",
+    specifications: {
+      "Processor": "Intel Core i5 10th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\" FHD",
+      "Graphics": "Intel UHD Graphics",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Best Seller"
+  },
+  {
+    id: 24,
+    name: "Lenovo ThinkPad L490",
+    price: 280,
+    rating: 4.6,
+    reviews: 44,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 5,
+    description: "Business-class ThinkPad with 8th Gen Intel Core i5. Reliable workhorse for professionals.",
+    features: [
+      "Intel Core i5 8th Gen",
+      "14\" display",
+      "ThinkPad reliability",
+      "Business security",
+      "Spill-resistant keyboard",
+      "MIL-SPEC tested"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 25,
+    name: "Toshiba Dynabook Tecra A50-EC (i7)",
+    price: 290,
+    rating: 4.5,
+    reviews: 26,
+    image: laptopImages.toshiba[0],
+    images: laptopImages.toshiba,
+    category: "Laptops",
+    brand: "Toshiba",
+    inStock: true,
+    stockCount: 3,
+    description: "High-performance Dynabook with Intel Core i7. Premium Japanese engineering.",
+    features: [
+      "Intel Core i7 8th Gen",
+      "High performance",
+      "15.6\" display",
+      "Japanese quality",
+      "Business features",
+      "Premium build"
+    ],
+    specifications: {
+      "Processor": "Intel Core i7 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 26,
+    name: "Lenovo ThinkPad T480",
+    price: 300,
+    rating: 4.8,
+    reviews: 92,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
     inStock: true,
     stockCount: 7,
-    description: "High-performance MSI gaming system that doubles as an all-in-one solution. Perfect for gaming and productivity.",
+    description: "Legendary ThinkPad T-series with 8th Gen Intel Core i5. The ultimate business laptop.",
     features: [
-      "11th Gen Intel Core i7",
-      "Dedicated 8GB GPU",
-      "16GB RAM",
-      "1TB SSD storage",
-      "Gaming-optimized display",
-      "All-in-one design"
+      "Intel Core i5 8th Gen",
+      "Legendary T-series quality",
+      "14\" display",
+      "Hot-swappable battery",
+      "Best-in-class keyboard",
+      "Enterprise security"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)",
+    badge: "Top Rated"
+  },
+  {
+    id: 27,
+    name: "Toshiba Satellite Pro",
+    price: 310,
+    rating: 4.4,
+    reviews: 33,
+    image: laptopImages.toshiba[0],
+    images: laptopImages.toshiba,
+    category: "Laptops",
+    brand: "Toshiba",
+    inStock: true,
+    stockCount: 4,
+    description: "Professional-grade Satellite Pro with 8th Gen Intel. Reliable business performance.",
+    features: [
+      "Intel Core i5 8th Gen",
+      "Professional design",
+      "15.6\" display",
+      "Business features",
+      "Reliable performance",
+      "Japanese engineering"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 28,
+    name: "Dell Latitude 5410",
+    price: 320,
+    rating: 4.6,
+    reviews: 58,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 5,
+    description: "Modern Dell Latitude with 10th Gen Intel Core i5. Latest business features and security.",
+    features: [
+      "Intel Core i5 10th Gen",
+      "14\" display",
+      "Modern design",
+      "Enhanced security",
+      "Dell reliability",
+      "Business-grade"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 10th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel UHD Graphics",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 29,
+    name: "Lenovo ThinkPad T490",
+    price: 330,
+    rating: 4.8,
+    reviews: 76,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 6,
+    description: "Premium ThinkPad T-series with 8th Gen Intel Core i5. Slim, powerful, and professional.",
+    features: [
+      "Intel Core i5 8th Gen",
+      "Slim T-series design",
+      "14\" display",
+      "Premium build quality",
+      "ThinkPad keyboard",
+      "Enterprise features"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+
+  // ==================== LAPTOPS - PREMIUM ($350-$500) ====================
+  {
+    id: 30,
+    name: "HP EliteBook x360 1030 G3",
+    price: 360,
+    rating: 4.7,
+    reviews: 64,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 5,
+    description: "Premium 2-in-1 convertible with 8th Gen Intel Core i5. 360-degree hinge for ultimate flexibility.",
+    features: [
+      "360-degree convertible",
+      "Intel Core i5 8th Gen",
+      "13.3\" touchscreen",
+      "Premium aluminum build",
+      "Pen support",
+      "Business security"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "13.3\" Touch",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 31,
+    name: "Lenovo ThinkPad E14 Gen 2",
+    price: 360,
+    rating: 4.6,
+    reviews: 52,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 6,
+    description: "Modern ThinkPad E-series with 11th Gen Intel. Affordable business performance.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "14\" FHD display",
+      "ThinkPad quality",
+      "Modern design",
+      "Fast SSD",
+      "Business features"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\" FHD",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 32,
+    name: "Dell Latitude 7320",
+    price: 370,
+    rating: 4.7,
+    reviews: 41,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 4,
+    description: "Premium Dell ultrabook with 11th Gen Intel Core i5. Thin, light, and powerful.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "13.3\" display",
+      "Ultra-thin design",
+      "Premium build",
+      "Thunderbolt 4",
+      "All-day battery"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "13.3\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 33,
+    name: "Lenovo ThinkPad E15 Gen 2",
+    price: 370,
+    rating: 4.5,
+    reviews: 48,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 5,
+    description: "Large-screen ThinkPad with 11th Gen Intel. Great for productivity with 15.6\" display.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "15.6\" FHD display",
+      "Full-size keyboard",
+      "ThinkPad quality",
+      "Numeric keypad",
+      "Business features"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "15.6\" FHD",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 34,
+    name: "Dell Latitude 5420",
+    price: 380,
+    rating: 4.6,
+    reviews: 55,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 6,
+    description: "Modern business laptop with 11th Gen Intel Core i5. Latest Dell enterprise features.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "14\" display",
+      "Modern design",
+      "Enterprise security",
+      "Dell reliability",
+      "Thunderbolt 4"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "14\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 35,
+    name: "Lenovo IdeaPad 5",
+    price: 390,
+    rating: 4.6,
+    reviews: 67,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 7,
+    description: "Premium consumer laptop with 11th Gen Intel. Sleek design with great performance.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "14\" FHD display",
+      "Slim aluminum design",
+      "512GB SSD",
+      "Dolby Audio",
+      "Rapid Charge"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "14\" FHD",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 36,
+    name: "Toshiba Portege X30",
+    price: 400,
+    rating: 4.5,
+    reviews: 32,
+    image: laptopImages.toshiba[0],
+    images: laptopImages.toshiba,
+    category: "Laptops",
+    brand: "Toshiba",
+    inStock: true,
+    stockCount: 3,
+    description: "Ultra-lightweight business laptop. Premium Japanese engineering at just 1kg.",
+    features: [
+      "Intel Core i5 8th Gen",
+      "Ultra-lightweight 1kg",
+      "13.3\" display",
+      "Premium magnesium",
+      "All-day battery",
+      "Japanese quality"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 8th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "13.3\"",
+      "Graphics": "Intel UHD Graphics 620",
+      "Operating System": "Windows 10 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 37,
+    name: "Lenovo IdeaPad Flex 5",
+    price: 420,
+    rating: 4.6,
+    reviews: 58,
+    image: laptopImages.lenovo[0],
+    images: laptopImages.lenovo,
+    category: "Laptops",
+    brand: "Lenovo",
+    inStock: true,
+    stockCount: 5,
+    description: "Versatile 2-in-1 with 11th Gen Intel. 360-degree hinge for tablet and tent modes.",
+    features: [
+      "360-degree convertible",
+      "Intel Core i5 11th Gen",
+      "14\" FHD touchscreen",
+      "Pen support",
+      "512GB SSD",
+      "Multiple modes"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "14\" FHD Touch",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 38,
+    name: "HP ProBook 430 G8",
+    price: 430,
+    rating: 4.6,
+    reviews: 49,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 6,
+    description: "Compact business laptop with 11th Gen Intel Core i5. Professional features in a portable design.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "13.3\" display",
+      "Compact design",
+      "Business security",
+      "HP reliability",
+      "All-day battery"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "13.3\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 39,
+    name: "HP ProBook 450 G8 (i5)",
+    price: 450,
+    rating: 4.5,
+    reviews: 56,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 8,
+    description: "Full-size business laptop with 11th Gen Intel Core i5. Great for office productivity.",
+    features: [
+      "Intel Core i5 11th Gen",
+      "15.6\" display",
+      "Full-size keyboard",
+      "Business features",
+      "HP reliability",
+      "Numeric keypad"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 11th Gen",
+      "RAM": "8GB",
+      "Storage": "256GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
+    },
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+
+  // ==================== LAPTOPS - HIGH-END ($500+) ====================
+  {
+    id: 40,
+    name: "HP 15 (i5)",
+    price: 600,
+    rating: 4.6,
+    reviews: 72,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 10,
+    description: "Latest HP 15 with 13th Gen Intel Core i5. Modern design with powerful performance.",
+    features: [
+      "Intel Core i5 13th Gen",
+      "15.6\" display",
+      "Latest generation",
+      "512GB SSD",
+      "Modern design",
+      "Full warranty"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 13th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Latest Gen"
+  },
+  {
+    id: 41,
+    name: "HP 15 (i7)",
+    price: 620,
+    rating: 4.7,
+    reviews: 65,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 8,
+    description: "High-performance HP 15 with 13th Gen Intel Core i7. Maximum power for demanding tasks.",
+    features: [
+      "Intel Core i7 13th Gen",
+      "15.6\" display",
+      "High performance",
+      "512GB SSD",
+      "Latest generation",
+      "Full warranty"
+    ],
+    specifications: {
+      "Processor": "Intel Core i7 13th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 42,
+    name: "HP 250 G10 (i5)",
+    price: 620,
+    rating: 4.6,
+    reviews: 58,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 10,
+    description: "Business-class HP 250 G10 with 13th Gen Intel Core i5. Reliable and powerful.",
+    features: [
+      "Intel Core i5 13th Gen",
+      "15.6\" display",
+      "Business-grade",
+      "512GB SSD",
+      "HP reliability",
+      "Full warranty"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 13th Gen",
+      "RAM": "8GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 43,
+    name: "HP ProBook 450 G8 (i7)",
+    price: 650,
+    rating: 4.7,
+    reviews: 44,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 6,
+    description: "Premium ProBook with 11th Gen Intel Core i7. Top-tier business performance.",
+    features: [
+      "Intel Core i7 11th Gen",
+      "15.6\" display",
+      "Premium performance",
+      "512GB SSD",
+      "Business security",
+      "Full warranty"
     ],
     specifications: {
       "Processor": "Intel Core i7 11th Gen",
-      "RAM": "16GB DDR4",
-      "Storage": "1TB SSD",
-      "Display": "15.6-inch FHD 144Hz",
-      "Graphics": "NVIDIA GTX 1650 8GB",
-      "Operating System": "Windows 11",
-      "Weight": "2.1kg"
+      "RAM": "16GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
+  },
+  {
+    id: 44,
+    name: "HP 250 G10 (i7)",
+    price: 800,
+    rating: 4.8,
+    reviews: 38,
+    image: laptopImages.hp[0],
+    images: laptopImages.hp,
+    category: "Laptops",
+    brand: "HP",
+    inStock: true,
+    stockCount: 5,
+    description: "Top-of-the-line HP 250 G10 with 13th Gen Intel Core i7. Maximum performance.",
+    features: [
+      "Intel Core i7 13th Gen",
+      "15.6\" display",
+      "Top performance",
+      "512GB SSD",
+      "Latest generation",
+      "Full warranty"
+    ],
+    specifications: {
+      "Processor": "Intel Core i7 13th Gen",
+      "RAM": "16GB",
+      "Storage": "512GB SSD",
+      "Display": "15.6\"",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Premium"
+  },
+  {
+    id: 45,
+    name: "Dell Latitude 5430 Rugged",
+    price: 1200,
+    rating: 4.9,
+    reviews: 28,
+    image: laptopImages.dell[0],
+    images: laptopImages.dell,
+    category: "Laptops",
+    brand: "Dell",
+    inStock: true,
+    stockCount: 3,
+    description: "Military-grade rugged laptop with 12th Gen Intel Core i5. Built for extreme conditions.",
+    features: [
+      "Intel Core i5 12th Gen",
+      "Military-grade durability",
+      "Water & dust resistant",
+      "14\" rugged display",
+      "Drop tested",
+      "Extreme conditions"
+    ],
+    specifications: {
+      "Processor": "Intel Core i5 12th Gen",
+      "RAM": "16GB",
+      "Storage": "512GB SSD",
+      "Display": "14\" Rugged",
+      "Graphics": "Intel Iris Xe",
+      "Operating System": "Windows 11 Pro"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Rugged"
   },
 
-  // SMARTPHONES
+  // ==================== SMARTPHONES ====================
   {
-    id: 201,
-    name: "Samsung Galaxy A05",
-    price: 100,
-    rating: 4.2,
-    reviews: 187,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Smartphones",
-    brand: "Samsung",
-    inStock: true,
-    stockCount: 25,
-    description: "Affordable Samsung smartphone with reliable performance. Perfect for everyday communication and basic smartphone needs.",
-    features: [
-      "6GB RAM for smooth performance",
-      "128GB internal storage",
-      "Large display",
-      "Dual camera system",
-      "Long-lasting battery",
-      "Samsung One UI"
-    ],
-    specifications: {
-      "RAM": "6GB",
-      "Storage": "128GB",
-      "Display": "6.7-inch HD+",
-      "Camera": "50MP + 2MP",
-      "Battery": "5000mAh",
-      "OS": "Android 13",
-      "Network": "4G LTE"
-    },
-    warranty: true
-  },
-  {
-    id: 202,
-    name: "Samsung Galaxy A14",
-    price: 100,
-    rating: 4.3,
-    reviews: 142,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Smartphones",
-    brand: "Samsung",
-    inStock: true,
-    stockCount: 18,
-    description: "Feature-rich Samsung Galaxy A14 with enhanced camera and performance. Great value for money smartphone.",
-    features: [
-      "6GB RAM",
-      "128GB storage",
-      "Triple camera system",
-      "Full HD+ display",
-      "Fast charging",
-      "Samsung Knox security"
-    ],
-    specifications: {
-      "RAM": "6GB",
-      "Storage": "128GB",
-      "Display": "6.6-inch FHD+",
-      "Camera": "50MP + 5MP + 2MP",
-      "Battery": "5000mAh",
-      "OS": "Android 13",
-      "Network": "4G LTE"
-    },
-    warranty: true
-  },
-  {
-    id: 203,
-    name: "Samsung Galaxy A51",
-    price: 120,
-    rating: 4.5,
-    reviews: 298,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
-    category: "Smartphones",
-    brand: "Samsung",
-    inStock: true,
-    stockCount: 14,
-    description: "Premium Samsung Galaxy A51 with quad camera system and Super AMOLED display. Excellent photography and display quality.",
-    features: [
-      "8GB RAM",
-      "128GB storage",
-      "Quad camera system",
-      "Super AMOLED display",
-      "In-display fingerprint",
-      "Premium design"
-    ],
-    specifications: {
-      "RAM": "8GB",
-      "Storage": "128GB",
-      "Display": "6.5-inch Super AMOLED",
-      "Camera": "48MP + 12MP + 5MP + 5MP",
-      "Battery": "4000mAh",
-      "OS": "Android 11",
-      "Network": "4G LTE"
-    },
-    warranty: true
-  },
-  {
-    id: 204,
+    id: 46,
     name: "Xiaomi Redmi A3",
     price: 85,
-    rating: 4.1,
+    rating: 4.2,
     reviews: 156,
-    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    image: smartphoneImages.xiaomi[0],
+    images: smartphoneImages.xiaomi,
     category: "Smartphones",
     brand: "Xiaomi",
     inStock: true,
-    stockCount: 22,
-    description: "Budget-friendly Xiaomi Redmi with great value proposition. Reliable performance for everyday smartphone usage.",
+    stockCount: 5,
+    description: "Budget-friendly smartphone with 8GB RAM. Great value for everyday use.",
     features: [
       "8GB RAM",
-      "64GB storage",
-      "Large display",
-      "Dual camera",
-      "MIUI interface",
-      "Long battery life"
+      "128GB storage",
+      "6.7\" display",
+      "MediaTek processor",
+      "Long battery life",
+      "Dual SIM"
     ],
     specifications: {
+      "Processor": "MediaTek Helio",
       "RAM": "8GB",
-      "Storage": "64GB",
-      "Display": "6.71-inch HD+",
-      "Camera": "8MP + 0.08MP",
-      "Battery": "5000mAh",
-      "OS": "Android 12 (MIUI)",
-      "Network": "4G LTE"
+      "Storage": "128GB",
+      "Display": "6.7\"",
+      "Camera": "13MP",
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New",
+    badge: "Budget Pick"
   },
   {
-    id: 206,
+    id: 47,
     name: "Samsung Galaxy A30",
     price: 85,
-    rating: 4.1,
-    reviews: 134,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    rating: 4.3,
+    reviews: 189,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
     category: "Smartphones",
     brand: "Samsung",
     inStock: true,
-    stockCount: 20,
-    description: "Samsung Galaxy A30 with reliable performance and good battery life. Perfect for everyday smartphone needs.",
+    stockCount: 3,
+    description: "Samsung smartphone with AMOLED display. Reliable Samsung quality.",
     features: [
+      "Super AMOLED display",
       "4GB RAM",
       "64GB storage",
-      "Dual camera system",
-      "Large display",
-      "Long battery life",
-      "Samsung One UI"
+      "Dual camera",
+      "Samsung quality",
+      "Fast charging"
     ],
     specifications: {
+      "Processor": "Exynos 7904",
       "RAM": "4GB",
       "Storage": "64GB",
-      "Display": "6.4-inch Super AMOLED",
+      "Display": "6.4\" AMOLED",
       "Camera": "16MP + 5MP",
-      "Battery": "4000mAh",
-      "OS": "Android 11",
-      "Network": "4G LTE"
+      "Battery": "4000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Second-hand (Excellent)"
   },
   {
-    id: 207,
-    name: "Samsung Galaxy A05s",
-    price: 120,
-    rating: 4.3,
-    reviews: 98,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
+    id: 48,
+    name: "Xiaomi Redmi 14C",
+    price: 95,
+    rating: 4.4,
+    reviews: 134,
+    image: smartphoneImages.xiaomi[0],
+    images: smartphoneImages.xiaomi,
+    category: "Smartphones",
+    brand: "Xiaomi",
+    inStock: true,
+    stockCount: 4,
+    description: "Latest Redmi with massive 16GB RAM. Smooth multitasking performance.",
+    features: [
+      "16GB RAM",
+      "256GB storage",
+      "6.88\" display",
+      "MediaTek Helio G81",
+      "50MP camera",
+      "5160mAh battery"
     ],
+    specifications: {
+      "Processor": "MediaTek Helio G81",
+      "RAM": "16GB",
+      "Storage": "256GB",
+      "Display": "6.88\"",
+      "Camera": "50MP",
+      "Battery": "5160mAh"
+    },
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 49,
+    name: "Samsung Galaxy A05",
+    price: 100,
+    rating: 4.3,
+    reviews: 167,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
     category: "Smartphones",
     brand: "Samsung",
     inStock: true,
-    stockCount: 15,
-    description: "Samsung Galaxy A05s with enhanced features and performance. Great value smartphone with modern design.",
+    stockCount: 5,
+    description: "Affordable Samsung with 6GB RAM and 128GB storage. Great starter phone.",
     features: [
       "6GB RAM",
       "128GB storage",
-      "Triple camera system",
-      "Large display",
-      "Fast charging",
-      "Enhanced performance"
+      "6.7\" PLS LCD",
+      "MediaTek Helio G85",
+      "50MP camera",
+      "5000mAh battery"
     ],
     specifications: {
+      "Processor": "MediaTek Helio G85",
       "RAM": "6GB",
       "Storage": "128GB",
-      "Display": "6.7-inch HD+",
-      "Camera": "50MP + 2MP + 2MP",
-      "Battery": "5000mAh",
-      "OS": "Android 13",
-      "Network": "4G LTE"
+      "Display": "6.7\" PLS LCD",
+      "Camera": "50MP + 2MP",
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New"
   },
   {
-    id: 208,
+    id: 50,
+    name: "Xiaomi Redmi 13",
+    price: 110,
+    rating: 4.5,
+    reviews: 145,
+    image: smartphoneImages.xiaomi[0],
+    images: smartphoneImages.xiaomi,
+    category: "Smartphones",
+    brand: "Xiaomi",
+    inStock: true,
+    stockCount: 4,
+    description: "Feature-packed Redmi 13 with excellent camera and performance.",
+    features: [
+      "8GB RAM",
+      "256GB storage",
+      "6.79\" FHD+ display",
+      "Snapdragon 4 Gen 2",
+      "108MP camera",
+      "5030mAh battery"
+    ],
+    specifications: {
+      "Processor": "Snapdragon 4 Gen 2",
+      "RAM": "8GB",
+      "Storage": "256GB",
+      "Display": "6.79\" FHD+",
+      "Camera": "108MP",
+      "Battery": "5030mAh"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Popular"
+  },
+  {
+    id: 51,
     name: "Samsung Galaxy M14 5G",
     price: 110,
     rating: 4.4,
-    reviews: 76,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-    images: [
-      "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&crop=center&q=80",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&crop=center&q=80"
-    ],
+    reviews: 178,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
     category: "Smartphones",
     brand: "Samsung",
     inStock: true,
-    stockCount: 18,
-    description: "Samsung Galaxy M14 5G with next-generation connectivity. Perfect for users who want 5G capability at an affordable price.",
+    stockCount: 3,
+    description: "5G-capable Samsung with long battery life. Future-proof connectivity.",
     features: [
+      "5G connectivity",
       "6GB RAM",
       "128GB storage",
-      "5G connectivity",
-      "Triple camera system",
-      "Large battery",
-      "Modern design"
+      "Exynos 1330",
+      "50MP camera",
+      "6000mAh battery"
     ],
     specifications: {
+      "Processor": "Exynos 1330 5G",
       "RAM": "6GB",
       "Storage": "128GB",
-      "Display": "6.6-inch FHD+",
+      "Display": "6.6\" PLS LCD",
       "Camera": "50MP + 2MP + 2MP",
-      "Battery": "6000mAh",
-      "OS": "Android 13",
-      "Network": "5G"
+      "Battery": "6000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New",
+    badge: "5G Ready"
   },
   {
-    id: 209,
-    name: "Samsung Galaxy A31",
-    price: 90,
-    rating: 4.2,
-    reviews: 112,
-    image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400&h=400&fit=crop&crop=center",
-    images: [
-      "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
-    ],
-    category: "Smartphones",
-    brand: "Samsung",
-    inStock: true,
-    stockCount: 16,
-    description: "Samsung Galaxy A31 with quad camera system and Super AMOLED display. Great photography capabilities.",
-    features: [
-      "4GB RAM",
-      "128GB storage",
-      "Quad camera system",
-      "Super AMOLED display",
-      "In-display fingerprint",
-      "Premium design"
-    ],
-    specifications: {
-      "RAM": "4GB",
-      "Storage": "128GB",
-      "Display": "6.4-inch Super AMOLED",
-      "Camera": "48MP + 8MP + 5MP + 5MP",
-      "Battery": "5000mAh",
-      "OS": "Android 11",
-      "Network": "4G LTE"
-    },
-    warranty: true
-  },
-  {
-    id: 210,
+    id: 52,
     name: "Samsung Galaxy A06",
     price: 115,
-    rating: 4.1,
-    reviews: 87,
-    image: "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop&crop=center",
-    images: [
-      "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center"
-    ],
+    rating: 4.3,
+    reviews: 123,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
     category: "Smartphones",
     brand: "Samsung",
     inStock: true,
-    stockCount: 14,
-    description: "Samsung Galaxy A06 with reliable performance and modern features. Perfect balance of price and functionality.",
+    stockCount: 4,
+    description: "Latest Samsung A-series with 6GB RAM. Reliable everyday smartphone.",
     features: [
       "6GB RAM",
       "128GB storage",
-      "Dual camera system",
-      "Large display",
-      "Long battery life",
-      "Samsung One UI"
+      "6.7\" PLS LCD",
+      "MediaTek Helio G85",
+      "50MP camera",
+      "5000mAh battery"
     ],
     specifications: {
+      "Processor": "MediaTek Helio G85",
       "RAM": "6GB",
       "Storage": "128GB",
-      "Display": "6.7-inch HD+",
+      "Display": "6.7\" PLS LCD",
       "Camera": "50MP + 2MP",
-      "Battery": "5000mAh",
-      "OS": "Android 13",
-      "Network": "4G LTE"
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New"
   },
   {
-    id: 211,
-    name: "Xiaomi Redmi 14C",
-    price: 95,
-    rating: 4.2,
-    reviews: 64,
-    image: "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=400&h=400&fit=crop&crop=center",
-    images: [
-      "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=600&h=600&fit=crop&crop=center"
-    ],
+    id: 53,
+    name: "Samsung Galaxy A05s",
+    price: 120,
+    rating: 4.4,
+    reviews: 156,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
     category: "Smartphones",
-    brand: "Xiaomi",
+    brand: "Samsung",
     inStock: true,
-    stockCount: 19,
-    description: "Xiaomi Redmi 14C with enhanced RAM and modern features. Great performance for the price point.",
+    stockCount: 4,
+    description: "Samsung A05s with enhanced features. Great camera and display.",
     features: [
-      "16GB RAM",
-      "64GB storage",
-      "Enhanced performance",
-      "Dual camera system",
-      "MIUI interface",
-      "Long battery life"
+      "6GB RAM",
+      "128GB storage",
+      "6.7\" FHD+ PLS",
+      "Snapdragon 680",
+      "50MP camera",
+      "5000mAh battery"
     ],
     specifications: {
-      "RAM": "16GB",
-      "Storage": "64GB",
-      "Display": "6.74-inch HD+",
-      "Camera": "50MP + 0.08MP",
-      "Battery": "5000mAh",
-      "OS": "Android 14 (MIUI)",
-      "Network": "4G LTE"
+      "Processor": "Snapdragon 680",
+      "RAM": "6GB",
+      "Storage": "128GB",
+      "Display": "6.7\" FHD+ PLS",
+      "Camera": "50MP + 2MP + 2MP",
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New"
   },
   {
-    id: 205,
-    name: "Xiaomi Redmi 13",
-    price: 110,
-    rating: 4.4,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=400&fit=crop&crop=center",
-    images: [
-      "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&h=600&fit=crop&crop=center"
-    ],
+    id: 54,
+    name: "Xiaomi Redmi Note 13",
+    price: 145,
+    rating: 4.6,
+    reviews: 234,
+    image: smartphoneImages.xiaomi[0],
+    images: smartphoneImages.xiaomi,
     category: "Smartphones",
     brand: "Xiaomi",
     inStock: true,
-    stockCount: 16,
-    description: "Latest Xiaomi Redmi 13 with improved performance and camera capabilities. Great balance of features and affordability.",
+    stockCount: 5,
+    description: "Popular Redmi Note series with 8GB RAM. Excellent value flagship.",
     features: [
       "8GB RAM",
-      "64GB storage",
-      "Enhanced camera system",
-      "Fast charging",
-      "Modern design",
-      "MIUI 14"
+      "256GB storage",
+      "6.67\" AMOLED",
+      "Snapdragon 685",
+      "108MP camera",
+      "5000mAh battery"
     ],
     specifications: {
+      "Processor": "Snapdragon 685",
       "RAM": "8GB",
-      "Storage": "64GB",
-      "Display": "6.79-inch FHD+",
-      "Camera": "108MP + 2MP",
-      "Battery": "5030mAh",
-      "OS": "Android 13 (MIUI 14)",
-      "Network": "4G LTE"
+      "Storage": "256GB",
+      "Display": "6.67\" AMOLED",
+      "Camera": "108MP + 8MP + 2MP",
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New",
+    badge: "Best Seller"
   },
-
-  // PRINTERS
   {
-    id: 301,
-    name: "HP DeskJet 2320 All-in-One",
-    price: 50,
-    rating: 4.0,
-    reviews: 67,
-    image: "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=400&h=400&fit=crop&crop=center",
-    images: [
-      "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&h=600&fit=crop&crop=center",
-      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&h=600&fit=crop&crop=center"
-    ],
-    category: "Printers",
-    brand: "HP",
+    id: 55,
+    name: "Samsung Galaxy A15",
+    price: 150,
+    rating: 4.5,
+    reviews: 198,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
+    category: "Smartphones",
+    brand: "Samsung",
     inStock: true,
-    stockCount: 20,
-    description: "Compact all-in-one printer perfect for home and small office use. Print, scan, and copy with ease.",
+    stockCount: 4,
+    description: "Mid-range Samsung with premium features. Super AMOLED display.",
     features: [
-      "All-in-one functionality",
-      "Compact design",
-      "Easy setup",
-      "Affordable printing",
-      "USB connectivity",
-      "Energy efficient"
+      "8GB RAM",
+      "256GB storage",
+      "6.5\" Super AMOLED",
+      "MediaTek Helio G99",
+      "50MP camera",
+      "5000mAh battery"
     ],
     specifications: {
-      "Print Speed": "7.5 ppm (black), 5.5 ppm (color)",
-      "Print Resolution": "Up to 4800 x 1200 dpi",
-      "Scan Resolution": "Up to 1200 x 1200 dpi",
-      "Paper Size": "A4, Letter, Legal",
-      "Connectivity": "USB 2.0",
-      "Dimensions": "425 x 304 x 155 mm",
-      "Weight": "3.42 kg"
+      "Processor": "MediaTek Helio G99",
+      "RAM": "8GB",
+      "Storage": "256GB",
+      "Display": "6.5\" Super AMOLED",
+      "Camera": "50MP + 5MP + 2MP",
+      "Battery": "5000mAh"
     },
-    warranty: true
+    warranty: true,
+    condition: "Brand New"
+  },
+  {
+    id: 56,
+    name: "Samsung Galaxy A25 5G",
+    price: 200,
+    rating: 4.6,
+    reviews: 167,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
+    category: "Smartphones",
+    brand: "Samsung",
+    inStock: true,
+    stockCount: 3,
+    description: "5G Samsung with 8GB RAM and 256GB storage. Premium mid-range.",
+    features: [
+      "5G connectivity",
+      "8GB RAM",
+      "256GB storage",
+      "6.5\" Super AMOLED",
+      "50MP OIS camera",
+      "5000mAh battery"
+    ],
+    specifications: {
+      "Processor": "Exynos 1280 5G",
+      "RAM": "8GB",
+      "Storage": "256GB",
+      "Display": "6.5\" Super AMOLED",
+      "Camera": "50MP OIS + 8MP + 2MP",
+      "Battery": "5000mAh"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "5G Ready"
+  },
+  {
+    id: 57,
+    name: "Samsung Galaxy A35 5G",
+    price: 280,
+    rating: 4.7,
+    reviews: 145,
+    image: smartphoneImages.samsung[0],
+    images: smartphoneImages.samsung,
+    category: "Smartphones",
+    brand: "Samsung",
+    inStock: true,
+    stockCount: 3,
+    description: "High-end Samsung A-series with flagship features. 8GB RAM, 256GB.",
+    features: [
+      "5G connectivity",
+      "8GB RAM",
+      "256GB storage",
+      "6.6\" Super AMOLED",
+      "50MP OIS camera",
+      "5000mAh battery"
+    ],
+    specifications: {
+      "Processor": "Exynos 1380 5G",
+      "RAM": "8GB",
+      "Storage": "256GB",
+      "Display": "6.6\" Super AMOLED",
+      "Camera": "50MP OIS + 8MP + 5MP",
+      "Battery": "5000mAh"
+    },
+    warranty: true,
+    condition: "Brand New",
+    badge: "Premium"
   }
 ];
 
-export const categories = [
-  {
-    id: "laptops",
-    name: "💻 Laptops",
-    description: "Professional laptops with warranty - HP, Dell, Lenovo, Toshiba & more",
-    count: products.filter(p => p.category === "Laptops").length
-  },
-  {
-    id: "desktops",
-    name: "🖥️ Desktops / CPUs",
-    description: "Desktop computers and CPU units with reliable performance",
-    count: products.filter(p => p.category === "Desktops").length
-  },
-  {
-    id: "monitors",
-    name: "🖥️ Monitors & AIOs",
-    description: "All-in-One computers and professional monitors",
-    count: products.filter(p => p.category === "Monitors").length
-  },
-  {
-    id: "printers",
-    name: "🖨️ Printers",
-    description: "All-in-One printers for home and office use",
-    count: products.filter(p => p.category === "Printers").length
-  },
-  {
-    id: "smartphones",
-    name: "📱 Smartphones",
-    description: "Samsung and Xiaomi smartphones with great specs",
-    count: products.filter(p => p.category === "Smartphones").length
-  }
-];
-
-export const getProductById = (id: string | number): Product | undefined => {
-  return products.find(product => product.id === Number(id));
+// Helper functions
+export const getProductById = (id: number): Product | undefined => {
+  return products.find(p => p.id === id);
 };
 
 export const getProductsByCategory = (category: string): Product[] => {
-  if (category === "all" || !category) return products;
-  return products.filter(product => 
-    product.category.toLowerCase() === category.toLowerCase()
-  );
+  return products.filter(p => p.category.toLowerCase() === category.toLowerCase());
+};
+
+export const getProductsByBrand = (brand: string): Product[] => {
+  return products.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
+};
+
+export const getFeaturedProducts = (): Product[] => {
+  return products.filter(p => p.badge);
+};
+
+export const getCategories = (): string[] => {
+  return Array.from(new Set(products.map(p => p.category)));
+};
+
+export const getBrands = (): string[] => {
+  return Array.from(new Set(products.map(p => p.brand)));
 };
 
 export const searchProducts = (query: string): Product[] => {
-  if (!query) return products;
-  const searchTerm = query.toLowerCase();
-  return products.filter(product =>
-    product.name.toLowerCase().includes(searchTerm) ||
-    product.brand.toLowerCase().includes(searchTerm) ||
-    product.category.toLowerCase().includes(searchTerm) ||
-    product.description.toLowerCase().includes(searchTerm)
+  const lowerQuery = query.toLowerCase();
+  return products.filter(p => 
+    p.name.toLowerCase().includes(lowerQuery) ||
+    p.brand.toLowerCase().includes(lowerQuery) ||
+    p.category.toLowerCase().includes(lowerQuery) ||
+    p.description.toLowerCase().includes(lowerQuery)
   );
 };
