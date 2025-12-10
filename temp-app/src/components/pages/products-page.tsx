@@ -291,15 +291,18 @@ export function ProductsPage() {
                       
                       {/* Badges */}
                       <div className="absolute top-4 left-4 flex flex-col gap-2">
-                        {product.warranty && (
-                          <div className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-xs font-bold rounded-full shadow-lg">
-                            <CheckCircle className="w-3 h-3" />
-                            WARRANTY
+                        {product.condition && (
+                          <div className={`px-3 py-1.5 text-white text-xs font-bold rounded-full shadow-lg ${
+                            product.condition === 'Brand New' 
+                              ? 'bg-gradient-to-r from-green-500 to-green-600' 
+                              : 'bg-gradient-to-r from-blue-500 to-blue-600'
+                          }`}>
+                            {product.condition === 'Brand New' ? '✨ NEW' : '✓ EXCELLENT'}
                           </div>
                         )}
-                        {product.originalPrice && (
-                          <div className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 text-white text-xs font-bold rounded-full shadow-lg">
-                            SAVE ${product.originalPrice - product.price}
+                        {product.badge && (
+                          <div className="px-3 py-1.5 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg">
+                            {product.badge}
                           </div>
                         )}
                       </div>
@@ -308,10 +311,21 @@ export function ProductsPage() {
                     {/* Product Info */}
                     <div className="p-5 flex-1 flex flex-col">
                       <Link href={`/products/${product.id}`}>
-                        <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-red-600 transition-colors line-clamp-2">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-red-600 transition-colors line-clamp-2">
                           {product.name}
                         </h3>
                       </Link>
+                      
+                      {/* Brand & Specs */}
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        <span className="text-xs font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded">{product.brand}</span>
+                        {product.specifications?.Processor && (
+                          <span className="text-xs text-gray-500">{product.specifications.Processor}</span>
+                        )}
+                        {product.specifications?.RAM && (
+                          <span className="text-xs text-gray-500">• {product.specifications.RAM}</span>
+                        )}
+                      </div>
                       
                       {/* Rating */}
                       <div className="flex items-center mb-3">
