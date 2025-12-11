@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Create or update user profile - optimized with single query using upsert
+  // Create or update user profile - optimized with single query
   const upsertUserProfile = async (user: User) => {
     try {
       // Single optimized query - try to fetch first (most common case)
@@ -68,10 +68,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
       
-      // User doesn't exist, create new profile with upsert
+      // User doesn't exist, create new profile with insert
       const { data: newUser, error: insertError } = await supabase
         .from('users')
-        .upsert({
+        .insert({
           id: user.id,
           email: user.email!,
           full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
@@ -80,13 +80,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           role: 'customer',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        }, { onConflict: 'id' })
+        })
         .select('id, email, full_name, avatar_url, is_admin, created_at, updated_at')
         .single();
 
       if (insertError) {
-        console.error('Error upserting user:', insertError);
-        setUserProfile(null);
+        // If insert fails (user might already exist due to race condition), try fetch again
+        console.error('Error inserting user:', insertError);
+        const retryProfile = await fetchUserProfile(user.id);
+        setUserProfile(retryProfile);
       } else {
         setUserProfile(newUser as UserProfile);
       }
