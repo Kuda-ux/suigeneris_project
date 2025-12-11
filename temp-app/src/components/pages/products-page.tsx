@@ -2,9 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Filter, Grid, List, Star, ShoppingCart, CheckCircle, SlidersHorizontal, TrendingUp, Award, X, ChevronDown } from 'lucide-react';
+import { Search, Filter, Grid, List, Star, ShoppingCart, CheckCircle, SlidersHorizontal, TrendingUp, Award, X, ChevronDown, Loader2 } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
-import { products as allProducts, getProductsByCategory, searchProducts } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
+
+// Product type that works with both database and static products
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  images?: string[];
+  category: string;
+  brand: string;
+  rating: number;
+  reviews: number;
+  description?: string;
+  inStock?: boolean;
+  in_stock?: boolean;
+  stock_count?: number;
+}
 
 const categories = ['All', 'Laptops', 'Smartphones', 'Monitors', 'Desktops', 'Processors', 'Accessories'];
 const sortOptions = [
@@ -18,25 +35,75 @@ const sortOptions = [
 export function ProductsPage() {
   const addItem = useCartStore((state) => state.addItem);
   const [addedToCart, setAddedToCart] = useState<number | null>(null);
-  const [filteredProducts, setFilteredProducts] = useState(allProducts);
+  const [allProducts, setAllProducts] = useState<Product[]>(staticProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(staticProducts);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch products from database on mount
   useEffect(() => {
-    let products = allProducts;
+    const fetchProductsFromDB = async () => {
+      try {
+        const response = await fetch('/api/products');
+        if (response.ok) {
+          const result = await response.json();
+          // API returns { success, count, data } format
+          const dbProducts = result.data || result;
+          if (dbProducts && dbProducts.length > 0) {
+            // Map database products to match expected format
+            const mappedProducts: Product[] = dbProducts.map((p: any) => ({
+              id: p.id,
+              name: p.name,
+              price: p.price,
+              image: p.images?.[0] || p.image || '/placeholder-product.jpg',
+              images: p.images || [p.image],
+              category: p.category || 'Uncategorized',
+              brand: p.brand || 'Generic',
+              rating: p.rating || 4.5,
+              reviews: p.reviews || 0,
+              description: p.description,
+              inStock: p.in_stock ?? (p.stock_count > 0),
+            }));
+            setAllProducts(mappedProducts);
+            setFilteredProducts(mappedProducts);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch products from database, using static products:', error);
+        // Keep using static products as fallback
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductsFromDB();
+  }, []);
+
+  // Filter and sort products when criteria change
+  useEffect(() => {
+    let products = [...allProducts];
     
     // Filter by category
     if (selectedCategory !== 'All') {
-      products = getProductsByCategory(selectedCategory);
+      products = products.filter(p => 
+        p.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
     }
     
     // Filter by search query
     if (searchQuery) {
-      products = searchProducts(searchQuery);
+      const query = searchQuery.toLowerCase();
+      products = products.filter(p => 
+        p.name.toLowerCase().includes(query) ||
+        p.brand?.toLowerCase().includes(query) ||
+        p.category?.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query)
+      );
     }
 
     // Filter by price range
@@ -50,7 +117,7 @@ export function ProductsPage() {
         case 'price-high':
           return b.price - a.price;
         case 'rating':
-          return b.rating - a.rating;
+          return (b.rating || 0) - (a.rating || 0);
         case 'newest':
           return b.id - a.id;
         default:
@@ -59,7 +126,7 @@ export function ProductsPage() {
     });
     
     setFilteredProducts(products);
-  }, [selectedCategory, searchQuery, sortBy, priceRange]);
+  }, [allProducts, selectedCategory, searchQuery, sortBy, priceRange]);
 
   const handleAddToCart = (product: typeof allProducts[0]) => {
     addItem({
