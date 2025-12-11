@@ -573,7 +573,17 @@ export function ProductManagement() {
                       >
                         <Eye className="h-4 w-4" />
                       </button>
-                      <button className="text-sg-gray-600 hover:text-sg-gray-800">
+                      <button 
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setShowEditModal(true);
+                          // Pre-populate image preview if product has an image
+                          if (product.images?.[0]) {
+                            setImagePreview(product.images[0]);
+                          }
+                        }}
+                        className="text-sg-gray-600 hover:text-sg-gray-800"
+                      >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button 
@@ -840,8 +850,247 @@ export function ProductManagement() {
         </div>
       )}
 
+      {/* Edit Product Modal */}
+      {showEditModal && selectedProduct && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="text-2xl font-bold text-gray-900">Edit Product</h3>
+                <p className="text-gray-600 text-sm mt-1">Update product details and image</p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedProduct(null);
+                  resetImageState();
+                }}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <form onSubmit={handleUpdateProduct} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Product Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    required
+                    defaultValue={selectedProduct.name}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    SKU *
+                  </label>
+                  <input
+                    type="text"
+                    name="sku"
+                    required
+                    defaultValue={selectedProduct.sku}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all font-mono"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Category *
+                  </label>
+                  <select
+                    name="category"
+                    required
+                    defaultValue={selectedProduct.category}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  >
+                    <option value="">Select category</option>
+                    <option value="Laptops">Laptops</option>
+                    <option value="Desktops">Desktops</option>
+                    <option value="Smartphones">Smartphones</option>
+                    <option value="Monitors">Monitors</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Price ($) *
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 font-semibold">$</span>
+                    <input
+                      type="number"
+                      name="price"
+                      step="0.01"
+                      min="0"
+                      required
+                      defaultValue={selectedProduct.price}
+                      className="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Current Stock *
+                  </label>
+                  <input
+                    type="number"
+                    name="currentStock"
+                    min="0"
+                    required
+                    defaultValue={selectedProduct.currentStock}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Brand
+                  </label>
+                  <input
+                    type="text"
+                    name="brand"
+                    defaultValue={selectedProduct.brand || ''}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  />
+                </div>
+                
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    Product Image
+                  </label>
+                  
+                  {/* Image Upload Area */}
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
+                    {imagePreview ? (
+                      <div className="relative">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="max-h-48 mx-auto rounded-lg shadow-md"
+                        />
+                        {uploadingImage && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                          </div>
+                        )}
+                        {uploadedImageUrl && (
+                          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            ✓ New Image Uploaded
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            resetImageState();
+                          }}
+                          className="mt-3 text-red-600 hover:text-red-800 text-sm font-medium"
+                        >
+                          Remove / Change Image
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                        <p className="text-gray-600 font-medium mb-2">
+                          Upload a new image
+                        </p>
+                        <p className="text-xs text-gray-500 mb-3">
+                          JPEG, PNG, WebP, GIF (max 5MB)
+                        </p>
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleImageUpload(file);
+                          }}
+                          className="hidden"
+                          id="edit-product-image-upload"
+                        />
+                        <label
+                          htmlFor="edit-product-image-upload"
+                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors"
+                        >
+                          <Camera className="h-4 w-4 mr-2" />
+                          Choose Image
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Alternative: URL Input */}
+                  <div className="mt-4">
+                    <p className="text-xs text-gray-500 mb-2">Or enter an image URL:</p>
+                    <input
+                      type="url"
+                      name="image"
+                      disabled={!!uploadedImageUrl}
+                      defaultValue={selectedProduct.images?.[0] || ''}
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="https://example.com/product-image.jpg"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  rows={4}
+                  defaultValue={selectedProduct.description || ''}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none"
+                  placeholder="Enter a detailed description of the product..."
+                />
+              </div>
+              
+              <div className="flex justify-end gap-3 pt-6 border-t-2 border-gray-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setSelectedProduct(null);
+                    resetImageState();
+                  }}
+                  disabled={submitting}
+                  className="px-6 py-3 border-2 border-gray-300 rounded-xl hover:bg-gray-50 font-semibold transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting || uploadingImage}
+                  className="px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 font-semibold shadow-lg transition-all disabled:opacity-50 flex items-center"
+                >
+                  {submitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Product Details Modal */}
-      {selectedProduct && (
+      {selectedProduct && !showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
             <div className="flex items-center justify-between mb-6">
