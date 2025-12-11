@@ -21,6 +21,9 @@ interface Product {
   inStock?: boolean;
   in_stock?: boolean;
   stock_count?: number;
+  condition?: string;
+  badge?: string;
+  originalPrice?: number;
 }
 
 const categories = ['All', 'Laptops', 'Smartphones', 'Monitors', 'Desktops', 'Processors', 'Accessories'];
