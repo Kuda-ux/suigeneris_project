@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Download, Eye, Check, X, Search, FileText, User, Briefcase, Building, CreditCard, Phone, Mail, Calendar, MapPin, DollarSign, Hash, FileDown } from 'lucide-react';
+import { Download, Eye, Check, X, Search, FileText, User, Briefcase, Building, CreditCard, Phone, Mail, Calendar, MapPin, DollarSign, Hash, FileDown, MessageCircle } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { CivilServantDetailModal } from './civil-servant-detail-modal';
 
@@ -73,7 +73,86 @@ export function CivilServantsManagement() {
     XLSX.writeFile(wb, fileName);
   };
 
+  // Format phone number for WhatsApp (Zimbabwe format)
+  const formatPhoneForWhatsApp = (phone: string): string => {
+    if (!phone) return '';
+    // Remove all non-digit characters
+    let cleaned = phone.replace(/\D/g, '');
+    // If starts with 0, replace with 263 (Zimbabwe country code)
+    if (cleaned.startsWith('0')) {
+      cleaned = '263' + cleaned.substring(1);
+    }
+    // If doesn't start with country code, add 263
+    if (!cleaned.startsWith('263')) {
+      cleaned = '263' + cleaned;
+    }
+    return cleaned;
+  };
+
+  // Generate WhatsApp message for approved application
+  const generateApprovalMessage = (app: any): string => {
+    return `🎉 *CONGRATULATIONS!*
+
+Dear ${app.full_name},
+
+Your laptop financing application has been *APPROVED*! ✅
+
+📋 *Application Details:*
+• Application #: ${app.application_number}
+• Product: ${app.product_name}
+• Price: $${parseFloat(app.product_price).toFixed(2)}
+
+📞 *Next Steps:*
+Please visit our office or contact us to complete the process and collect your laptop.
+
+📍 *Location:* 109 Leopold Takawira St, Harare
+📱 *Call/WhatsApp:* +263 78 411 6938
+
+Thank you for choosing Sui Generis Technologies!
+
+_This is an automated message._`;
+  };
+
+  // Generate WhatsApp message for rejected application
+  const generateRejectionMessage = (app: any): string => {
+    return `Dear ${app.full_name},
+
+We regret to inform you that your laptop financing application has not been approved at this time.
+
+📋 *Application Details:*
+• Application #: ${app.application_number}
+• Product: ${app.product_name}
+
+If you have any questions or would like to discuss this further, please contact us:
+
+📍 *Location:* 109 Leopold Takawira St, Harare
+📱 *Call/WhatsApp:* +263 78 411 6938
+
+Thank you for your interest in Sui Generis Technologies.
+
+_This is an automated message._`;
+  };
+
+  // Open WhatsApp with pre-filled message
+  const openWhatsAppNotification = (app: any, status: string) => {
+    const phone = formatPhoneForWhatsApp(app.phone);
+    if (!phone) {
+      alert('No phone number available for this applicant');
+      return;
+    }
+    
+    const message = status === 'approved' 
+      ? generateApprovalMessage(app) 
+      : generateRejectionMessage(app);
+    
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   const handleUpdateStatus = async (id: number, status: string) => {
+    // Find the application to get phone number
+    const app = applications.find(a => a.id === id);
+    
     try {
       const res = await fetch('/api/loan-applications', {
         method: 'PATCH',
@@ -90,11 +169,40 @@ export function CivilServantsManagement() {
         alert(`Application ${status} successfully!`);
         loadApplications();
         setShowDetailModal(false);
+        
+        // Open WhatsApp to notify the applicant
+        if (app && app.phone) {
+          const sendWhatsApp = confirm(`Would you like to notify ${app.full_name} via WhatsApp?`);
+          if (sendWhatsApp) {
+            openWhatsAppNotification(app, status);
+          }
+        }
       }
     } catch (err) {
       console.error('Error updating application:', err);
       alert('Failed to update application');
     }
+  };
+
+  // Direct WhatsApp contact for any application
+  const handleWhatsAppContact = (app: any) => {
+    const phone = formatPhoneForWhatsApp(app.phone);
+    if (!phone) {
+      alert('No phone number available for this applicant');
+      return;
+    }
+    
+    const message = `Hello ${app.full_name},
+
+This is Sui Generis Technologies regarding your laptop financing application.
+
+📋 *Application #:* ${app.application_number}
+💻 *Product:* ${app.product_name}
+
+How can we assist you today?`;
+    
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const filteredApplications = applications.filter(app => {
@@ -268,11 +376,18 @@ export function CivilServantsManagement() {
                         >
                           <Eye className="w-4 h-4" />
                         </button>
+                        <button
+                          onClick={() => handleWhatsAppContact(app)}
+                          className="p-1.5 text-green-600 hover:bg-green-100 rounded-lg transition-all"
+                          title="Contact via WhatsApp"
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                        </button>
                         {app.status === 'pending' && (
                           <>
                             <button
                               onClick={() => handleUpdateStatus(app.id, 'approved')}
-                              className="p-1.5 text-green-600 hover:bg-green-100 rounded-lg transition-all"
+                              className="p-1.5 text-emerald-600 hover:bg-emerald-100 rounded-lg transition-all"
                               title="Approve"
                             >
                               <Check className="w-4 h-4" />

@@ -1,6 +1,6 @@
 'use client';
 
-import { X, User, Briefcase, Building, CreditCard, Phone, Mail, Calendar, MapPin, DollarSign, Hash, FileText, FileDown, Check } from 'lucide-react';
+import { X, User, Briefcase, Building, CreditCard, Phone, Mail, Calendar, MapPin, DollarSign, Hash, FileText, FileDown, Check, MessageCircle } from 'lucide-react';
 
 interface CivilServantDetailModalProps {
   application: any;
@@ -97,7 +97,20 @@ export function CivilServantDetailModal({ application, onClose, onUpdateStatus }
                   <Phone className="w-4 h-4 text-gray-500" />
                   <span className="text-xs font-semibold text-gray-600">Phone Number</span>
                 </div>
-                <p className="font-bold text-gray-900">{application.phone}</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-bold text-gray-900">{application.phone}</p>
+                  {application.phone && (
+                    <a
+                      href={`https://wa.me/${application.phone?.replace(/\D/g, '').replace(/^0/, '263')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 bg-green-100 hover:bg-green-200 text-green-600 rounded-lg transition-all"
+                      title="Contact via WhatsApp"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
               </div>
               <div className="md:col-span-3 bg-gray-50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
