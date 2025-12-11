@@ -491,85 +491,52 @@ export function ProductManagement() {
       <div className="bg-white rounded-lg shadow-sm border border-sg-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-sg-gray-50 border-b border-sg-gray-200">
+            <thead className="bg-sg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Product
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  SKU
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Category
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Stock Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Current Stock
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-sg-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Product</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Category</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Stock</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Price</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Status</th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-sg-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-sg-gray-200">
               {filteredProducts.map((product) => (
                 <tr key={product.id} className="hover:bg-sg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-3 py-2">
                     <div className="flex items-center">
                       <img
-                        src={product.images[0]}
+                        src={product.images?.[0] || '/placeholder-product.jpg'}
                         alt={product.name}
-                        className="h-10 w-10 rounded-lg object-cover mr-3"
+                        className="h-8 w-8 rounded object-cover mr-2 flex-shrink-0"
                       />
-                      <div>
-                        <div className="text-sm font-medium text-sg-black">{product.name}</div>
-                        <div className="text-sm text-sg-gray-500 truncate max-w-xs">
-                          {product.description}
-                        </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-medium text-sg-black truncate max-w-[150px]" title={product.name}>{product.name}</div>
+                        <div className="text-xs text-sg-gray-500">{product.sku}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
-                    {product.sku}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
+                  <td className="px-3 py-2 text-xs text-sg-gray-900">
                     {product.category}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {getStockIcon(product)}
-                      <span className="ml-2 text-sm text-sg-gray-900">
-                        {product.currentStock <= product.reorderLevel ? 'Reorder' : 'Good'}
-                      </span>
-                    </div>
+                  <td className="px-3 py-2">
+                    <div className="text-xs font-medium text-sg-gray-900">{product.currentStock}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-sg-gray-900">{product.currentStock}</div>
-                    <div className="text-xs text-sg-gray-500">
-                      Reorder at: {product.reorderLevel}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-sg-gray-900">
+                  <td className="px-3 py-2 text-xs font-medium text-sg-gray-900">
                     ${product.price}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(product.status)}`}>
+                  <td className="px-3 py-2">
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${getStatusBadge(product.status)}`}>
                       {product.status.replace('-', ' ')}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div className="flex items-center space-x-2">
+                  <td className="px-3 py-2">
+                    <div className="flex items-center space-x-1">
                       <button
                         onClick={() => setSelectedProduct(product)}
-                        className="text-sg-navy hover:text-sg-navy/80"
+                        className="p-1 text-sg-navy hover:text-sg-navy/80 hover:bg-gray-100 rounded"
+                        title="View"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
@@ -577,18 +544,19 @@ export function ProductManagement() {
                         onClick={() => {
                           setSelectedProduct(product);
                           setShowEditModal(true);
-                          // Pre-populate image preview if product has an image
                           if (product.images?.[0]) {
                             setImagePreview(product.images[0]);
                           }
                         }}
-                        className="text-sg-gray-600 hover:text-sg-gray-800"
+                        className="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded"
+                        title="Edit"
                       >
                         <Edit className="h-4 w-4" />
                       </button>
                       <button 
                         onClick={() => handleDeleteProduct(product.id)}
-                        className="text-red-600 hover:text-red-800"
+                        className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                        title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
