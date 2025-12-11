@@ -1,16 +1,33 @@
 'use client';
 
 import Link from 'next/link';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Shield, Truck, Lock, CreditCard, Award, CheckCircle, Tag } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Shield, MessageCircle, Phone, Award, CheckCircle } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
+
+const WHATSAPP_NUMBER = '263784116938';
 
 export function CartPage() {
   const { items: cartItems, updateQuantity, removeItem, getTotalPrice } = useCartStore();
 
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 50 ? 0 : 9.99;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const total = subtotal; // No shipping or tax for Zimbabwe
+
+  // Generate WhatsApp message with order details
+  const generateWhatsAppMessage = () => {
+    const itemsList = cartItems.map(item => 
+      `• ${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`
+    ).join('\n');
+    
+    const message = `🛒 *ORDER REQUEST - Sui Generis Technologies*\n\n` +
+      `*Items:*\n${itemsList}\n\n` +
+      `*Total: $${total.toFixed(2)}*\n\n` +
+      `Please confirm availability and payment options.\n\n` +
+      `Thank you!`;
+    
+    return encodeURIComponent(message);
+  };
+
+  const whatsappCheckoutUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${generateWhatsAppMessage()}`;
 
   if (cartItems.length === 0) {
     return (
@@ -145,31 +162,15 @@ export function CartPage() {
             <div className="bg-white rounded-3xl shadow-xl border-2 border-gray-100 p-8 sticky top-4">
               <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-2xl p-4 mb-6 border-2 border-red-200">
                 <h2 className="text-2xl font-black text-black flex items-center gap-2">
-                  <CreditCard className="h-6 w-6 text-red-600" />
+                  <ShoppingBag className="h-6 w-6 text-red-600" />
                   Order Summary
                 </h2>
               </div>
               
               <div className="space-y-5 mb-8">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-semibold">Subtotal</span>
+                  <span className="text-gray-600 font-semibold">Subtotal ({cartItems.length} items)</span>
                   <span className="font-black text-xl text-black">${subtotal.toFixed(2)}</span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-semibold">Shipping</span>
-                  <span className="font-black text-xl">
-                    {shipping === 0 ? (
-                      <span className="text-green-600">FREE</span>
-                    ) : (
-                      <span className="text-black">${shipping.toFixed(2)}</span>
-                    )}
-                  </span>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-semibold">Tax (8%)</span>
-                  <span className="font-black text-xl text-black">${tax.toFixed(2)}</span>
                 </div>
                 
                 <div className="border-t-4 border-red-200 pt-5">
@@ -180,47 +181,41 @@ export function CartPage() {
                 </div>
               </div>
 
-              {shipping > 0 && (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-2xl p-5 mb-6 shadow-md">
-                  <div className="flex items-start gap-3">
-                    <Tag className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-black text-green-800 mb-1">Almost there!</p>
-                      <p className="text-sm text-green-700 font-semibold">
-                        Add ${(50 - subtotal).toFixed(2)} more to get FREE shipping!
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              <Link
-                href="/checkout"
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-black text-lg py-5 px-6 rounded-2xl transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105 mb-6"
+              {/* WhatsApp Checkout Button */}
+              <a
+                href={whatsappCheckoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-black text-lg py-5 px-6 rounded-2xl transition-all flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105 mb-4"
               >
-                <Lock className="h-6 w-6" />
-                Secure Checkout
-              </Link>
+                <MessageCircle className="h-6 w-6" />
+                Checkout via WhatsApp
+              </a>
+              
+              <p className="text-center text-sm text-gray-600 mb-6 font-medium">
+                <Phone className="inline h-4 w-4 mr-1" />
+                Or call us: +263 78 411 6938
+              </p>
               
               {/* Trust Badges */}
               <div className="space-y-3">
+                <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4 border-2 border-green-200">
+                  <div className="bg-green-600 p-2 rounded-lg">
+                    <MessageCircle className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-black text-black text-sm">WhatsApp Orders</p>
+                    <p className="text-xs text-gray-600">Quick & easy checkout</p>
+                  </div>
+                </div>
+                
                 <div className="flex items-center gap-3 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-4 border-2 border-blue-200">
                   <div className="bg-blue-600 p-2 rounded-lg">
                     <Shield className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">Secure Payment</p>
-                    <p className="text-xs text-gray-600">SSL encrypted</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-4 border-2 border-green-200">
-                  <div className="bg-green-600 p-2 rounded-lg">
-                    <Truck className="h-5 w-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-black text-black text-sm">Free Shipping</p>
-                    <p className="text-xs text-gray-600">On orders over $50</p>
+                    <p className="font-black text-black text-sm">Warranty Included</p>
+                    <p className="text-xs text-gray-600">All products covered</p>
                   </div>
                 </div>
                 
@@ -229,8 +224,8 @@ export function CartPage() {
                     <CheckCircle className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">30-Day Returns</p>
-                    <p className="text-xs text-gray-600">Money-back guarantee</p>
+                    <p className="font-black text-black text-sm">Quality Guaranteed</p>
+                    <p className="text-xs text-gray-600">Certified products</p>
                   </div>
                 </div>
                 
@@ -239,8 +234,8 @@ export function CartPage() {
                     <Award className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">Quality Guaranteed</p>
-                    <p className="text-xs text-gray-600">Premium products</p>
+                    <p className="font-black text-black text-sm">Harare Based</p>
+                    <p className="text-xs text-gray-600">Local support</p>
                   </div>
                 </div>
               </div>
