@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Truck, Shield, RotateCcw, Check, ChevronRight, Award, Zap } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Shield, RotateCcw, Check, ChevronRight, Award, Zap, MessageCircle, Phone } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
 import { getProductById } from '@/data/products';
 
@@ -235,15 +235,32 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
                 </div>
               </div>
 
+              {/* WhatsApp Order Button */}
+              <div className="mt-6">
+                <a
+                  href={`https://wa.me/263784116938?text=${encodeURIComponent(`Hi Sui Generis! I'm interested in ordering:\n\n*${product.name}*\nPrice: $${product.price}\nQuantity: ${quantity}\n\nPlease confirm availability and payment options.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-5 px-8 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-black text-lg rounded-2xl transition-all transform hover:scale-105 flex items-center justify-center shadow-xl gap-3"
+                >
+                  <MessageCircle className="h-6 w-6" />
+                  Order via WhatsApp
+                </a>
+                <p className="text-center text-sm text-gray-600 mt-2 font-medium">
+                  <Phone className="inline h-4 w-4 mr-1" />
+                  Or call us: +263 78 411 6938
+                </p>
+              </div>
+
               {/* Features */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-                <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
-                  <div className="bg-red-600 p-3 rounded-xl">
-                    <Truck className="h-6 w-6 text-white" />
+                <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-green-600 p-3 rounded-xl">
+                    <MessageCircle className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">Free Shipping</p>
-                    <p className="text-xs text-gray-600">Over $50</p>
+                    <p className="font-black text-black text-sm">WhatsApp Orders</p>
+                    <p className="text-xs text-gray-600">Quick & Easy</p>
                   </div>
                 </div>
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
@@ -251,17 +268,17 @@ export function ProductDetailPage({ productId }: ProductDetailPageProps) {
                     <Shield className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">2-Year Warranty</p>
+                    <p className="font-black text-black text-sm">Warranty Included</p>
                     <p className="text-xs text-gray-600">Full coverage</p>
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
-                  <div className="bg-green-600 p-3 rounded-xl">
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 rounded-2xl p-5 flex items-center gap-3 shadow-md hover:shadow-lg transition-shadow">
+                  <div className="bg-orange-600 p-3 rounded-xl">
                     <RotateCcw className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-black text-black text-sm">30-Day Returns</p>
-                    <p className="text-xs text-gray-600">Easy returns</p>
+                    <p className="font-black text-black text-sm">Quality Guaranteed</p>
+                    <p className="text-xs text-gray-600">Certified products</p>
                   </div>
                 </div>
               </div>
