@@ -288,37 +288,34 @@ export function OrdersManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Order #</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Customer</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Product</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Quantity</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Total</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Order #</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Customer</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Product</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Total</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Date</th>
+                  <th className="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredOrders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-bold text-gray-900">{order.order_number}</span>
+                    <td className="px-3 py-3">
+                      <span className="font-bold text-blue-600 text-sm">{order.order_number}</span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-900">{order.customer_name}</div>
-                      <div className="text-sm text-gray-500">{order.customer_email}</div>
+                    <td className="px-3 py-3">
+                      <div className="font-semibold text-gray-900 text-sm">{order.customer_name}</div>
+                      <div className="text-xs text-gray-500">{order.customer_phone || order.customer_email}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="font-medium text-gray-900">{order.product_name}</span>
+                    <td className="px-3 py-3">
+                      <div className="font-medium text-gray-900 text-sm truncate max-w-[120px]" title={order.product_name}>{order.product_name}</div>
+                      <div className="text-xs text-gray-500">Qty: {order.quantity}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="font-semibold text-gray-900">{order.quantity}</span>
+                    <td className="px-3 py-3">
+                      <span className="font-bold text-green-600 text-sm">${order.total_amount}</span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="font-bold text-gray-900">${order.total_amount}</span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    <td className="px-3 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                         order.status === 'delivered' ? 'bg-green-100 text-green-700' :
                         order.status === 'processing' ? 'bg-blue-100 text-blue-700' :
                         order.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
@@ -327,15 +324,17 @@ export function OrdersManagement() {
                         {order.status.toUpperCase()}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-gray-600">
-                        {new Date(order.created_at).toLocaleDateString()}
+                    <td className="px-3 py-3">
+                      <span className="text-xs font-medium text-gray-600">
+                        {new Date(order.created_at).toLocaleDateString('en-GB')}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <button className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-all">
-                        <Eye className="w-5 h-5" />
-                      </button>
+                    <td className="px-3 py-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <button className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-all" title="View Details">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -379,38 +379,20 @@ export function StockManagement() {
       <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+            <thead className="bg-gray-50 border-b-2 border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Date & Time
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Product
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Type
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Quantity
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Previous
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  New Stock
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  Reference
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
-                  User
-                </th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Date</th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Product</th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Type</th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Qty</th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Stock Change</th>
+                <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Reference</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredMovements.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-12 text-center">
+                  <td colSpan={6} className="px-6 py-12 text-center">
                     <Package className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                     <p className="text-gray-500 font-medium">No stock movements found</p>
                     <p className="text-gray-400 text-sm mt-1">Try adjusting your filters</p>
@@ -419,22 +401,18 @@ export function StockManagement() {
               ) : (
                 filteredMovements.map((movement) => (
                   <tr key={movement.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {new Date(movement.created_at).toLocaleString()}
+                    <td className="px-3 py-3 text-xs text-gray-600">
+                      {new Date(movement.created_at).toLocaleDateString('en-GB')}
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-gray-900">{movement.product_name}</div>
-                      <div className="text-sm text-gray-500">{movement.reason}</div>
+                    <td className="px-3 py-3">
+                      <div className="text-sm font-semibold text-gray-900 truncate max-w-[150px]" title={movement.product_name}>{movement.product_name}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        {getMovementIcon(movement.type)}
-                        <span className={`inline-flex px-3 py-1 text-xs font-bold rounded-full border ${getMovementBadge(movement.type)}`}>
-                          {movement.type.toUpperCase()}
-                        </span>
-                      </div>
+                    <td className="px-3 py-3">
+                      <span className={`inline-flex px-2 py-1 text-xs font-bold rounded-full ${getMovementBadge(movement.type)}`}>
+                        {movement.type.toUpperCase()}
+                      </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-3 py-3">
                       <span className={`text-sm font-bold ${
                         movement.type === 'issued' || movement.type === 'exchange' 
                           ? 'text-red-600' 
@@ -443,17 +421,15 @@ export function StockManagement() {
                         {movement.type === 'issued' || movement.type === 'exchange' ? '-' : '+'}{movement.quantity}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
-                      {movement.previous_stock}
+                    <td className="px-3 py-3">
+                      <div className="flex items-center gap-1 text-xs">
+                        <span className="text-gray-500">{movement.previous_stock}</span>
+                        <span className="text-gray-400">→</span>
+                        <span className="font-bold text-gray-900">{movement.new_stock}</span>
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
-                      {movement.new_stock}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-mono">
-                      {movement.reference}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {movement.user_name}
+                    <td className="px-3 py-3 text-xs text-gray-600 font-mono truncate max-w-[100px]" title={movement.reference}>
+                      {movement.reference || '-'}
                     </td>
                   </tr>
                 ))
