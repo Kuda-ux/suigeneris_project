@@ -148,7 +148,7 @@ export function ProductManagement() {
     }
   };
 
-  const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors'];
+  const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors', 'Processors', 'Accessories'];
 
   // Fetch products on component mount
   useEffect(() => {
@@ -647,6 +647,8 @@ export function ProductManagement() {
                     <option value="Desktops">Desktops</option>
                     <option value="Smartphones">Smartphones</option>
                     <option value="Monitors">Monitors</option>
+                    <option value="Processors">Processors</option>
+                    <option value="Accessories">Accessories</option>
                   </select>
                 </div>
                 
@@ -882,6 +884,8 @@ export function ProductManagement() {
                     <option value="Desktops">Desktops</option>
                     <option value="Smartphones">Smartphones</option>
                     <option value="Monitors">Monitors</option>
+                    <option value="Processors">Processors</option>
+                    <option value="Accessories">Accessories</option>
                   </select>
                 </div>
                 

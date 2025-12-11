@@ -19,6 +19,9 @@ const navigation = [
       { name: 'Laptops', href: '/products?category=Laptops' },
       { name: 'Desktops', href: '/products?category=Desktops' },
       { name: 'Smartphones', href: '/products?category=Smartphones' },
+      { name: 'Monitors', href: '/products?category=Monitors' },
+      { name: 'Processors', href: '/products?category=Processors' },
+      { name: 'Accessories', href: '/products?category=Accessories' },
     ]
   },
   { name: 'IT Solutions', href: '/it-solutions' },
