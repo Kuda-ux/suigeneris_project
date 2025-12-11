@@ -79,37 +79,18 @@ export function AdminDashboard() {
   };
 
   useEffect(() => {
-    // Debug logging
-    console.log('Admin Dashboard - Auth State:', {
-      loading,
-      user: user ? 'Present' : 'None',
-      userProfile,
-      isAdmin: userProfile?.is_admin
-    });
-
     setDebugInfo(`Loading: ${loading}, User: ${user ? 'Yes' : 'No'}, Profile: ${userProfile ? 'Yes' : 'No'}, Admin: ${userProfile?.is_admin}`);
 
-    // Check if user is authenticated and is admin
-    if (!loading) {
-      if (!user) {
-        console.log('No user found, redirecting to home');
-        router.push('/');
-        return;
-      }
-      
-      if (!userProfile) {
-        console.log('User profile not loaded yet');
-        return;
-      }
-      
-      if (!userProfile?.is_admin) {
-        console.log('User is not admin, redirecting');
-        alert('Access Denied: Admin privileges required. Please contact support.');
-        router.push('/');
-        return;
-      }
-      
-      console.log('Admin access granted!');
+    // Only redirect if we're sure there's no user (not loading)
+    if (!loading && !user) {
+      router.push('/');
+      return;
+    }
+    
+    // If profile loaded and user is not admin, redirect
+    if (userProfile && !userProfile.is_admin) {
+      alert('Access Denied: Admin privileges required.');
+      router.push('/');
     }
   }, [user, userProfile, loading, router]);
 
@@ -118,25 +99,25 @@ export function AdminDashboard() {
     router.push('/');
   };
 
-  // Show loading state
-  if (loading || !userProfile) {
+  // Show loading state only during initial auth check
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center max-w-md">
           <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-red-600 mx-auto mb-4"></div>
           <p className="text-gray-600 font-semibold mb-2">Loading Admin Dashboard...</p>
-          <p className="text-xs text-gray-500">{debugInfo}</p>
-          {!loading && !userProfile && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">Profile is taking longer than expected to load.</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="mt-2 px-4 py-2 bg-yellow-600 text-white rounded-lg text-sm hover:bg-yellow-700"
-              >
-                Refresh Page
-              </button>
-            </div>
-          )}
+        </div>
+      </div>
+    );
+  }
+  
+  // Show brief loading while profile loads (user is authenticated)
+  if (user && !userProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-4 border-red-600 mx-auto mb-3"></div>
+          <p className="text-gray-600 font-medium">Verifying admin access...</p>
         </div>
       </div>
     );

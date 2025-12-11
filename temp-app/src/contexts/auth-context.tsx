@@ -36,132 +36,114 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const router = useRouter();
 
-  // Fetch user profile from database
-  const fetchUserProfile = async (userId: string) => {
+  // Fetch user profile from database - optimized for speed
+  const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
     try {
-      console.log('Fetching user profile for:', userId);
       const { data, error } = await supabase
         .from('users')
-        .select('*')
+        .select('id, email, full_name, avatar_url, is_admin, created_at, updated_at')
         .eq('id', userId)
         .single();
 
       if (error) {
         console.error('Error fetching user profile:', error);
-        throw error;
+        return null;
       }
       
-      console.log('User profile fetched:', data);
-      setUserProfile(data as any);
+      return data as UserProfile;
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      // Set null profile so loading can complete
-      setUserProfile(null);
+      return null;
     }
   };
 
-  // Create or update user profile
+  // Create or update user profile - optimized with single query using upsert
   const upsertUserProfile = async (user: User) => {
     try {
-      console.log('Upserting user profile for:', user.id);
+      // Single optimized query - try to fetch first (most common case)
+      const profile = await fetchUserProfile(user.id);
       
-      // First check if user exists
-      const { data: existingUser, error: fetchError } = await supabase
+      if (profile) {
+        setUserProfile(profile);
+        return;
+      }
+      
+      // User doesn't exist, create new profile with upsert
+      const { data: newUser, error: insertError } = await supabase
         .from('users')
-        .select('*')
-        .eq('id', user.id)
-        .maybeSingle(); // Use maybeSingle() instead of single() to avoid errors when not found
+        .upsert({
+          id: user.id,
+          email: user.email!,
+          full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+          avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
+          is_admin: false,
+          role: 'customer',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'id' })
+        .select('id, email, full_name, avatar_url, is_admin, created_at, updated_at')
+        .single();
 
-      if (existingUser) {
-        console.log('User exists, fetching profile');
-        // User exists, just fetch the profile (don't update to preserve is_admin)
-        setUserProfile(existingUser as any);
-      } else if (fetchError) {
-        console.error('Error checking user existence:', fetchError);
-        // If there's an error, set profile to null so loading completes
+      if (insertError) {
+        console.error('Error upserting user:', insertError);
         setUserProfile(null);
       } else {
-        console.log('User does not exist, creating new profile');
-        // User doesn't exist, create new profile
-        const { data: newUser, error: insertError } = await (supabase as any)
-          .from('users')
-          .insert({
-            id: user.id,
-            email: user.email!,
-            full_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
-            avatar_url: user.user_metadata?.avatar_url || user.user_metadata?.picture || null,
-            is_admin: false,
-            role: 'customer',
-            password_hash: null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          })
-          .select()
-          .single();
-
-        if (insertError) {
-          console.error('Error inserting user:', insertError);
-          // Try to fetch anyway in case of race condition
-          await fetchUserProfile(user.id);
-        } else {
-          console.log('New user created:', newUser);
-          setUserProfile(newUser as any);
-        }
+        setUserProfile(newUser as UserProfile);
       }
     } catch (error) {
       console.error('Error upserting user profile:', error);
-      // Set profile to null so loading completes
       setUserProfile(null);
     }
   };
 
   useEffect(() => {
-    // Set a shorter timeout to prevent infinite loading
-    const loadingTimeout = setTimeout(() => {
-      if (loading) {
-        console.warn('Loading timeout reached, forcing loading to complete');
+    let isMounted = true;
+    
+    // Get initial session - optimized for speed
+    const initAuth = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!isMounted) return;
+        
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Load profile in parallel, don't block
+          upsertUserProfile(session.user);
+        } else {
+          setUserProfile(null);
+        }
+        
+        // Set loading false immediately after session check
         setLoading(false);
+      } catch (error) {
+        console.error('Auth init error:', error);
+        if (isMounted) setLoading(false);
       }
-    }, 3000); // Reduced to 3 second timeout for faster loading
-
-    // Get initial session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        // Use Promise.race to timeout profile loading after 2 seconds
-        const profilePromise = upsertUserProfile(session.user);
-        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000));
-        await Promise.race([profilePromise, timeoutPromise]);
-      } else {
-        setUserProfile(null);
-      }
-      setLoading(false);
-      clearTimeout(loadingTimeout);
-    });
+    };
+    
+    initAuth();
 
     // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!isMounted) return;
+      
       setSession(session);
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        // Use Promise.race to timeout profile loading after 2 seconds
-        const profilePromise = upsertUserProfile(session.user);
-        const timeoutPromise = new Promise((resolve) => setTimeout(resolve, 2000));
-        await Promise.race([profilePromise, timeoutPromise]);
+        // Load profile without blocking
+        upsertUserProfile(session.user);
       } else {
         setUserProfile(null);
       }
-      
-      setLoading(false);
     });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
-      clearTimeout(loadingTimeout);
     };
   }, []);
 
