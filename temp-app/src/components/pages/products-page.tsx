@@ -24,6 +24,9 @@ interface Product {
   condition?: string;
   badge?: string;
   originalPrice?: number;
+  specifications?: Record<string, string>;
+  features?: string[];
+  warranty?: boolean;
 }
 
 const categories = ['All', 'Laptops', 'Smartphones', 'Monitors', 'Desktops', 'Processors', 'Accessories'];
