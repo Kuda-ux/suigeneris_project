@@ -39,7 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Fetch user profile from database - optimized for speed
   const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
     try {
-      const { data, error } = await supabase
+      // Cast to any to bypass strict Supabase types (table schema not in generated types)
+      const { data, error } = await (supabase as any)
         .from('users')
         .select('id, email, full_name, avatar_url, is_admin, created_at, updated_at')
         .eq('id', userId)
@@ -69,7 +70,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       
       // User doesn't exist, create new profile with insert
-      const { data: newUser, error: insertError } = await supabase
+      // Cast to any to bypass strict Supabase types (table schema not in generated types)
+      const { data: newUser, error: insertError } = await (supabase as any)
         .from('users')
         .insert({
           id: user.id,
