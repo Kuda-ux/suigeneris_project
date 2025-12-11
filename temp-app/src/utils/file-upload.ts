@@ -84,14 +84,12 @@ export async function uploadLoanDocuments(
   files: {
     national_id?: File | null;
     payslip?: File | null;
-    bank_statement?: File | null;
     proof_of_residence?: File | null;
   },
   applicationId: string
 ): Promise<{
   national_id_document_url?: string;
   payslip_document_url?: string;
-  bank_statement_document_url?: string;
   proof_of_residence_document_url?: string;
 }> {
   const urls: any = {};
@@ -107,12 +105,6 @@ export async function uploadLoanDocuments(
     if (files.payslip) {
       const result = await uploadFile(files.payslip, applicationId, 'payslip');
       if (result) urls.payslip_document_url = result.url;
-    }
-
-    // Upload bank statement
-    if (files.bank_statement) {
-      const result = await uploadFile(files.bank_statement, applicationId, 'bank_statement');
-      if (result) urls.bank_statement_document_url = result.url;
     }
 
     // Upload proof of residence

@@ -215,32 +215,43 @@ export function CivilServantDetailModal({ application, onClose, onUpdateStatus }
               {[
                 { label: 'National ID Document', field: 'national_id_document_url' },
                 { label: 'Recent Payslip', field: 'payslip_document_url' },
-                { label: 'Bank Statement', field: 'bank_statement_document_url' },
                 { label: 'Proof of Residence', field: 'proof_of_residence_document_url' }
-              ].map((doc) => (
-                <div key={doc.field} className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <FileText className="w-4 h-4 text-gray-500" />
-                        <span className="text-xs font-semibold text-gray-600">{doc.label}</span>
+              ].map((doc) => {
+                // Extract file extension from URL
+                const url = application[doc.field];
+                const getFileExtension = (fileUrl: string) => {
+                  if (!fileUrl) return 'pdf';
+                  const parts = fileUrl.split('.');
+                  const ext = parts[parts.length - 1].split('?')[0].toLowerCase();
+                  return ['pdf', 'jpg', 'jpeg', 'png'].includes(ext) ? ext : 'pdf';
+                };
+                const fileExt = getFileExtension(url);
+                
+                return (
+                  <div key={doc.field} className="bg-gray-50 rounded-xl p-4 border-2 border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <FileText className="w-4 h-4 text-gray-500" />
+                          <span className="text-xs font-semibold text-gray-600">{doc.label}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 font-medium">
+                          {url ? `✅ Available (${fileExt.toUpperCase()})` : '❌ Not uploaded'}
+                        </p>
                       </div>
-                      <p className="text-xs text-gray-500 font-medium">
-                        {application[doc.field] ? '✅ Available' : '❌ Not uploaded'}
-                      </p>
+                      {url && (
+                        <button
+                          onClick={() => handleDownloadDocument(url, `${doc.label.replace(/\s+/g, '_')}_${application.application_number}.${fileExt}`)}
+                          className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-all"
+                          title="Download Document"
+                        >
+                          <FileDown className="w-5 h-5" />
+                        </button>
+                      )}
                     </div>
-                    {application[doc.field] && (
-                      <button
-                        onClick={() => handleDownloadDocument(application[doc.field], `${doc.label}_${application.application_number}.pdf`)}
-                        className="p-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-all"
-                        title="Download Document"
-                      >
-                        <FileDown className="w-5 h-5" />
-                      </button>
-                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

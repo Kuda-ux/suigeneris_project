@@ -54,7 +54,6 @@ export function LoanApplicationForm() {
     // Documents
     national_id_document: null as File | null,
     payslip_document: null as File | null,
-    bank_statement_document: null as File | null,
     proof_of_residence_document: null as File | null,
     
     // Consent
@@ -89,7 +88,6 @@ export function LoanApplicationForm() {
         // Don't save file objects, only metadata
         national_id_document: formData.national_id_document ? 'uploaded' : null,
         payslip_document: formData.payslip_document ? 'uploaded' : null,
-        bank_statement_document: formData.bank_statement_document ? 'uploaded' : null,
         proof_of_residence_document: formData.proof_of_residence_document ? 'uploaded' : null,
         savedAt: new Date().toISOString()
       };
@@ -258,7 +256,6 @@ export function LoanApplicationForm() {
         {
           national_id: formData.national_id_document,
           payslip: formData.payslip_document,
-          bank_statement: formData.bank_statement_document,
           proof_of_residence: formData.proof_of_residence_document,
         },
         tempAppId
@@ -274,7 +271,6 @@ export function LoanApplicationForm() {
           // Remove file objects, keep only URLs
           national_id_document: undefined,
           payslip_document: undefined,
-          bank_statement_document: undefined,
           proof_of_residence_document: undefined,
         })
       });
@@ -1205,7 +1201,6 @@ export function LoanApplicationForm() {
                 {[
                   { field: 'national_id_document', label: 'National ID Copy', icon: '🪪', desc: 'Clear photo or scan of your ID' },
                   { field: 'payslip_document', label: 'Recent Payslip', icon: '💰', desc: 'Latest salary slip from your employer' },
-                  { field: 'bank_statement_document', label: 'Bank Statement', icon: '🏦', desc: 'Last 3 months statement' },
                   { field: 'proof_of_residence_document', label: 'Proof of Residence', icon: '🏠', desc: 'Utility bill or rental agreement' }
                 ].map((doc) => (
                   <div key={doc.field} className="border-3 border-gray-300 rounded-xl p-5 hover:border-blue-400 transition-all bg-white">
