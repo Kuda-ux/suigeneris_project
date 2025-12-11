@@ -1,9 +1,15 @@
 import { Resend } from 'resend';
 
 // Initialize Resend only if API key is available
-const resend = process.env.RESEND_API_KEY 
-  ? new Resend(process.env.RESEND_API_KEY)
-  : null;
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
+
+// Log initialization status (helps with debugging)
+if (!resend) {
+  console.warn('⚠️ RESEND_API_KEY not found. Email notifications are DISABLED.');
+} else {
+  console.log('✅ Resend email service initialized');
+}
 
 interface ApplicationConfirmationData {
   email: string;
@@ -211,22 +217,31 @@ export async function sendApplicationConfirmationEmail(data: ApplicationConfirma
 </html>
     `;
 
+    // Use verified domain or Resend's test domain
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis Technologies <onboarding@resend.dev>';
+    
+    console.log(`📧 Sending confirmation email to: ${email}`);
+    console.log(`📧 From: ${fromEmail}`);
+    
     const { data: result, error } = await resend.emails.send({
-      from: 'Sui Generis Technologies <noreply@suigeneriszim.co.zw>',
+      from: fromEmail,
       to: [email],
       subject: `Application Received - ${application_number}`,
       html: emailHtml,
     });
 
     if (error) {
-      console.error('Error sending confirmation email:', error);
+      console.error('❌ Error sending confirmation email:', error);
+      console.error('Error details:', JSON.stringify(error, null, 2));
       throw error;
     }
 
-    console.log('Confirmation email sent successfully:', result);
+    console.log('✅ Confirmation email sent successfully:', result);
     return result;
-  } catch (error) {
-    console.error('Failed to send confirmation email:', error);
+  } catch (error: any) {
+    console.error('❌ Failed to send confirmation email:', error);
+    console.error('Error message:', error?.message);
+    console.error('Error stack:', error?.stack);
     throw error;
   }
 }
@@ -402,22 +417,27 @@ export async function sendApplicationStatusUpdateEmail(data: ApplicationStatusUp
 </html>
     `;
 
+    // Use verified domain or Resend's test domain
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis Technologies <onboarding@resend.dev>';
+    
+    console.log(`📧 Sending status update email to: ${email}`);
+    
     const { data: result, error } = await resend.emails.send({
-      from: 'Sui Generis Technologies <noreply@suigeneriszim.co.zw>',
+      from: fromEmail,
       to: [email],
       subject: `Application ${statusText} - ${application_number}`,
       html: emailHtml,
     });
 
     if (error) {
-      console.error('Error sending status update email:', error);
+      console.error('❌ Error sending status update email:', error);
       throw error;
     }
 
-    console.log('Status update email sent successfully:', result);
+    console.log('✅ Status update email sent successfully:', result);
     return result;
-  } catch (error) {
-    console.error('Failed to send status update email:', error);
+  } catch (error: any) {
+    console.error('❌ Failed to send status update email:', error?.message);
     throw error;
   }
 }
@@ -496,22 +516,28 @@ export async function sendAdminNotificationEmail(data: ApplicationConfirmationDa
 </html>
     `;
 
+    // Use verified domain or Resend's test domain
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis System <onboarding@resend.dev>';
+    const adminEmail = process.env.ADMIN_EMAIL || 'info@suigeneriszim.co.zw';
+    
+    console.log(`📧 Sending admin notification to: ${adminEmail}`);
+    
     const { data: result, error } = await resend.emails.send({
-      from: 'Sui Generis System <system@suigeneriszim.co.zw>',
-      to: ['info@suigeneriszim.co.zw'], // Admin email
+      from: fromEmail,
+      to: [adminEmail],
       subject: `🔔 New Loan Application - ${application_number}`,
       html: emailHtml,
     });
 
     if (error) {
-      console.error('Error sending admin notification:', error);
+      console.error('❌ Error sending admin notification:', error);
       throw error;
     }
 
-    console.log('Admin notification sent successfully:', result);
+    console.log('✅ Admin notification sent successfully:', result);
     return result;
-  } catch (error) {
-    console.error('Failed to send admin notification:', error);
+  } catch (error: any) {
+    console.error('❌ Failed to send admin notification:', error?.message);
     throw error;
   }
 }
