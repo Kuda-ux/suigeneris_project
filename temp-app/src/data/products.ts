@@ -19,24 +19,24 @@ export interface Product {
   condition?: string;
 }
 
-// High-quality product images
+// High-quality product images - Clear electronics photos
 const images = {
   laptop: {
-    hp: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&q=80",
-    dell: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=800&h=800&fit=crop&q=80",
-    lenovo: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&h=800&fit=crop&q=80",
-    toshiba: "https://images.unsplash.com/photo-1602080858428-57174f9431cf?w=800&h=800&fit=crop&q=80",
+    hp: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&q=80",
+    dell: "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&h=800&fit=crop&q=80",
+    lenovo: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&h=800&fit=crop&q=80",
+    toshiba: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=800&fit=crop&q=80",
     microsoft: "https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=800&h=800&fit=crop&q=80",
-    acer: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&h=800&fit=crop&q=80",
+    acer: "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=800&h=800&fit=crop&q=80",
     apple: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=800&fit=crop&q=80"
   },
   phone: {
     samsung: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=800&h=800&fit=crop&q=80",
-    xiaomi: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&h=800&fit=crop&q=80"
+    xiaomi: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&h=800&fit=crop&q=80"
   },
   monitor: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&h=800&fit=crop&q=80",
-  processor: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=800&h=800&fit=crop&q=80",
-  desktop: "https://images.unsplash.com/photo-1593062096033-9a26b09da705?w=800&h=800&fit=crop&q=80",
+  processor: "https://images.unsplash.com/photo-1555617981-dac3880eac6e?w=800&h=800&fit=crop&q=80",
+  desktop: "https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=800&h=800&fit=crop&q=80",
   accessory: "https://images.unsplash.com/photo-1625723044792-44de16ccb4e9?w=800&h=800&fit=crop&q=80",
   headphone: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=800&fit=crop&q=80",
   cable: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=800&fit=crop&q=80",
