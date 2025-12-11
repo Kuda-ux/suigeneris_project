@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield, Save, RefreshCw, DollarSign, Boxes, Grid, List, Tag, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Plus, Edit, Trash2, Search, Filter, Eye, Package, AlertTriangle, TrendingUp, TrendingDown, X, Shield, Save, RefreshCw, DollarSign, Boxes, Grid, List, Tag, AlertCircle, Upload, Image as ImageIcon, Camera } from 'lucide-react';
+import Image from 'next/image';
 
 interface AdminProduct {
   id: string;
@@ -79,6 +80,73 @@ export function ProductManagement() {
     averagePrice: 0,
     totalStock: 0
   });
+  
+  // Image upload state
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Handle image file selection and upload
+  const handleImageUpload = async (file: File) => {
+    if (!file) return;
+    
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      setError('Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.');
+      return;
+    }
+    
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('File too large. Maximum size is 5MB.');
+      return;
+    }
+    
+    // Show preview immediately
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+    
+    // Upload to server
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'products');
+      
+      const response = await fetch('/api/admin/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to upload image');
+      }
+      
+      const data = await response.json();
+      setUploadedImageUrl(data.url);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload image');
+      setImagePreview(null);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+  
+  // Reset image state when modal closes
+  const resetImageState = () => {
+    setImagePreview(null);
+    setUploadedImageUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const categories = ['all', 'Laptops', 'Desktops', 'Smartphones', 'Monitors'];
 
@@ -155,7 +223,10 @@ export function ProductManagement() {
     setSubmitting(true);
     
     const formData = new FormData(e.currentTarget);
-    const imageUrl = formData.get('image') as string || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop';
+    // Use uploaded image URL, or fallback to URL input, or default image
+    const imageUrl = uploadedImageUrl || 
+                     formData.get('image') as string || 
+                     'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop';
     
     const productData = {
       name: formData.get('name') as string,
@@ -172,6 +243,7 @@ export function ProductManagement() {
       await createProduct(productData);
       await loadProducts();
       setShowAddModal(false);
+      resetImageState();
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to create product');
@@ -188,6 +260,11 @@ export function ProductManagement() {
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
     
+    // Use uploaded image URL, or fallback to URL input, or keep existing image
+    const imageUrl = uploadedImageUrl || 
+                     formData.get('image') as string || 
+                     selectedProduct.images?.[0] || '';
+    
     const productData = {
       name: formData.get('name') as string,
       sku: formData.get('sku') as string,
@@ -196,8 +273,8 @@ export function ProductManagement() {
       description: formData.get('description') as string,
       brand: formData.get('brand') as string,
       currentStock: parseInt(formData.get('currentStock') as string),
-      image: formData.get('image') as string,
-      images: [formData.get('image') as string],
+      image: imageUrl,
+      images: [imageUrl],
     };
 
     try {
@@ -205,6 +282,7 @@ export function ProductManagement() {
       await loadProducts();
       setShowEditModal(false);
       setSelectedProduct(null);
+      resetImageState();
       setError(null);
     } catch (err: any) {
       setError(err.message || 'Failed to update product');
@@ -641,15 +719,80 @@ export function ProductManagement() {
                 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-bold text-gray-700 mb-2">
-                    Image URL
+                    Product Image
                   </label>
-                  <input
-                    type="url"
-                    name="image"
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                    placeholder="https://example.com/product-image.jpg"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Leave empty to use default image</p>
+                  
+                  {/* Image Upload Area */}
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors">
+                    {imagePreview ? (
+                      <div className="relative">
+                        <img 
+                          src={imagePreview} 
+                          alt="Preview" 
+                          className="max-h-48 mx-auto rounded-lg shadow-md"
+                        />
+                        {uploadingImage && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                          </div>
+                        )}
+                        {uploadedImageUrl && (
+                          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">
+                            ✓ Uploaded
+                          </div>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            resetImageState();
+                          }}
+                          className="mt-3 text-red-600 hover:text-red-800 text-sm font-medium"
+                        >
+                          Remove Image
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Upload className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                        <p className="text-gray-600 font-medium mb-2">
+                          Drag & drop an image or click to upload
+                        </p>
+                        <p className="text-xs text-gray-500 mb-3">
+                          JPEG, PNG, WebP, GIF (max 5MB)
+                        </p>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleImageUpload(file);
+                          }}
+                          className="hidden"
+                          id="product-image-upload"
+                        />
+                        <label
+                          htmlFor="product-image-upload"
+                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors"
+                        >
+                          <Camera className="h-4 w-4 mr-2" />
+                          Choose Image
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Alternative: URL Input */}
+                  <div className="mt-4">
+                    <p className="text-xs text-gray-500 mb-2">Or enter an image URL:</p>
+                    <input
+                      type="url"
+                      name="image"
+                      disabled={!!uploadedImageUrl}
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder="https://example.com/product-image.jpg"
+                    />
+                  </div>
                 </div>
               </div>
               
