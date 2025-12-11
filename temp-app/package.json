@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "migrate": "npx tsx scripts/migrate-to-database.ts",
+    "backup": "node scripts/backup-database.js",
+    "restore": "node scripts/restore-database.js",
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",
@@ -41,7 +43,8 @@
     "resend": "^6.4.0",
     "tailwind-merge": "^3.3.1",
     "xlsx": "^0.18.5",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.8",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",
