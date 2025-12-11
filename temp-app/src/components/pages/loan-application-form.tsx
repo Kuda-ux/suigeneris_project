@@ -1125,34 +1125,49 @@ export function LoanApplicationForm() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setStep(3)}
-                  className="px-6 py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-lg"
-                >
-                  Back
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    saveFormData();
-                    alert('✅ Progress saved! You can return anytime to continue your application.');
-                  }}
-                  className="px-6 py-4 bg-orange-50 hover:bg-orange-100 text-orange-900 font-bold rounded-xl transition-all text-lg flex items-center justify-center gap-2 border-2 border-orange-200"
-                >
-                  <Save className="w-5 h-5" />
-                  Save & Exit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setStep(5)}
-                  disabled={!formData.product_id}
-                  className="px-6 py-5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-lg rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  Upload Documents
-                  <ArrowRight className="w-5 h-5" />
-                </button>
+              {/* Spacer for sticky nav */}
+              <div className="h-24 md:h-0"></div>
+
+              {/* Sticky Navigation Bar - Always visible at bottom */}
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 shadow-2xl p-3 md:p-4 z-50 md:relative md:border-0 md:shadow-none md:bg-transparent">
+                <div className="max-w-4xl mx-auto">
+                  <div className="grid grid-cols-3 gap-2 md:gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setStep(3)}
+                      className="px-3 md:px-6 py-3 md:py-4 bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold rounded-xl transition-all text-sm md:text-lg"
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        saveFormData();
+                        alert('✅ Progress saved! You can return anytime to continue your application.');
+                      }}
+                      className="px-3 md:px-6 py-3 md:py-4 bg-orange-50 hover:bg-orange-100 text-orange-900 font-bold rounded-xl transition-all text-sm md:text-lg flex items-center justify-center gap-1 md:gap-2 border-2 border-orange-200"
+                    >
+                      <Save className="w-4 h-4 md:w-5 md:h-5" />
+                      <span className="hidden sm:inline">Save</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setStep(5)}
+                      disabled={!formData.product_id}
+                      className="px-3 md:px-6 py-3 md:py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-sm md:text-lg rounded-xl transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1 md:gap-2"
+                    >
+                      Next →
+                    </button>
+                  </div>
+                  {/* Selected product indicator */}
+                  {formData.product_name && (
+                    <div className="mt-2 text-center">
+                      <p className="text-xs md:text-sm text-green-700 font-semibold bg-green-50 rounded-lg py-1 px-2 inline-block">
+                        ✓ Selected: {formData.product_name.substring(0, 30)}{formData.product_name.length > 30 ? '...' : ''}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
