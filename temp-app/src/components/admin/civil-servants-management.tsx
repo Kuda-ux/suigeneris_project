@@ -216,41 +216,34 @@ export function CivilServantsManagement() {
             <table className="w-full">
               <thead className="bg-gray-50 border-b-2 border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Application #</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Applicant</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Laptop</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Employer</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Salary</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Date</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-gray-900 uppercase tracking-wider">Actions</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">App #</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Applicant</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Product</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Employer</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Status</th>
+                  <th className="px-3 py-3 text-left text-xs font-bold text-gray-700 uppercase">Date</th>
+                  <th className="px-3 py-3 text-center text-xs font-bold text-gray-700 uppercase">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredApplications.map((app) => (
                   <tr key={app.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-bold text-blue-600">{app.application_number}</span>
+                    <td className="px-3 py-3">
+                      <span className="font-bold text-blue-600 text-sm">{app.application_number}</span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-semibold text-gray-900">{app.full_name}</div>
-                      <div className="text-sm text-gray-500">{app.email}</div>
-                      <div className="text-sm text-gray-500">{app.national_id}</div>
+                    <td className="px-3 py-3">
+                      <div className="font-semibold text-gray-900 text-sm">{app.full_name}</div>
+                      <div className="text-xs text-gray-500">{app.phone || app.email}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-bold text-red-600">{app.product_name}</div>
-                      <div className="text-sm text-gray-500">${app.product_price}</div>
+                    <td className="px-3 py-3">
+                      <div className="font-semibold text-gray-900 text-sm truncate max-w-[120px]" title={app.product_name}>{app.product_name}</div>
+                      <div className="text-xs font-bold text-green-600">${app.product_price}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-gray-900">{app.employer}</div>
-                      <div className="text-sm text-gray-500">{app.job_title}</div>
+                    <td className="px-3 py-3">
+                      <div className="font-medium text-gray-900 text-sm truncate max-w-[100px]" title={app.employer}>{app.employer}</div>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="font-bold text-green-600">${app.net_salary}</div>
-                      <div className="text-xs text-gray-500">Net Salary</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                    <td className="px-3 py-3">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
                         app.status === 'approved' ? 'bg-green-100 text-green-700' :
                         app.status === 'rejected' ? 'bg-red-100 text-red-700' :
                         'bg-yellow-100 text-yellow-700'
@@ -258,22 +251,42 @@ export function CivilServantsManagement() {
                         {app.status?.toUpperCase() || 'PENDING'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-gray-600">
+                    <td className="px-3 py-3">
+                      <span className="text-xs font-medium text-gray-600">
                         {new Date(app.created_at).toLocaleDateString('en-GB')}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => {
-                          setSelectedApplication(app);
-                          setShowDetailModal(true);
-                        }}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-                        title="View Details"
-                      >
-                        <Eye className="w-5 h-5" />
-                      </button>
+                    <td className="px-3 py-3">
+                      <div className="flex items-center justify-center gap-1">
+                        <button
+                          onClick={() => {
+                            setSelectedApplication(app);
+                            setShowDetailModal(true);
+                          }}
+                          className="p-1.5 text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+                          title="View Details"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        {app.status === 'pending' && (
+                          <>
+                            <button
+                              onClick={() => handleUpdateStatus(app.id, 'approved')}
+                              className="p-1.5 text-green-600 hover:bg-green-100 rounded-lg transition-all"
+                              title="Approve"
+                            >
+                              <Check className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleUpdateStatus(app.id, 'rejected')}
+                              className="p-1.5 text-red-600 hover:bg-red-100 rounded-lg transition-all"
+                              title="Reject"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
