@@ -71,8 +71,10 @@ export async function POST(request: Request) {
         job_title: applicationData.job_title,
         employment_status: applicationData.employment_status,
         payroll_number: applicationData.payroll_number,
-        gross_salary: parseFloat(applicationData.gross_salary),
-        net_salary: parseFloat(applicationData.net_salary),
+        years_of_service: applicationData.years_of_service || null,
+        // Salary fields removed - set to 0 for backwards compatibility
+        gross_salary: 0,
+        net_salary: 0,
         bank_name: applicationData.bank_name,
         account_number: applicationData.account_number,
         product_id: applicationData.product_id ? parseInt(applicationData.product_id) : null,
@@ -82,7 +84,6 @@ export async function POST(request: Request) {
         // Store document URLs from Supabase Storage
         national_id_document_url: applicationData.national_id_document_url,
         payslip_document_url: applicationData.payslip_document_url,
-        bank_statement_document_url: applicationData.bank_statement_document_url,
         proof_of_residence_document_url: applicationData.proof_of_residence_document_url,
         data_sharing_consent: applicationData.data_sharing_consent,
         status: 'pending'
