@@ -12,14 +12,78 @@ import { Analytics } from '@vercel/analytics/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// SEO Metadata - World-Class Configuration (v0.1.3)
+// SEO Metadata - World-Class Configuration (v0.2.0) - AGGRESSIVE SEO
 const siteConfig = {
   name: 'Sui Generis Technologies Zimbabwe',
   shortName: 'Sui Generis Tech',
-  description: 'Zimbabwe\'s premier destination for brand new and certified refurbished laptops, desktops, and smartphones. Premium HP, Dell, Lenovo, and Samsung devices with warranty. Zero deposit laptop financing available for civil servants. Shop quality technology in Harare.',
+  description: 'Buy laptops in Zimbabwe with ZERO deposit financing for civil servants! Teachers, nurses, police, government workers - get HP, Dell, Lenovo laptops in Harare. Brand new & certified refurbished with warranty. Salary-based laptop loans available. Best laptop prices in Zimbabwe.',
   url: 'https://www.suigeneriszim.co.zw',
   ogImage: 'https://www.suigeneriszim.co.zw/logo.svg',
-  keywords: 'laptops Zimbabwe, laptops Harare, buy laptops Zimbabwe, brand new laptops Zimbabwe, refurbished laptops Harare, new laptops Harare, desktops Zimbabwe, computers Harare, smartphones Harare, HP laptops Zimbabwe, Dell laptops Harare, Lenovo laptops Zimbabwe, ThinkPad Zimbabwe, Samsung Galaxy Zimbabwe, laptop shop Harare, computer shop Harare, laptop financing Zimbabwe, zero deposit laptops, civil servant laptops Zimbabwe, government employee laptops, cheap laptops Zimbabwe, affordable laptops Harare, quality laptops Zimbabwe, certified refurbished laptops, brand new computers Zimbabwe, laptop deals Zimbabwe, laptop prices Harare, best laptop shop Zimbabwe, Sui Generis Technologies, tech shop Harare, electronics store Zimbabwe, laptop repair Harare, computer accessories Zimbabwe, laptop warranty Zimbabwe, buy laptop online Zimbabwe, laptop delivery Harare, laptop store near me, technology Zimbabwe, IT equipment Harare',
+  keywords: [
+    // Civil Servant Loan Keywords - HIGH PRIORITY
+    'civil servant laptop loan Zimbabwe',
+    'teacher laptop loan Zimbabwe',
+    'nurse laptop loan Zimbabwe',
+    'police laptop loan Zimbabwe',
+    'government employee laptop financing',
+    'zero deposit laptop Zimbabwe',
+    'salary based laptop loan Zimbabwe',
+    'laptop financing civil servants',
+    'SSB laptop loan Zimbabwe',
+    'ZIMRA employee laptop loan',
+    'ministry worker laptop loan',
+    'ZRP laptop financing',
+    'ZNA laptop loan',
+    'public sector laptop scheme Zimbabwe',
+    
+    // Product Keywords
+    'buy laptop Zimbabwe',
+    'laptops Harare',
+    'HP laptop Zimbabwe',
+    'Dell laptop Zimbabwe',
+    'Lenovo laptop Zimbabwe',
+    'ThinkPad Zimbabwe',
+    'laptop prices Zimbabwe',
+    'cheap laptops Zimbabwe',
+    'affordable laptops Harare',
+    'brand new laptops Zimbabwe',
+    'refurbished laptops Zimbabwe',
+    'certified refurbished laptops Harare',
+    'ex-UK laptops Zimbabwe',
+    
+    // Specific Models
+    'HP EliteBook Zimbabwe',
+    'HP ProBook Zimbabwe',
+    'Dell Latitude Zimbabwe',
+    'Dell Inspiron Zimbabwe',
+    'Lenovo ThinkPad T480 Zimbabwe',
+    'MacBook Zimbabwe',
+    
+    // Other Products
+    'desktops Zimbabwe',
+    'monitors Zimbabwe',
+    'smartphones Zimbabwe',
+    'Samsung phones Zimbabwe',
+    'computer accessories Zimbabwe',
+    
+    // Location Keywords
+    'laptop shop Harare',
+    'computer shop Zimbabwe',
+    'electronics store Harare',
+    'laptop store near me Zimbabwe',
+    'laptop delivery Harare',
+    
+    // Intent Keywords
+    'best laptop deals Zimbabwe',
+    'where to buy laptop Zimbabwe',
+    'laptop warranty Zimbabwe',
+    'laptop installment Zimbabwe',
+    'laptop hire purchase Zimbabwe',
+    
+    // Brand
+    'Sui Generis Technologies',
+    'Sui Generis laptops',
+  ].join(', '),
   author: 'Sui Generis Technologies',
   location: 'Harare, Zimbabwe',
   businessType: 'Electronics Store',
