@@ -458,7 +458,7 @@ export function LoanApplicationForm() {
               <Calculator className="w-7 h-7 text-purple-600" />
             </div>
             <h3 className="font-bold text-gray-900 mb-2 text-lg">Flexible Terms</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">Choose 2-24 months at only 5% flat interest</p>
+            <p className="text-sm text-gray-600 leading-relaxed">Choose 2-24 months at 5% interest per month</p>
           </div>
           <div className="bg-white rounded-xl p-6 shadow-md border border-gray-200 text-center">
             <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -760,8 +760,8 @@ export function LoanApplicationForm() {
                 <div className="mt-4 p-4 bg-white rounded-lg border border-green-300">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-bold text-gray-900">5% Flat Interest Rate</p>
-                      <p className="text-xs text-gray-600">Same low rate for all payment terms</p>
+                      <p className="text-sm font-bold text-gray-900">5% Interest Per Month</p>
+                      <p className="text-xs text-gray-600">Interest calculated monthly on principal</p>
                     </div>
                     <div className="text-right">
                       <p className="text-2xl font-black text-green-600">{formData.loan_term} months</p>
@@ -898,7 +898,7 @@ export function LoanApplicationForm() {
               <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-4 text-white">
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <div>
-                    <p className="font-bold text-lg">5% Flat Interest Only!</p>
+                    <p className="font-bold text-lg">5% Interest Per Month</p>
                     <p className="text-sm text-green-100">Simple calculation • No hidden fees</p>
                   </div>
                   <div className="text-right">
@@ -1098,7 +1098,7 @@ export function LoanApplicationForm() {
                               <span className="font-bold">${loanDetails.principal.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between">
-                              <span className="text-gray-600">Interest (5% flat):</span>
+                              <span className="text-gray-600">Interest (5%/month × {formData.loan_term}):</span>
                               <span className="font-bold text-green-600">+${loanDetails.totalInterest.toFixed(2)}</span>
                             </div>
                             <div className="flex justify-between pt-2 border-t-2 border-green-200">

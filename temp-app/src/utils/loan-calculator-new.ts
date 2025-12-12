@@ -1,11 +1,16 @@
 /**
  * Loan Calculator for Zimbabwe Civil Servants
- * Using 5% FLAT Interest Rate (2-24 months)
+ * Using 5% Interest Rate PER MONTH (2-24 months)
  * 
- * Flat Interest Calculation:
- * - Interest = Principal × 5% (flat, one-time)
+ * Monthly Interest Calculation:
+ * - Interest = Principal × 5% × Number of Months
  * - Total = Principal + Interest
  * - Monthly Payment = Total / Number of Months
+ * 
+ * Example: $300 laptop for 6 months
+ * - Interest = $300 × 5% × 6 = $90
+ * - Total = $300 + $90 = $390
+ * - Monthly = $390 / 6 = $65
  */
 
 export interface FlatLoanCalculation {
@@ -18,21 +23,21 @@ export interface FlatLoanCalculation {
 }
 
 /**
- * Calculate loan using 5% Flat Interest Rate
- * Simple calculation: Interest is 5% of principal (one-time)
+ * Calculate loan using 5% Interest Rate PER MONTH
+ * Interest = Principal × 5% × Number of Months
  */
 export function calculateFlatInterest(
   principal: number,
   months: number
 ): FlatLoanCalculation {
-  const interestRate = 5; // 5% flat
-  const totalInterest = principal * (interestRate / 100);
+  const monthlyInterestRate = 5; // 5% per month
+  const totalInterest = principal * (monthlyInterestRate / 100) * months;
   const totalAmount = principal + totalInterest;
   const monthlyPayment = totalAmount / months;
   
   return {
     principal,
-    interestRate,
+    interestRate: monthlyInterestRate,
     months,
     monthlyPayment,
     totalInterest,
@@ -57,12 +62,15 @@ export function checkLoanAffordability(monthlyPayment: number, netSalary: number
 
 /**
  * Calculate maximum product price based on salary and term
+ * With 5% per month interest: Total = Principal × (1 + 0.05 × months)
+ * So: Principal = Total / (1 + 0.05 × months)
  */
 export function calculateMaxProductPrice(netSalary: number, months: number): number {
   const maxMonthlyPayment = netSalary * 0.30;
-  // Reverse: Total = Monthly × Months, Principal = Total / 1.05
   const maxTotal = maxMonthlyPayment * months;
-  const maxPrincipal = maxTotal / 1.05;
+  // Reverse: Principal = Total / (1 + 0.05 × months)
+  const interestMultiplier = 1 + (0.05 * months);
+  const maxPrincipal = maxTotal / interestMultiplier;
   
   return Math.floor(maxPrincipal);
 }
