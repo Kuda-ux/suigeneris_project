@@ -41,8 +41,8 @@ const sortOptions = [
 export function ProductsPage() {
   const addItem = useCartStore((state) => state.addItem);
   const [addedToCart, setAddedToCart] = useState<number | null>(null);
-  const [allProducts, setAllProducts] = useState<Product[]>(staticProducts);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>(staticProducts);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -62,26 +62,49 @@ export function ProductsPage() {
           const dbProducts = result.data || result;
           if (dbProducts && dbProducts.length > 0) {
             // Map database products to match expected format
-            const mappedProducts: Product[] = dbProducts.map((p: any) => ({
-              id: p.id,
-              name: p.name,
-              price: p.price,
-              image: p.images?.[0] || p.image || '/placeholder-product.jpg',
-              images: p.images || [p.image],
-              category: p.category || 'Uncategorized',
-              brand: p.brand || 'Generic',
-              rating: p.rating || 4.5,
-              reviews: p.reviews || 0,
-              description: p.description,
-              inStock: p.in_stock ?? (p.stock_count > 0),
-            }));
+            // Use static product images as fallback to avoid broken/wrong images
+            const mappedProducts: Product[] = dbProducts.map((p: any) => {
+              // Find matching static product for fallback image
+              const staticProduct = staticProducts.find(sp => sp.id === p.id);
+              const fallbackImage = staticProduct?.image || 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&h=800&fit=crop&q=80';
+              
+              return {
+                id: p.id,
+                name: p.name,
+                price: p.price,
+                image: p.images?.[0] || p.image || fallbackImage,
+                images: p.images || [p.image || fallbackImage],
+                category: p.category || 'Uncategorized',
+                brand: p.brand || 'Generic',
+                rating: p.rating || 4.5,
+                reviews: p.reviews || 0,
+                description: p.description,
+                inStock: p.in_stock ?? (p.stock_count > 0),
+                condition: p.condition,
+                badge: p.badge,
+                originalPrice: p.original_price,
+                specifications: p.specifications,
+                features: p.features,
+                warranty: p.warranty,
+              };
+            });
             setAllProducts(mappedProducts);
             setFilteredProducts(mappedProducts);
+          } else {
+            // No products in database, use static products
+            setAllProducts(staticProducts);
+            setFilteredProducts(staticProducts);
           }
+        } else {
+          // API error, use static products
+          setAllProducts(staticProducts);
+          setFilteredProducts(staticProducts);
         }
       } catch (error) {
         console.error('Failed to fetch products from database, using static products:', error);
-        // Keep using static products as fallback
+        // Use static products as fallback
+        setAllProducts(staticProducts);
+        setFilteredProducts(staticProducts);
       } finally {
         setLoading(false);
       }
@@ -325,7 +348,13 @@ export function ProductsPage() {
 
           {/* Products Grid */}
           <div className="flex-1">
-            {filteredProducts.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-16">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-6"></div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Loading Products...</h3>
+                <p className="text-gray-600">Please wait while we fetch the latest products</p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-6xl mb-4">😔</div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">No products found</h3>
