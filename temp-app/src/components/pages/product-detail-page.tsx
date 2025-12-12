@@ -1,22 +1,63 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart, Share2, Minus, Plus, Shield, RotateCcw, Check, ChevronRight, Award, Zap, MessageCircle, Phone } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
-import { getProductById } from '@/data/products';
+import { getProductById, Product } from '@/data/products';
 
 interface ProductDetailPageProps {
   productId: string;
 }
 
 export function ProductDetailPage({ productId }: ProductDetailPageProps) {
-  const product = getProductById(productId);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const addItem = useCartStore((state) => state.addItem);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('description');
   const [addedToCart, setAddedToCart] = useState(false);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true);
+      try {
+        // First try to fetch from database API
+        const response = await fetch(`/api/products/${productId}`);
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          setProduct(result.data);
+        } else {
+          // Fallback to static products if not found in database
+          const staticProduct = getProductById(productId);
+          setProduct(staticProduct || null);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        // Fallback to static products on error
+        const staticProduct = getProductById(productId);
+        setProduct(staticProduct || null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-600 mx-auto mb-6"></div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Loading Product...</h3>
+          <p className="text-gray-600">Please wait</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
