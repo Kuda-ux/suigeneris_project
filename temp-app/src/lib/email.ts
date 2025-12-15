@@ -217,11 +217,13 @@ export async function sendApplicationConfirmationEmail(data: ApplicationConfirma
 </html>
     `;
 
-    // Use verified domain or Resend's test domain
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis Technologies <onboarding@resend.dev>';
+    // Require RESEND_FROM_EMAIL to be configured
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      throw new Error('RESEND_FROM_EMAIL is not configured in environment variables');
+    }
     
     console.log(`📧 Sending confirmation email to: ${email}`);
-    console.log(`📧 From: ${fromEmail}`);
     
     const { data: result, error } = await resend.emails.send({
       from: fromEmail,
@@ -417,8 +419,11 @@ export async function sendApplicationStatusUpdateEmail(data: ApplicationStatusUp
 </html>
     `;
 
-    // Use verified domain or Resend's test domain
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis Technologies <onboarding@resend.dev>';
+    // Require RESEND_FROM_EMAIL to be configured
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    if (!fromEmail) {
+      throw new Error('RESEND_FROM_EMAIL is not configured in environment variables');
+    }
     
     console.log(`📧 Sending status update email to: ${email}`);
     
@@ -516,9 +521,16 @@ export async function sendAdminNotificationEmail(data: ApplicationConfirmationDa
 </html>
     `;
 
-    // Use verified domain or Resend's test domain
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Sui Generis System <onboarding@resend.dev>';
-    const adminEmail = process.env.ADMIN_EMAIL || 'info@suigeneriszim.co.zw';
+    // Require RESEND_FROM_EMAIL and ADMIN_EMAIL to be configured
+    const fromEmail = process.env.RESEND_FROM_EMAIL;
+    const adminEmail = process.env.ADMIN_EMAIL;
+    
+    if (!fromEmail) {
+      throw new Error('RESEND_FROM_EMAIL is not configured in environment variables');
+    }
+    if (!adminEmail) {
+      throw new Error('ADMIN_EMAIL is not configured in environment variables');
+    }
     
     console.log(`📧 Sending admin notification to: ${adminEmail}`);
     
