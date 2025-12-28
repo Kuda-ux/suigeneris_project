@@ -1,4 +1,6 @@
 import { ProductsPage } from '@/components/pages/products-page';
+import { products } from '@/data/products';
+import { generateProductListSchema, generateCompactProductSchema } from '@/lib/product-schema';
 import { Metadata } from 'next';
 
 const siteUrl = 'https://www.suigeneriszim.co.zw';
@@ -18,14 +20,14 @@ export const metadata: Metadata = {
     'laptop prices Zimbabwe',
     'cheap laptops Zimbabwe',
     'affordable laptops Harare',
-    
+
     // Brand New vs Refurbished
     'brand new laptops Zimbabwe',
     'refurbished laptops Zimbabwe',
     'certified refurbished laptops Harare',
     'second hand laptops Zimbabwe',
     'ex-UK laptops Zimbabwe',
-    
+
     // Specific Products
     'HP EliteBook Zimbabwe',
     'HP ProBook Zimbabwe',
@@ -36,7 +38,7 @@ export const metadata: Metadata = {
     'gaming laptop Zimbabwe',
     'business laptop Zimbabwe',
     'student laptop Zimbabwe',
-    
+
     // Other Products
     'desktops Zimbabwe',
     'monitors Zimbabwe',
@@ -44,7 +46,7 @@ export const metadata: Metadata = {
     'Samsung phones Zimbabwe',
     'iPhone Zimbabwe',
     'computer accessories Zimbabwe',
-    
+
     // Location Keywords
     'laptop shop Harare CBD',
     'computer shop Zimbabwe',
@@ -52,14 +54,14 @@ export const metadata: Metadata = {
     'tech shop Zimbabwe',
     'laptop delivery Zimbabwe',
     'laptop store near me Harare',
-    
+
     // Intent Keywords
     'best laptop deals Zimbabwe',
     'laptop specials Zimbabwe',
     'laptop sale Zimbabwe',
     'where to buy laptop Zimbabwe',
     'laptop warranty Zimbabwe',
-    
+
     // Civil Servant Related
     'civil servant laptops Zimbabwe',
     'teacher laptops Zimbabwe',
@@ -108,51 +110,7 @@ export const metadata: Metadata = {
   },
 };
 
-// JSON-LD for Product Catalog
-function generateProductCatalogJsonLd() {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    '@id': `${siteUrl}/products#catalog`,
-    name: 'Laptops and Electronics Zimbabwe',
-    description: 'Browse our collection of laptops, desktops, monitors, and smartphones in Zimbabwe',
-    url: `${siteUrl}/products`,
-    numberOfItems: 200,
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Laptops',
-        url: `${siteUrl}/categories/laptops`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Desktops',
-        url: `${siteUrl}/categories/desktops`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Monitors',
-        url: `${siteUrl}/categories/monitors`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 4,
-        name: 'Smartphones',
-        url: `${siteUrl}/categories/smartphones`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 5,
-        name: 'Accessories',
-        url: `${siteUrl}/categories/accessories`,
-      },
-    ],
-  };
-}
-
+// Generate Local Business JSON-LD
 function generateLocalBusinessJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -197,24 +155,10 @@ function generateLocalBusinessJsonLd() {
       '@type': 'Country',
       name: 'Zimbabwe',
     },
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Laptops and Electronics',
-      itemListElement: [
-        {
-          '@type': 'OfferCatalog',
-          name: 'Laptops',
-          itemListElement: [
-            { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'HP Laptops' } },
-            { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Dell Laptops' } },
-            { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Lenovo Laptops' } },
-          ],
-        },
-      ],
-    },
   };
 }
 
+// Generate Breadcrumb JSON-LD
 function generateBreadcrumbJsonLd() {
   return {
     '@context': 'https://schema.org',
@@ -236,28 +180,64 @@ function generateBreadcrumbJsonLd() {
   };
 }
 
+// Convert static products to ProductData format for schema generator
+function getProductDataForSchema() {
+  // Take first 20 featured products for the listing page structured data
+  // This keeps the page size manageable while providing rich snippets
+  const featuredProducts = products
+    .filter(p => p.badge || p.inStock)
+    .slice(0, 20)
+    .map(p => ({
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      price: p.price,
+      originalPrice: p.originalPrice,
+      image: p.image,
+      images: p.images,
+      brand: p.brand,
+      category: p.category,
+      rating: p.rating,
+      reviews: p.reviews,
+      stockCount: p.stockCount,
+      inStock: p.inStock,
+      condition: p.condition,
+    }));
+
+  return featuredProducts;
+}
+
 export default function Products() {
+  const productDataList = getProductDataForSchema();
+
   return (
     <>
-      {/* JSON-LD Structured Data for SEO */}
+      {/* JSON-LD Structured Data for SEO - With VALID Product schemas including offers */}
+
+      {/* Product List with individual product schemas - FIXES Google error */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateProductCatalogJsonLd()),
+          __html: JSON.stringify(generateProductListSchema(productDataList, 'Laptops and Electronics Zimbabwe')),
         }}
       />
+
+      {/* Local Business for store info */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateLocalBusinessJsonLd()),
         }}
       />
+
+      {/* Breadcrumb navigation */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(generateBreadcrumbJsonLd()),
         }}
       />
+
       <ProductsPage />
     </>
   );

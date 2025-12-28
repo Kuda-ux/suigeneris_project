@@ -1,14 +1,14 @@
 import { ProductDetailPage } from '@/components/pages/product-detail-page';
 import { getProductById } from '@/data/products';
+import { generateProductSchema } from '@/lib/product-schema';
 import { Metadata } from 'next';
 
 const siteUrl = 'https://www.suigeneriszim.co.zw';
-const whatsappNumber = '+263784116938';
 
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const product = getProductById(params.id);
-  
+
   if (!product) {
     return {
       title: 'Product Not Found | Sui Generis Technologies Zimbabwe',
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   const productDescription = `Buy ${product.name} in Zimbabwe for $${product.price}. ${product.condition || 'Brand New'} ${product.brand} ${product.category}. ${product.description.slice(0, 150)}... Order via WhatsApp. Free warranty included.`;
   const productImage = product.images[0] || `${siteUrl}/logo.svg`;
   const productUrl = `${siteUrl}/products/${params.id}`;
-  
+
   // Generate keywords based on product
   const keywords = [
     product.name,
@@ -94,68 +94,6 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-// Generate JSON-LD structured data for the product
-function generateProductJsonLd(product: any) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    '@id': `${siteUrl}/products/${product.id}`,
-    name: product.name,
-    description: product.description,
-    image: product.images,
-    brand: {
-      '@type': 'Brand',
-      name: product.brand,
-    },
-    category: product.category,
-    sku: `SG-${product.id}`,
-    mpn: `SG-${product.id}`,
-    offers: {
-      '@type': 'Offer',
-      url: `${siteUrl}/products/${product.id}`,
-      priceCurrency: 'USD',
-      price: product.price,
-      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      availability: product.stockCount > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      itemCondition: product.condition === 'Refurbished' ? 'https://schema.org/RefurbishedCondition' : 'https://schema.org/NewCondition',
-      seller: {
-        '@type': 'Organization',
-        name: 'Sui Generis Technologies',
-        url: siteUrl,
-      },
-      shippingDetails: {
-        '@type': 'OfferShippingDetails',
-        shippingDestination: {
-          '@type': 'DefinedRegion',
-          addressCountry: 'ZW',
-        },
-        deliveryTime: {
-          '@type': 'ShippingDeliveryTime',
-          handlingTime: {
-            '@type': 'QuantitativeValue',
-            minValue: 0,
-            maxValue: 1,
-            unitCode: 'DAY',
-          },
-          transitTime: {
-            '@type': 'QuantitativeValue',
-            minValue: 1,
-            maxValue: 3,
-            unitCode: 'DAY',
-          },
-        },
-      },
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating,
-      reviewCount: product.reviews,
-      bestRating: 5,
-      worstRating: 1,
-    },
-  };
-}
-
 // Generate BreadcrumbList JSON-LD
 function generateBreadcrumbJsonLd(product: any) {
   return {
@@ -192,16 +130,36 @@ function generateBreadcrumbJsonLd(product: any) {
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const product = getProductById(params.id);
-  
+
+  // Convert product to ProductData format for schema generator
+  const productData = product ? {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: product.price,
+    originalPrice: product.originalPrice,
+    image: product.image,
+    images: product.images,
+    brand: product.brand,
+    category: product.category,
+    rating: product.rating,
+    reviews: product.reviews,
+    stockCount: product.stockCount,
+    inStock: product.inStock,
+    condition: product.condition,
+    specifications: product.specifications,
+    features: product.features,
+  } : null;
+
   return (
     <>
-      {/* JSON-LD Structured Data for SEO */}
-      {product && (
+      {/* JSON-LD Structured Data for SEO - Now with VALID offers and aggregateRating */}
+      {product && productData && (
         <>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(generateProductJsonLd(product)),
+              __html: JSON.stringify(generateProductSchema(productData)),
             }}
           />
           <script
