@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Send, CheckCircle, Mail, Gift } from 'lucide-react';
+import { Send, CheckCircle, Mail, Gift, Zap, Shield, Sparkles } from 'lucide-react';
 
 export function NewsletterSection() {
   const [email, setEmail] = useState('');
@@ -9,7 +9,6 @@ export function NewsletterSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle newsletter subscription
     setSubscribed(true);
     setTimeout(() => {
       setSubscribed(false);
@@ -18,54 +17,54 @@ export function NewsletterSection() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-red-600 to-red-700 relative overflow-hidden">
+    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-gray-900 via-gray-900 to-red-900 relative overflow-hidden">
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
-      
-      {/* Decorative Circles */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-      <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-      <div className="container mx-auto px-4 relative z-10">
+      {/* Decorative Elements */}
+      <div className="absolute -top-20 -right-20 w-80 h-80 bg-red-600/20 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-red-600/10 rounded-full blur-3xl" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          {/* Content */}
+          <div className="text-center mb-10">
             {/* Icon Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2 mb-6">
-              <Gift className="w-5 h-5 text-white" />
-              <span className="text-sm font-bold text-white">Exclusive Offers</span>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2 mb-6">
+              <Gift className="w-4 h-4 text-red-400" />
+              <span className="text-sm font-semibold text-white">Exclusive Offers</span>
             </div>
 
             {/* Heading */}
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4">
               Stay Updated
             </h2>
-            <p className="text-lg md:text-xl text-red-100 max-w-2xl mx-auto leading-relaxed">
-              Subscribe to our newsletter and get <span className="font-bold text-white">exclusive deals</span>, early access to new products, and tech tips delivered to your inbox.
+            <p className="text-base sm:text-lg text-gray-300 max-w-xl mx-auto">
+              Subscribe to get <span className="font-semibold text-white">exclusive deals</span>, early access to new products, and tech tips.
             </p>
           </div>
 
           {/* Newsletter Form */}
-          <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
-            <div className="flex flex-col sm:flex-row gap-4">
+          <form onSubmit={handleSubmit} className="max-w-lg mx-auto mb-10">
+            <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1 relative">
                 <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
+                  placeholder="Enter your email"
                   required
-                  className="w-full pl-12 pr-4 py-4 bg-white rounded-xl text-gray-900 placeholder-gray-500 font-medium focus:outline-none focus:ring-4 focus:ring-white/30 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-white rounded-xl text-gray-900 placeholder-gray-500 font-medium focus:outline-none focus:ring-4 focus:ring-red-500/30 transition-all"
                 />
               </div>
               <button
                 type="submit"
                 disabled={subscribed}
-                className={`px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center ${
-                  subscribed
+                className={`px-6 sm:px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center whitespace-nowrap ${subscribed
                     ? 'bg-green-500 text-white'
-                    : 'bg-white text-red-600 hover:bg-gray-50'
-                }`}
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                  }`}
               >
                 {subscribed ? (
                   <>
@@ -83,34 +82,34 @@ export function NewsletterSection() {
           </form>
 
           {/* Trust Indicators */}
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/80">
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-gray-300 mb-10">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-white" />
-              <span className="text-sm font-semibold">No spam, ever</span>
+              <Shield className="w-4 h-4 text-green-400" />
+              <span className="text-sm">No spam, ever</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-white" />
-              <span className="text-sm font-semibold">Unsubscribe anytime</span>
+              <Zap className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm">Exclusive deals only</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-white" />
-              <span className="text-sm font-semibold">Exclusive deals only</span>
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              <span className="text-sm">Unsubscribe anytime</span>
             </div>
           </div>
 
           {/* Stats */}
-          <div className="mt-12 grid grid-cols-3 gap-6 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-black text-white mb-2">500+</div>
-              <div className="text-sm text-red-100">Subscribers</div>
+          <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-md mx-auto">
+            <div className="text-center bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+              <div className="text-2xl sm:text-3xl font-black text-white mb-1">500+</div>
+              <div className="text-xs sm:text-sm text-gray-400">Subscribers</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-black text-white mb-2">Weekly</div>
-              <div className="text-sm text-red-100">Updates</div>
+            <div className="text-center bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+              <div className="text-2xl sm:text-3xl font-black text-white mb-1">Weekly</div>
+              <div className="text-xs sm:text-sm text-gray-400">Updates</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-black text-white mb-2">20%</div>
-              <div className="text-sm text-red-100">Avg. Savings</div>
+            <div className="text-center bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+              <div className="text-2xl sm:text-3xl font-black text-white mb-1">20%</div>
+              <div className="text-xs sm:text-sm text-gray-400">Avg. Savings</div>
             </div>
           </div>
         </div>
