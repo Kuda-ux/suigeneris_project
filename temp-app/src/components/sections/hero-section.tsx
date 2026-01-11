@@ -2,77 +2,70 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowRight, ShoppingBag, Shield, Award, CheckCircle, Star, ChevronLeft, ChevronRight, Tag, Zap, CreditCard, FileText, DollarSign, Truck, Headphones, RefreshCw } from 'lucide-react';
+import { ArrowRight, ShoppingBag, Shield, CheckCircle, Star, ChevronLeft, ChevronRight, Zap, CreditCard, FileText, DollarSign, Truck, Award, Clock } from 'lucide-react';
 
-// Featured product slides data
-const slides = [
+// Hero slides with different campaigns
+const heroSlides = [
   {
     id: 'loan',
-    type: 'loan',
+    type: 'promo',
+    badge: '🔥 Civil Servants Special',
     title: 'Zero Deposit Laptops',
-    subtitle: 'For Zimbabwe Civil Servants',
-    description: 'Get your laptop today with NO deposit required. Pay through salary deductions.',
-    features: [
-      'No upfront payment required',
-      'Convenient salary deductions',
-      'Full warranty included',
-      'Immediate delivery'
-    ],
+    subtitle: 'For Zimbabwe Government Employees',
+    description: 'Get your laptop today with NO deposit required. Pay conveniently through salary deductions with full warranty included.',
+    features: ['No upfront payment', 'Salary deductions', 'Full warranty', 'Immediate delivery'],
     cta: 'Apply Now',
     href: '/loan-application',
-    image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=600&fit=crop&crop=center&q=80',
+    bgImage: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=1920&h=1080&fit=crop&crop=center&q=90',
+    ctaIcon: FileText,
   },
   {
-    id: 1,
-    name: 'HP EliteBook 840 G5',
-    subtitle: 'Premium Business Laptop',
-    specs: 'Intel i7 • 16GB RAM • 512GB SSD',
-    image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=600&h=600&fit=crop&crop=center&q=80',
-    price: 750,
-    originalPrice: 1100,
-    discount: 32,
-    rating: 4.9,
-    reviews: 23,
-    badge: 'BESTSELLER',
-    type: 'product'
+    id: 'laptops',
+    type: 'category',
+    badge: '💻 Best Sellers',
+    title: 'Premium Laptops',
+    subtitle: 'HP • Dell • Lenovo • MacBook',
+    description: 'Certified refurbished and brand new laptops with up to 40% off retail prices. Every device includes warranty protection.',
+    features: ['Up to 40% savings', '6-month warranty', 'Quality tested', 'Same-day pickup'],
+    cta: 'Shop Laptops',
+    href: '/products?category=laptops',
+    bgImage: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=1920&h=1080&fit=crop&crop=center&q=90',
+    ctaIcon: ShoppingBag,
   },
   {
-    id: 2,
-    name: 'MacBook Pro M1',
-    subtitle: 'Professional Performance',
-    specs: 'M1 Chip • 8GB RAM • 256GB SSD',
-    image: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=600&h=600&fit=crop&crop=center&q=80',
-    price: 1200,
-    originalPrice: 1800,
-    discount: 33,
-    rating: 4.9,
-    reviews: 18,
-    badge: 'PREMIUM',
-    type: 'product'
+    id: 'phones',
+    type: 'category',
+    badge: '📱 New Arrivals',
+    title: 'Smartphones',
+    subtitle: 'Samsung • Xiaomi • iPhone',
+    description: 'Latest smartphones at unbeatable prices. From budget-friendly options to flagship devices, all with warranty.',
+    features: ['Factory unlocked', 'Original accessories', 'Warranty included', 'Trade-in available'],
+    cta: 'Shop Phones',
+    href: '/products?category=smartphones',
+    bgImage: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1920&h=1080&fit=crop&crop=center&q=90',
+    ctaIcon: ShoppingBag,
   },
   {
-    id: 3,
-    name: 'Samsung Galaxy A51',
-    subtitle: 'Unlocked Smartphone',
-    specs: '8GB RAM • 128GB Storage • 6.5″',
-    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=600&fit=crop&crop=center&q=80',
-    price: 280,
-    originalPrice: 450,
-    discount: 38,
-    rating: 4.7,
-    reviews: 31,
-    badge: 'HOT DEAL',
-    type: 'product'
-  }
+    id: 'deals',
+    type: 'promo',
+    badge: '⚡ Limited Time',
+    title: 'Flash Sale',
+    subtitle: 'Up to 50% Off Selected Items',
+    description: 'Don\'t miss out on incredible savings. Premium tech at the lowest prices of the year. Limited stock available.',
+    features: ['50% off select items', 'Free delivery', 'Extended warranty', 'Easy returns'],
+    cta: 'View Deals',
+    href: '/products',
+    bgImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1920&h=1080&fit=crop&crop=center&q=90',
+    ctaIcon: Zap,
+  },
 ];
 
-// Trust badges data
+// Trust badges
 const trustBadges = [
-  { icon: Shield, title: 'Secure Payments', desc: '100% Protected' },
-  { icon: Truck, title: 'Fast Delivery', desc: 'Nationwide' },
-  { icon: RefreshCw, title: 'Easy Returns', desc: '30-Day Policy' },
-  { icon: Headphones, title: '24/7 Support', desc: 'Always Here' },
+  { icon: Shield, label: 'Secure Payment' },
+  { icon: Truck, label: 'Fast Delivery' },
+  { icon: Award, label: '6-Month Warranty' },
+  { icon: Clock, label: '24/7 Support' },
 ];
 
 export function HeroSection() {
@@ -82,246 +75,201 @@ export function HeroSection() {
   const nextSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-    setTimeout(() => setIsAnimating(false), 500);
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    setTimeout(() => setIsAnimating(false), 600);
   };
 
   const prevSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    setTimeout(() => setIsAnimating(false), 500);
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setTimeout(() => setIsAnimating(false), 600);
   };
 
   // Auto-advance slides
   useEffect(() => {
-    const timer = setInterval(nextSlide, 6000);
+    const timer = setInterval(nextSlide, 7000);
     return () => clearInterval(timer);
   }, []);
 
-  const currentItem = slides[currentSlide];
+  const slide = heroSlides[currentSlide];
+  const CtaIcon = slide.ctaIcon;
 
   return (
-    <section className="relative min-h-[100vh] lg:min-h-[90vh] overflow-hidden">
-      {/* Modern Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-red-50/30">
-        {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-red-50/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-100/30 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2" />
-        <div className="absolute top-20 right-20 w-72 h-72 bg-red-100/20 rounded-full blur-3xl" />
+    <section className="relative h-[100vh] min-h-[600px] max-h-[900px] overflow-hidden">
+      {/* Background Images with Transition */}
+      {heroSlides.map((s, index) => (
+        <div
+          key={s.id}
+          className={`absolute inset-0 transition-opacity duration-700 ${index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+        >
+          <img
+            src={s.bgImage}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          {/* Dark Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        </div>
+      ))}
 
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:48px_48px]" />
-      </div>
-
-      <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-16 pb-20">
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh]">
-
-          {/* Left Content */}
-          <div className="order-2 lg:order-1 text-center lg:text-left">
-            {/* Animated Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-red-200 rounded-full px-4 py-2 mb-6 shadow-sm animate-fade-in">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
-              </span>
-              <span className="text-sm font-semibold text-gray-700">
-                {currentItem.type === 'loan' ? '🔥 Civil Servants Special' : `✨ ${(currentItem as any).badge || 'Featured'}`}
-              </span>
-            </div>
-
-            {/* Main Heading */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 mb-4 lg:mb-6 leading-[1.1] tracking-tight">
-              {currentItem.type === 'loan' ? (
-                <>
-                  <span className="block">Zero Deposit</span>
-                  <span className="block bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                    Laptops
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="block">{(currentItem as any).name?.split(' ').slice(0, 2).join(' ')}</span>
-                  <span className="block bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
-                    {(currentItem as any).name?.split(' ').slice(2).join(' ') || 'Premium'}
-                  </span>
-                </>
-              )}
-            </h1>
-
-            {/* Subtitle & Description */}
-            {currentItem.type === 'loan' ? (
-              <>
-                <p className="text-lg sm:text-xl text-gray-600 mb-6 max-w-lg mx-auto lg:mx-0">
-                  {currentItem.description}
-                </p>
-                <div className="grid grid-cols-2 gap-3 mb-8 max-w-lg mx-auto lg:mx-0">
-                  {currentItem.features?.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                      <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-                      <span className="font-medium">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-lg text-gray-500 mb-2">{(currentItem as any).specs}</p>
-                <div className="flex items-center gap-3 justify-center lg:justify-start mb-6">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className={`w-5 h-5 ${i < Math.floor((currentItem as any).rating || 5) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
-                    ))}
-                  </div>
-                  <span className="text-gray-600 font-medium">{(currentItem as any).rating} ({(currentItem as any).reviews} reviews)</span>
-                </div>
-                <div className="flex items-baseline gap-3 justify-center lg:justify-start mb-8">
-                  <span className="text-4xl sm:text-5xl font-black text-gray-900">${(currentItem as any).price}</span>
-                  {(currentItem as any).originalPrice && (
-                    <>
-                      <span className="text-xl text-gray-400 line-through">${(currentItem as any).originalPrice}</span>
-                      <span className="px-3 py-1 bg-red-100 text-red-700 text-sm font-bold rounded-full">
-                        Save ${(currentItem as any).originalPrice - (currentItem as any).price}
-                      </span>
-                    </>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link
-                href={currentItem.type === 'loan' ? '/loan-application' : `/products/${currentItem.id}`}
-                className="group px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-2xl transition-all duration-300 shadow-xl shadow-red-600/25 hover:shadow-2xl hover:shadow-red-600/30 transform hover:-translate-y-1 flex items-center justify-center gap-2"
-              >
-                {currentItem.type === 'loan' ? (
-                  <>
-                    <FileText className="w-5 h-5" />
-                    Apply Now
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="w-5 h-5" />
-                    Buy Now
-                  </>
-                )}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="/products"
-                className="px-8 py-4 bg-white border-2 border-gray-200 hover:border-red-300 text-gray-900 font-bold text-lg rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
-              >
-                <Zap className="w-5 h-5 text-red-600" />
-                Browse All Products
-              </Link>
-            </div>
+      {/* Content Container */}
+      <div className="relative z-10 h-full container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+        <div className="max-w-3xl">
+          {/* Animated Badge */}
+          <div
+            key={`badge-${currentSlide}`}
+            className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-4 sm:px-5 py-2 mb-4 sm:mb-6 animate-fade-in-up"
+          >
+            <span className="text-sm sm:text-base font-semibold text-white">
+              {slide.badge}
+            </span>
           </div>
 
-          {/* Right - Product Showcase */}
-          <div className="order-1 lg:order-2 relative">
-            <div className="relative">
-              {/* Decorative backdrop */}
-              <div className="absolute inset-0 bg-gradient-to-br from-red-100/50 to-red-50/30 rounded-[3rem] transform rotate-3 scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-tl from-gray-100/50 to-transparent rounded-[3rem] transform -rotate-2 scale-105" />
+          {/* Main Title */}
+          <h1
+            key={`title-${currentSlide}`}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-2 sm:mb-4 leading-[1.1] animate-fade-in-up animation-delay-100"
+          >
+            {slide.title}
+          </h1>
 
-              {/* Product Image Container */}
-              <div className="relative bg-white rounded-[2.5rem] p-6 sm:p-8 shadow-2xl border border-gray-100/50 backdrop-blur-sm overflow-hidden">
-                <div className="relative aspect-square max-w-md mx-auto">
-                  <img
-                    src={currentItem.image}
-                    alt={currentItem.type === 'loan' ? 'Laptop' : (currentItem as any).name}
-                    className="w-full h-full object-cover rounded-2xl transition-all duration-500"
-                  />
+          {/* Subtitle */}
+          <p
+            key={`subtitle-${currentSlide}`}
+            className="text-xl sm:text-2xl md:text-3xl font-bold text-red-400 mb-4 sm:mb-6 animate-fade-in-up animation-delay-150"
+          >
+            {slide.subtitle}
+          </p>
 
-                  {/* Floating Badges */}
-                  {currentItem.type !== 'loan' && (
-                    <>
-                      <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white text-sm font-bold rounded-full shadow-lg">
-                        -{(currentItem as any).discount}% OFF
-                      </div>
-                      <div className="absolute bottom-4 right-4 px-4 py-2 bg-white/90 backdrop-blur-sm text-gray-900 text-sm font-bold rounded-full shadow-lg border border-gray-100 flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-green-600" />
-                        Warranty Included
-                      </div>
-                    </>
-                  )}
-                  {currentItem.type === 'loan' && (
-                    <div className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white text-sm font-bold rounded-full shadow-lg flex items-center gap-2">
-                      <DollarSign className="w-4 h-4" />
-                      $0 Deposit
-                    </div>
-                  )}
-                </div>
+          {/* Description */}
+          <p
+            key={`desc-${currentSlide}`}
+            className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 max-w-2xl leading-relaxed animate-fade-in-up animation-delay-200"
+          >
+            {slide.description}
+          </p>
+
+          {/* Features Grid */}
+          <div
+            key={`features-${currentSlide}`}
+            className="grid grid-cols-2 gap-3 sm:gap-4 mb-8 sm:mb-10 animate-fade-in-up animation-delay-250"
+          >
+            {slide.features.map((feature, i) => (
+              <div key={i} className="flex items-center gap-2 text-white">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400 flex-shrink-0" />
+                <span className="text-sm sm:text-base font-medium">{feature}</span>
               </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Carousel Controls */}
-            <div className="flex items-center justify-center gap-4 mt-6">
-              <button
-                onClick={prevSlide}
-                disabled={isAnimating}
-                className="w-12 h-12 bg-white border-2 border-gray-200 hover:border-red-300 rounded-full flex items-center justify-center text-gray-600 hover:text-red-600 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
-                aria-label="Previous slide"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              <div className="flex items-center gap-2">
-                {slides.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`transition-all duration-300 rounded-full ${currentSlide === index
-                        ? 'w-8 h-3 bg-red-600'
-                        : 'w-3 h-3 bg-gray-300 hover:bg-red-300'
-                      }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
-
-              <button
-                onClick={nextSlide}
-                disabled={isAnimating}
-                className="w-12 h-12 bg-white border-2 border-gray-200 hover:border-red-300 rounded-full flex items-center justify-center text-gray-600 hover:text-red-600 transition-all shadow-lg hover:shadow-xl disabled:opacity-50"
-                aria-label="Next slide"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
+          {/* CTA Buttons */}
+          <div
+            key={`cta-${currentSlide}`}
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-fade-in-up animation-delay-300"
+          >
+            <Link
+              href={slide.href}
+              className="group px-6 sm:px-8 py-3 sm:py-4 bg-red-600 hover:bg-red-700 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 shadow-xl shadow-red-600/30 hover:shadow-2xl hover:shadow-red-600/40 flex items-center justify-center gap-2"
+            >
+              <CtaIcon className="w-5 h-5" />
+              {slide.cta}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              href="/products"
+              className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 text-white font-bold text-base sm:text-lg rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              Browse All Products
+            </Link>
           </div>
         </div>
 
-        {/* Trust Badges Strip */}
-        <div className="mt-12 lg:mt-16">
-          <div className="bg-white/60 backdrop-blur-sm border border-gray-100 rounded-2xl p-6 shadow-lg">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {trustBadges.map((badge, index) => (
-                <div key={index} className="flex items-center gap-4 justify-center md:justify-start">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-100 to-red-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                    <badge.icon className="w-6 h-6 text-red-600" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-sm">{badge.title}</div>
-                    <div className="text-xs text-gray-500">{badge.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Trust Badges - Bottom */}
+        <div className="absolute bottom-6 sm:bottom-10 left-4 right-4 sm:left-6 sm:right-6 lg:left-8 lg:right-8">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 sm:gap-8">
+            {trustBadges.map((badge, index) => (
+              <div key={index} className="flex items-center gap-2 text-white/80">
+                <badge.icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="text-xs sm:text-sm font-medium hidden sm:inline">{badge.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* CSS Animation */}
+      {/* Carousel Navigation */}
+      <div className="absolute right-4 sm:right-8 lg:right-12 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-3">
+        <button
+          onClick={prevSlide}
+          disabled={isAnimating}
+          className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center text-white transition-all disabled:opacity-50"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+        <button
+          onClick={nextSlide}
+          disabled={isAnimating}
+          className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 rounded-full flex items-center justify-center text-white transition-all disabled:opacity-50"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-6 sm:bottom-10 right-4 sm:right-8 lg:right-12 z-20 flex items-center gap-2">
+        {heroSlides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`transition-all duration-300 rounded-full ${currentSlide === index
+                ? 'w-8 h-2 bg-red-500'
+                : 'w-2 h-2 bg-white/50 hover:bg-white/80'
+              }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* CSS Animations */}
       <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out forwards;
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+        }
+        .animation-delay-100 {
+          animation-delay: 0.1s;
+          opacity: 0;
+        }
+        .animation-delay-150 {
+          animation-delay: 0.15s;
+          opacity: 0;
+        }
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+          opacity: 0;
+        }
+        .animation-delay-250 {
+          animation-delay: 0.25s;
+          opacity: 0;
+        }
+        .animation-delay-300 {
+          animation-delay: 0.3s;
+          opacity: 0;
         }
       `}</style>
     </section>
