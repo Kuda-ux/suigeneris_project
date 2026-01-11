@@ -5,7 +5,7 @@ import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin, Send, Arro
 const footerLinks = {
   quickLinks: [
     { name: 'Shop Products', href: '/products' },
-    { name: 'Civil Servants Loan', href: '/loan-applicat' },
+    { name: 'Civil Servants Loan', href: '/loan-application' },
     { name: 'Contact Us', href: '/contact' },
   ],
 };
