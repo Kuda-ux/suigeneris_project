@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageSquare, User, Building, Shield, Award, Zap } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageSquare, User, Building, Shield, Award, Zap, Loader2, AlertCircle } from 'lucide-react';
 
 export function ContactPage() {
   const [formData, setFormData] = useState({
@@ -11,15 +11,39 @@ export function ContactPage() {
     subject: '',
     message: ''
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-    }, 3000);
+    setStatus('loading');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'contact',
+          ...formData
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send message');
+      }
+
+      setStatus('success');
+      setTimeout(() => {
+        setStatus('idle');
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      }, 5000);
+    } catch (error: any) {
+      setStatus('error');
+      setErrorMessage(error.message || 'Something went wrong. Please try again.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -33,7 +57,7 @@ export function ContactPage() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:64px_64px]"></div>
         <div className="absolute -top-20 -right-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-        
+
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-6 py-2 mb-6">
@@ -58,8 +82,8 @@ export function ContactPage() {
               <Phone className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-4">Phone</h3>
-            <p className="text-lg text-gray-700 mb-2">+263 77 123 4567</p>
-            <p className="text-sm text-gray-500">Mon-Fri: 8:00 AM - 5:00 PM</p>
+            <a href="tel:+263784116938" className="text-lg text-red-600 hover:text-red-700 font-bold mb-2 block">+263 78 411 6938</a>
+            <p className="text-sm text-gray-500">Mon-Sat: 8:00 AM - 6:00 PM</p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 p-8 hover:shadow-2xl transition-all duration-300 hover:border-red-200 transform hover:-translate-y-2">
@@ -67,7 +91,7 @@ export function ContactPage() {
               <Mail className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-4">Email</h3>
-            <p className="text-lg text-gray-700 mb-2">info@suigeneris.co.zw</p>
+            <a href="mailto:info@suigeneriszim.co.zw" className="text-lg text-red-600 hover:text-red-700 font-bold mb-2 block">info@suigeneriszim.co.zw</a>
             <p className="text-sm text-gray-500">We reply within 24 hours</p>
           </div>
 
@@ -76,8 +100,8 @@ export function ContactPage() {
               <MapPin className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-4">Location</h3>
-            <p className="text-lg text-gray-700 mb-2">Harare, Zimbabwe</p>
-            <p className="text-sm text-gray-500">Visit us by appointment</p>
+            <p className="text-lg text-gray-700 mb-2">109 Leopold Takawira St</p>
+            <p className="text-sm text-gray-500">Harare, Zimbabwe</p>
           </div>
         </div>
 
@@ -88,19 +112,26 @@ export function ContactPage() {
             <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 p-8">
               <div className="mb-8">
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Send Us a Message</h2>
-                <p className="text-lg text-gray-600">Fill out the form below and we'll get back to you as soon as possible.</p>
+                <p className="text-lg text-gray-600">Fill out the form below and we'll get back to you within 24 hours.</p>
               </div>
 
-              {submitted ? (
+              {status === 'success' ? (
                 <div className="bg-green-50 border-2 border-green-200 rounded-2xl p-8 text-center">
                   <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <CheckCircle className="w-10 h-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-black text-gray-900 mb-2">Message Sent!</h3>
-                  <p className="text-lg text-gray-600">Thank you for contacting us. We'll respond within 24 hours.</p>
+                  <p className="text-lg text-gray-600">Thank you for contacting us. We'll respond to <span className="font-bold">{formData.email}</span> within 24 hours.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {status === 'error' && (
+                    <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-center gap-3">
+                      <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
+                      <p className="text-red-700 font-medium">{errorMessage}</p>
+                    </div>
+                  )}
+
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-bold text-gray-900 mb-2">
@@ -113,7 +144,8 @@ export function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium"
+                        disabled={status === 'loading'}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="John Doe"
                       />
                     </div>
@@ -128,7 +160,8 @@ export function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium"
+                        disabled={status === 'loading'}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="john@example.com"
                       />
                     </div>
@@ -145,7 +178,8 @@ export function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium"
+                        disabled={status === 'loading'}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="+263 77 123 4567"
                       />
                     </div>
@@ -159,14 +193,18 @@ export function ContactPage() {
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium"
+                        disabled={status === 'loading'}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="product">Product Question</option>
-                        <option value="warranty">Warranty Support</option>
-                        <option value="bulk">Bulk Order</option>
-                        <option value="other">Other</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Product Question">Product Question</option>
+                        <option value="IT Solutions">IT Solutions Inquiry</option>
+                        <option value="Civil Servants Loan">Civil Servants Loan</option>
+                        <option value="Warranty Support">Warranty Support</option>
+                        <option value="Bulk Order">Bulk Order</option>
+                        <option value="Partnership">Partnership Opportunity</option>
+                        <option value="Other">Other</option>
                       </select>
                     </div>
                   </div>
@@ -182,17 +220,28 @@ export function ContactPage() {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium resize-none"
+                      disabled={status === 'loading'}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none font-medium resize-none disabled:opacity-50 disabled:cursor-not-allowed"
                       placeholder="Tell us how we can help you..."
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full py-4 px-6 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center gap-2"
+                    disabled={status === 'loading'}
+                    className="w-full py-4 px-6 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    <Send className="w-5 h-5" />
-                    Send Message
+                    {status === 'loading' ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5" />
+                        Send Message
+                      </>
+                    )}
                   </button>
                 </form>
               )}
@@ -212,11 +261,11 @@ export function ContactPage() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <span className="font-semibold text-gray-700">Monday - Friday</span>
-                  <span className="font-bold text-gray-900">8:00 AM - 5:00 PM</span>
+                  <span className="font-bold text-gray-900">8:00 AM - 6:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-gray-100">
                   <span className="font-semibold text-gray-700">Saturday</span>
-                  <span className="font-bold text-gray-900">9:00 AM - 2:00 PM</span>
+                  <span className="font-bold text-gray-900">9:00 AM - 4:00 PM</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <span className="font-semibold text-gray-700">Sunday</span>

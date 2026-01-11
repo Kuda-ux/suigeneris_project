@@ -1,14 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Code, 
-  Smartphone, 
-  Globe, 
-  Database, 
-  Cloud, 
-  ShoppingCart, 
-  BarChart, 
+import { Mail, Phone, Loader2, AlertCircle, CheckCircle as CheckCircle2 } from 'lucide-react';
+import {
+  Code,
+  Smartphone,
+  Globe,
+  Database,
+  Cloud,
+  ShoppingCart,
+  BarChart,
   Lock,
   Zap,
   CheckCircle,
@@ -212,6 +213,53 @@ const process = [
 export function ITSolutionsPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Form state
+  const [formData, setFormData] = useState({
+    companyName: '',
+    name: '',
+    email: '',
+    phone: '',
+    serviceInterest: '',
+    budgetRange: '',
+    timeline: '',
+    projectDescription: ''
+  });
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormStatus('loading');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'consultation',
+          ...formData,
+          message: formData.projectDescription
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send request');
+      }
+
+      setFormStatus('success');
+    } catch (error: any) {
+      setFormStatus('error');
+      setErrorMessage(error.message || 'Something went wrong');
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   // Auto-advance carousel
   useEffect(() => {
     const timer = setInterval(() => {
@@ -235,7 +283,7 @@ export function ITSolutionsPage() {
       {/* Hero Section with Background Image */}
       <section className="relative min-h-screen lg:h-[900px] overflow-hidden">
         {/* Background Image with Overlay */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&h=1080&fit=crop&q=80)',
@@ -247,7 +295,7 @@ export function ITSolutionsPage() {
 
         <div className="container mx-auto px-4 h-full relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full py-20 lg:py-12">
-            
+
             {/* Left Content */}
             <div className="space-y-6 order-2 lg:order-1">
               {/* Badge */}
@@ -331,7 +379,7 @@ export function ITSolutionsPage() {
                       priority
                     />
                     <div className={`absolute inset-0 bg-gradient-to-t ${currentSlideData.color} opacity-40`}></div>
-                    
+
                     {/* Icon Badge on Image */}
                     <div className={`absolute bottom-4 left-4 w-16 h-16 bg-gradient-to-br ${currentSlideData.color} rounded-2xl flex items-center justify-center shadow-xl`}>
                       <currentSlideData.icon className="w-8 h-8 text-white" strokeWidth={2.5} />
@@ -394,11 +442,10 @@ export function ITSolutionsPage() {
                     <button
                       key={index}
                       onClick={() => setCurrentSlide(index)}
-                      className={`h-2 rounded-full transition-all ${
-                        index === currentSlide
+                      className={`h-2 rounded-full transition-all ${index === currentSlide
                           ? 'w-8 bg-gradient-to-r ' + currentSlideData.color
                           : 'w-2 bg-gray-300 hover:bg-gray-400'
-                      }`}
+                        }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
                   ))}
@@ -428,7 +475,7 @@ export function ITSolutionsPage() {
               Comprehensive technology solutions designed to transform your business and drive measurable results
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
               <div
@@ -437,7 +484,7 @@ export function ITSolutionsPage() {
               >
                 {/* Gradient Background on Hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
-                
+
                 {/* Icon Container - Vibrant and Visible */}
                 <div className="relative mb-6">
                   <div className={`w-20 h-20 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-500 relative`}>
@@ -446,17 +493,17 @@ export function ITSolutionsPage() {
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.color} rounded-2xl blur-xl opacity-50 group-hover:opacity-75 transition-opacity`}></div>
                   </div>
                 </div>
-                
+
                 {/* Title */}
                 <h3 className="text-xl font-black text-gray-900 mb-4 group-hover:text-gray-800 transition-colors">
                   {service.title}
                 </h3>
-                
+
                 {/* Description */}
                 <p className="text-gray-600 mb-6 leading-relaxed text-sm">
                   {service.description}
                 </p>
-                
+
                 {/* Features List */}
                 <ul className="space-y-3 mb-6">
                   {service.features.map((feature, idx) => (
@@ -468,14 +515,14 @@ export function ITSolutionsPage() {
                     </li>
                   ))}
                 </ul>
-                
+
                 {/* CTA Button */}
                 <button className={`relative w-full bg-gradient-to-r ${service.color} text-white py-4 rounded-xl font-black text-sm hover:shadow-2xl transition-all duration-300 overflow-hidden group/btn`}>
                   <span className="relative z-10">Learn More</span>
                   <div className="absolute inset-0 bg-white opacity-0 group-hover/btn:opacity-20 transition-opacity"></div>
                   <ArrowRight className="inline-block ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </button>
-                
+
                 {/* Corner Accent */}
                 <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${service.color} opacity-5 rounded-bl-full`}></div>
               </div>
@@ -495,7 +542,7 @@ export function ITSolutionsPage() {
               We deliver excellence in every project
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
               <div key={index} className="text-center">
@@ -525,7 +572,7 @@ export function ITSolutionsPage() {
               Cutting-edge tools and frameworks
             </p>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-6">
             {technologies.map((tech, index) => (
               <div
@@ -553,7 +600,7 @@ export function ITSolutionsPage() {
               A proven methodology for successful project delivery
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {process.map((item, index) => (
               <div key={index} className="relative">
@@ -579,30 +626,238 @@ export function ITSolutionsPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-red-600 to-red-700 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-black mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-red-100 mb-8 max-w-2xl mx-auto">
-            Let's discuss your project and create a solution that drives real results.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="bg-white text-red-600 px-10 py-5 rounded-2xl font-black text-lg hover:bg-gray-100 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 inline-flex items-center justify-center gap-2"
-            >
-              Get Free Consultation
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <a
-              href="tel:+263"
-              className="bg-white/10 backdrop-blur-md border-2 border-white/30 text-white px-10 py-5 rounded-2xl font-black text-lg hover:bg-white/20 transition-all inline-flex items-center justify-center gap-2"
-            >
-              Call Us Now
-              <Server className="w-5 h-5" />
-            </a>
+      {/* Consultation Form Section */}
+      <section id="consultation" className="py-20 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left Content */}
+            <div>
+              <div className="inline-block bg-purple-500/20 text-purple-300 px-6 py-2 rounded-full font-black text-sm mb-6">
+                🚀 FREE CONSULTATION
+              </div>
+              <h2 className="text-4xl md:text-5xl font-black mb-6">
+                Ready to Transform<br />
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Your Business?</span>
+              </h2>
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                Tell us about your project and our expert team will get back to you within 24 hours with a tailored solution.
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <div className="font-bold">Free Project Assessment</div>
+                    <div className="text-gray-400 text-sm">No obligation consultation</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <div className="font-bold">Expert Technical Team</div>
+                    <div className="text-gray-400 text-sm">Senior developers on every project</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-500/30 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <div className="font-bold">24-Hour Response</div>
+                    <div className="text-gray-400 text-sm">Fast turnaround on all inquiries</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="tel:+263784116938" className="flex items-center gap-3 bg-white/10 px-6 py-4 rounded-xl hover:bg-white/20 transition-all">
+                  <Phone className="w-5 h-5 text-purple-400" />
+                  <span className="font-bold">+263 78 411 6938</span>
+                </a>
+                <a href="mailto:info@suigeneriszim.co.zw" className="flex items-center gap-3 bg-white/10 px-6 py-4 rounded-xl hover:bg-white/20 transition-all">
+                  <Mail className="w-5 h-5 text-purple-400" />
+                  <span className="font-bold">info@suigeneriszim.co.zw</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right - Form */}
+            <div className="bg-white rounded-3xl p-8 shadow-2xl">
+              {formStatus === 'success' ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle2 className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 mb-4">Request Submitted!</h3>
+                  <p className="text-gray-600">Thank you for your interest. Our team will contact you within 24 hours.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleFormSubmit} className="space-y-5">
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-black text-gray-900">Request Free Consultation</h3>
+                    <p className="text-gray-600">Fill out the form below</p>
+                  </div>
+
+                  {formStatus === 'error' && (
+                    <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 flex items-center gap-3">
+                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                      <p className="text-red-700 font-medium text-sm">{errorMessage}</p>
+                    </div>
+                  )}
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Company Name</label>
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                        placeholder="Your Company"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Contact Person *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Email *</label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                        placeholder="john@company.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Phone *</label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                        placeholder="+263 77 123 4567"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">Service Interest *</label>
+                    <select
+                      name="serviceInterest"
+                      value={formData.serviceInterest}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                    >
+                      <option value="">Select a service</option>
+                      <option value="Website Development">Website Development</option>
+                      <option value="Custom Software Development">Custom Software Development</option>
+                      <option value="Mobile App Development">Mobile App Development</option>
+                      <option value="E-Commerce Solutions">E-Commerce Solutions</option>
+                      <option value="Cloud Solutions">Cloud Solutions</option>
+                      <option value="Database Management">Database Management</option>
+                      <option value="Business Analytics">Business Analytics</option>
+                      <option value="Cybersecurity">Cybersecurity</option>
+                      <option value="Multiple Services">Multiple Services</option>
+                    </select>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Budget Range</label>
+                      <select
+                        name="budgetRange"
+                        value={formData.budgetRange}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                      >
+                        <option value="">Select budget</option>
+                        <option value="$500 - $2,000">$500 - $2,000</option>
+                        <option value="$2,000 - $5,000">$2,000 - $5,000</option>
+                        <option value="$5,000 - $10,000">$5,000 - $10,000</option>
+                        <option value="$10,000 - $25,000">$10,000 - $25,000</option>
+                        <option value="$25,000+">$25,000+</option>
+                        <option value="To be discussed">To be discussed</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-1">Timeline</label>
+                      <select
+                        name="timeline"
+                        value={formData.timeline}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-gray-900"
+                      >
+                        <option value="">Select timeline</option>
+                        <option value="ASAP">ASAP</option>
+                        <option value="1-2 weeks">1-2 weeks</option>
+                        <option value="1 month">1 month</option>
+                        <option value="1-3 months">1-3 months</option>
+                        <option value="3-6 months">3-6 months</option>
+                        <option value="Flexible">Flexible</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-1">Project Description *</label>
+                    <textarea
+                      name="projectDescription"
+                      value={formData.projectDescription}
+                      onChange={handleInputChange}
+                      required
+                      rows={4}
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none resize-none text-gray-900"
+                      placeholder="Describe your project requirements, goals, and any specific features you need..."
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={formStatus === 'loading'}
+                    className="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-black text-lg rounded-xl transition-all shadow-xl hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {formStatus === 'loading' ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Request
+                        <ArrowRight className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+
+                  <p className="text-xs text-gray-500 text-center">
+                    By submitting, you agree to be contacted about your project. We never share your information.
+                  </p>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </section>
