@@ -35,7 +35,7 @@ const siteConfig = {
     'ZRP laptop financing',
     'ZNA laptop loan',
     'public sector laptop scheme Zimbabwe',
-    
+
     // Product Keywords
     'buy laptop Zimbabwe',
     'laptops Harare',
@@ -50,7 +50,7 @@ const siteConfig = {
     'refurbished laptops Zimbabwe',
     'certified refurbished laptops Harare',
     'ex-UK laptops Zimbabwe',
-    
+
     // Specific Models
     'HP EliteBook Zimbabwe',
     'HP ProBook Zimbabwe',
@@ -58,28 +58,28 @@ const siteConfig = {
     'Dell Inspiron Zimbabwe',
     'Lenovo ThinkPad T480 Zimbabwe',
     'MacBook Zimbabwe',
-    
+
     // Other Products
     'desktops Zimbabwe',
     'monitors Zimbabwe',
     'smartphones Zimbabwe',
     'Samsung phones Zimbabwe',
     'computer accessories Zimbabwe',
-    
+
     // Location Keywords
     'laptop shop Harare',
     'computer shop Zimbabwe',
     'electronics store Harare',
     'laptop store near me Zimbabwe',
     'laptop delivery Harare',
-    
+
     // Intent Keywords
     'best laptop deals Zimbabwe',
     'where to buy laptop Zimbabwe',
     'laptop warranty Zimbabwe',
     'laptop installment Zimbabwe',
     'laptop hire purchase Zimbabwe',
-    
+
     // Brand
     'Sui Generis Technologies',
     'Sui Generis laptops',
@@ -98,11 +98,11 @@ export default function RootLayout({
   const isAdminPage = pathname?.startsWith('/admin');
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="JXPDOrdWzO5nQEYG2qGrV8U6_QjnpI8DCoTsuP63OTs" />
-        
+
         {/* Primary Meta Tags */}
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
@@ -115,7 +115,7 @@ export default function RootLayout({
         <meta name="google" content="nositelinkssearchbox" />
         <meta name="google" content="notranslate" />
         <link rel="canonical" href={siteConfig.url} />
-        
+
         {/* Business & Local SEO */}
         <meta name="business:contact_data:street_address" content="109 Leopold Takawira Street" />
         <meta name="business:contact_data:locality" content="Harare" />
@@ -124,13 +124,13 @@ export default function RootLayout({
         <meta name="business:contact_data:country_name" content="Zimbabwe" />
         <meta name="business:contact_data:phone_number" content="+263784116938" />
         <meta name="business:contact_data:website" content="https://www.suigeneriszim.co.zw" />
-        
+
         {/* Geo Tags for Zimbabwe */}
         <meta name="geo.region" content="ZW" />
         <meta name="geo.placename" content="Harare" />
         <meta name="geo.position" content="-17.8292;31.0522" />
         <meta name="ICBM" content="-17.8292, 31.0522" />
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={siteConfig.url} />
@@ -143,7 +143,7 @@ export default function RootLayout({
         <meta property="og:site_name" content={siteConfig.name} />
         <meta property="og:locale" content="en_ZW" />
         <meta property="og:locale:alternate" content="en_US" />
-        
+
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@suigeneristech" />
@@ -153,7 +153,7 @@ export default function RootLayout({
         <meta name="twitter:description" content={siteConfig.description} />
         <meta name="twitter:image" content={siteConfig.ogImage} />
         <meta name="twitter:image:alt" content="Sui Generis Technologies - Quality Laptops & Technology" />
-        
+
         {/* Favicon & Icons - Using Sui Generis Logo */}
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -164,11 +164,11 @@ export default function RootLayout({
         <meta name="msapplication-TileImage" content="/logo.svg" />
         <meta name="msapplication-TileColor" content="#dc2626" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        
+
         {/* Theme Color */}
         <meta name="theme-color" content="#dc2626" />
         <meta name="msapplication-TileColor" content="#dc2626" />
-        
+
         {/* Structured Data - Organization */}
         <script
           type="application/ld+json"
@@ -218,7 +218,7 @@ export default function RootLayout({
             }),
           }}
         />
-        
+
         {/* Structured Data - WebSite */}
         <script
           type="application/ld+json"
@@ -245,7 +245,7 @@ export default function RootLayout({
             }),
           }}
         />
-        
+
         <title>{siteConfig.name} | Premium Laptops, Desktops & Smartphones | Harare, Zimbabwe</title>
       </head>
       <body className={inter.className}>

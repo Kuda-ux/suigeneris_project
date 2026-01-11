@@ -26,7 +26,7 @@ export function Footer() {
                 Subscribe to get special offers, free giveaways, and updates.
               </p>
             </div>
-            
+
             {/* Newsletter Form */}
             <div className="w-full lg:w-auto lg:flex-1 lg:max-w-xl">
               <form className="flex flex-col sm:flex-row gap-3 sm:gap-2">
@@ -36,7 +36,7 @@ export function Footer() {
                   className="w-full sm:flex-1 px-4 py-3 sm:py-3.5 bg-gray-900 border-2 border-gray-800 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all outline-none text-white placeholder-gray-500 text-sm sm:text-base"
                   required
                 />
-                <button 
+                <button
                   type="submit"
                   className="w-full sm:w-auto px-6 py-3 sm:py-3.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 text-sm sm:text-base whitespace-nowrap"
                 >
@@ -75,14 +75,14 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-gray-400 mb-6 leading-relaxed text-sm md:text-base">
-              Your trusted partner for premium technology solutions in Zimbabwe. 
+              Your trusted partner for premium technology solutions in Zimbabwe.
               We deliver quality laptops, desktops, and accessories with exceptional service.
             </p>
-            
+
             {/* Social Links */}
             <div className="flex flex-wrap gap-3">
-              <a 
-                href="https://www.facebook.com/profile.php?id=61571109901731" 
+              <a
+                href="https://www.facebook.com/profile.php?id=61571109901731"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow us on Facebook"
@@ -90,8 +90,8 @@ export function Footer() {
               >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a 
-                href="https://wa.me/263784116938" 
+              <a
+                href="https://wa.me/263784116938"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contact us on WhatsApp"
@@ -99,8 +99,8 @@ export function Footer() {
               >
                 <Phone className="h-5 w-5" />
               </a>
-              <a 
-                href="https://instagram.com" 
+              <a
+                href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Follow us on Instagram"
@@ -209,7 +209,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-700 pt-6 md:pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-gray-400 text-center md:text-left text-sm md:text-base">
+            <p className="text-gray-400 text-center md:text-left text-sm md:text-base" suppressHydrationWarning>
               © {new Date().getFullYear()} <span className="font-bold text-white">Sui Generis Technologies</span>. All rights reserved.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-xs md:text-sm text-gray-400">
