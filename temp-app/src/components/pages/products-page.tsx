@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, Filter, Grid, List, Star, ShoppingCart, CheckCircle, SlidersHorizontal, TrendingUp, Award, X, ChevronDown, Loader2 } from 'lucide-react';
+import { Search, Filter, Grid, List, Star, ShoppingCart, CheckCircle, SlidersHorizontal, TrendingUp, Award, X, ChevronDown, Loader2, Check } from 'lucide-react';
 import { useCartStore } from '@/store/cart-store';
 import { products as staticProducts } from '@/data/products';
 
@@ -379,8 +379,8 @@ export function ProductsPage() {
                         <button
                           onClick={() => handleAddToCart(product)}
                           className={`mt-3 ${viewMode === 'list' ? 'mt-0 w-auto px-6' : 'w-full'} py-2.5 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${addedToCart === product.id
-                              ? 'bg-green-600 text-white'
-                              : 'bg-gray-900 hover:bg-red-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                            ? 'bg-green-600 text-white'
+                            : 'bg-gray-900 hover:bg-red-600 text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                             }`}
                         >
                           {addedToCart === product.id ? (
