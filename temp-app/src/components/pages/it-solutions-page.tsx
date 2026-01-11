@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import {
   Code, Smartphone, Globe, Database, Cloud, ShoppingCart, BarChart, Lock, Zap,
   CheckCircle, ArrowRight, Server, Palette, Users, TrendingUp, Shield,
-  ChevronDown, Star, MapPin, Clock, Check
+  ChevronDown, Star, MapPin, Clock, Check, Phone
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
