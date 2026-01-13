@@ -149,24 +149,24 @@ export function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Header */}
+      {/* Hero Header - Mobile Optimized */}
       <div className="relative bg-gradient-to-r from-gray-900 via-red-900 to-gray-900 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-red-600/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-10 left-5 md:top-20 md:left-10 w-48 md:w-72 h-48 md:h-72 bg-red-600/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-5 right-5 md:bottom-10 md:right-10 w-64 md:w-96 h-64 md:h-96 bg-red-500/10 rounded-full blur-3xl" />
         
-        <div className="container mx-auto px-4 py-16 md:py-20 relative z-10">
+        <div className="container mx-auto px-4 py-10 md:py-16 lg:py-20 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-600/20 backdrop-blur-sm border border-red-500/30 rounded-full text-red-300 text-sm font-semibold mb-6">
               <Zap className="w-4 h-4" />
               Premium Electronics Store
             </div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-4 md:mb-6 leading-tight px-2">
               Discover Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600">Premium</span> Collection
             </h1>
             
-            <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 md:mb-10 max-w-2xl mx-auto px-2">
               Shop the latest laptops, smartphones, and electronics with <span className="text-red-400 font-semibold">warranty guarantee</span> and civil servant financing options.
             </p>
 
@@ -187,33 +187,33 @@ export function ProductsPage() {
               </div>
             </div>
 
-            {/* Quick Stats */}
-            <div className="flex flex-wrap justify-center gap-8 mt-12">
-              <div className="flex items-center gap-3 text-white/80">
-                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                  <Package className="w-6 h-6 text-red-400" />
+            {/* Quick Stats - Mobile Grid */}
+            <div className="grid grid-cols-3 gap-3 sm:flex sm:flex-wrap sm:justify-center sm:gap-8 mt-8 md:mt-12 px-2">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-white/80 text-center sm:text-left">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <Package className="w-5 h-5 sm:w-6 sm:h-6 text-red-400" />
                 </div>
-                <div className="text-left">
-                  <div className="text-2xl font-black text-white">{products.length}+</div>
-                  <div className="text-sm text-gray-400">Products</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 text-white/80">
-                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-green-400" />
-                </div>
-                <div className="text-left">
-                  <div className="text-2xl font-black text-white">100%</div>
-                  <div className="text-sm text-gray-400">Warranty</div>
+                <div>
+                  <div className="text-lg sm:text-2xl font-black text-white">{products.length}+</div>
+                  <div className="text-xs sm:text-sm text-gray-400">Products</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3 text-white/80">
-                <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-yellow-400" />
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-white/80 text-center sm:text-left">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <Shield className="w-5 h-5 sm:w-6 sm:h-6 text-green-400" />
                 </div>
-                <div className="text-left">
-                  <div className="text-2xl font-black text-white">Fast</div>
-                  <div className="text-sm text-gray-400">Delivery</div>
+                <div>
+                  <div className="text-lg sm:text-2xl font-black text-white">100%</div>
+                  <div className="text-xs sm:text-sm text-gray-400">Warranty</div>
+                </div>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-white/80 text-center sm:text-left">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                  <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-400" />
+                </div>
+                <div>
+                  <div className="text-lg sm:text-2xl font-black text-white">Fast</div>
+                  <div className="text-xs sm:text-sm text-gray-400">Delivery</div>
                 </div>
               </div>
             </div>
@@ -221,10 +221,10 @@ export function ProductsPage() {
         </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="sticky top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-3 py-4 overflow-x-auto scrollbar-hide">
+      {/* Category Pills - Mobile Scrollable */}
+      <div className="sticky top-14 sm:top-16 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="flex items-center gap-2 sm:gap-3 py-3 sm:py-4 overflow-x-auto scrollbar-hide -mx-3 px-3 sm:mx-0 sm:px-0">
             {availableCategories.map(category => {
               const IconComponent = categoryIcons[category] || Package;
               const count = categoryCounts[category] || 0;
@@ -232,13 +232,13 @@ export function ProductsPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap transition-all duration-300 ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl font-semibold text-xs sm:text-sm whitespace-nowrap transition-all duration-300 touch-manipulation ${
                     selectedCategory === category
                       ? 'bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg shadow-red-500/30 scale-105'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  <IconComponent className="w-4 h-4" />
+                  <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {category}
                   {category !== 'All' && (
                     <span className={`text-xs px-1.5 py-0.5 rounded-md ${selectedCategory === category ? 'bg-white/20' : 'bg-gray-200'}`}>
@@ -253,28 +253,28 @@ export function ProductsPage() {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        {/* Toolbar - Mobile Optimized */}
+        <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowMobileFilters(true)}
-              className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-red-600 transition-colors"
+              className="lg:hidden flex items-center gap-2 px-3 sm:px-4 py-2.5 bg-gray-900 text-white rounded-xl font-bold text-xs sm:text-sm hover:bg-red-600 transition-colors touch-manipulation active:scale-95"
             >
               <Filter className="w-4 h-4" />
-              Filters
+              <span className="hidden xs:inline">Filters</span>
             </button>
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
               <span className="font-bold text-gray-900">{filteredProducts.length}</span>
-              <span className="text-gray-500">products found</span>
+              <span className="text-gray-500">products</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none pl-4 pr-10 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 cursor-pointer"
+                className="appearance-none pl-3 sm:pl-4 pr-8 sm:pr-10 py-2 sm:py-2.5 bg-white border border-gray-200 rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 cursor-pointer"
               >
                 {sortOptions.map(option => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -283,18 +283,18 @@ export function ProductsPage() {
               <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             </div>
 
-            <div className="flex bg-gray-100 p-1 rounded-xl">
+            <div className="hidden sm:flex bg-gray-100 p-1 rounded-xl">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-white shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`p-2 sm:p-2.5 rounded-lg transition-all touch-manipulation ${viewMode === 'grid' ? 'bg-white shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-900'}`}
               >
-                <Grid className="w-5 h-5" />
+                <Grid className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-white shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-900'}`}
+                className={`p-2 sm:p-2.5 rounded-lg transition-all touch-manipulation ${viewMode === 'list' ? 'bg-white shadow-sm text-red-600' : 'text-gray-500 hover:text-gray-900'}`}
               >
-                <List className="w-5 h-5" />
+                <List className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             </div>
           </div>

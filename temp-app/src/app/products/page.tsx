@@ -1,9 +1,14 @@
 import { ProductsPage } from '@/components/pages/products-page';
-import { products } from '@/data/products';
 import { generateProductListSchema, generateCompactProductSchema } from '@/lib/product-schema';
 import { Metadata } from 'next';
+import { createClient } from '@supabase/supabase-js';
 
 const siteUrl = 'https://www.suigeneriszim.co.zw';
+
+// Create Supabase client for server-side data fetching
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const metadata: Metadata = {
   title: 'Buy Laptops Zimbabwe | HP, Dell, Lenovo | Best Prices Harare | Sui Generis',
@@ -180,35 +185,44 @@ function generateBreadcrumbJsonLd() {
   };
 }
 
-// Convert static products to ProductData format for schema generator
-function getProductDataForSchema() {
-  // Take first 20 featured products for the listing page structured data
-  // This keeps the page size manageable while providing rich snippets
-  const featuredProducts = products
-    .filter(p => p.badge || p.inStock)
-    .slice(0, 20)
-    .map(p => ({
+// Fetch products from database for SEO structured data
+async function getProductsFromDatabase() {
+  try {
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) {
+      console.error('Error fetching products for SEO:', error);
+      return [];
+    }
+
+    return (products || []).map((p: any) => ({
       id: p.id,
       name: p.name,
-      description: p.description,
+      description: p.description || `${p.name} - Premium ${p.category} from ${p.brand}. Available at Sui Generis Technologies Zimbabwe.`,
       price: p.price,
-      originalPrice: p.originalPrice,
-      image: p.image,
+      originalPrice: p.original_price,
+      image: p.image || p.images?.[0] || '/placeholder-product.png',
       images: p.images,
       brand: p.brand,
       category: p.category,
-      rating: p.rating,
-      reviews: p.reviews,
-      stockCount: p.stockCount,
-      inStock: p.inStock,
+      rating: p.rating || 4.5,
+      reviews: p.reviews || 1,
+      stockCount: p.stock_count,
+      inStock: p.in_stock !== false,
       condition: p.condition,
     }));
-
-  return featuredProducts;
+  } catch (err) {
+    console.error('Error in getProductsFromDatabase:', err);
+    return [];
+  }
 }
 
-export default function Products() {
-  const productDataList = getProductDataForSchema();
+export default async function Products() {
+  const productDataList = await getProductsFromDatabase();
 
   return (
     <>
