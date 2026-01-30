@@ -5,24 +5,6 @@ import { sendApplicationConfirmationEmail, sendAdminNotificationEmail, sendAppli
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-// Microfinance companies we work with
-export const MICROFINANCE_COMPANIES = ['GoldenNote', 'Ksheet'] as const;
-export type MicrofinanceCompany = typeof MICROFINANCE_COMPANIES[number];
-
-// Application stages for tracking
-export const APPLICATION_STAGES = [
-  'inquiry',           // Initial inquiry received
-  'documents_pending', // Waiting for documents
-  'documents_received',// Documents received, being processed
-  'submitted_to_mfi',  // Submitted to microfinance institution
-  'under_review',      // MFI is reviewing
-  'approved',          // Approved by MFI
-  'rejected',          // Rejected by MFI
-  'disbursed',         // Loan disbursed, product delivered
-  'completed'          // Fully paid off
-] as const;
-export type ApplicationStage = typeof APPLICATION_STAGES[number];
-
 export async function GET(request: Request) {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {

@@ -5,8 +5,8 @@ import { Download, Eye, Check, X, Search, FileText, User, Briefcase, Building, C
 import * as XLSX from 'xlsx';
 import { CivilServantDetailModal } from './civil-servant-detail-modal';
 
-// Microfinance companies
-const MICROFINANCE_COMPANIES = ['GoldenNote', 'Ksheet'] as const;
+// Microfinance companies we partner with
+const MICROFINANCE_COMPANIES = ['Golden Knot', 'CashIt'] as const;
 type MicrofinanceCompany = typeof MICROFINANCE_COMPANIES[number];
 
 // Application stages with display info
@@ -384,14 +384,41 @@ How can we assist you today?`;
     return matchesSearch && matchesStatus && matchesStage && matchesMfi;
   });
 
+  // Calculate statistics
   const stats = {
     total: applications.length,
     inquiry: applications.filter(a => a.application_stage === 'inquiry').length,
     documents_pending: applications.filter(a => a.application_stage === 'documents_pending').length,
     submitted: applications.filter(a => a.application_stage === 'submitted_to_mfi' || a.application_stage === 'under_review').length,
     approved: applications.filter(a => a.application_stage === 'approved' || a.application_stage === 'disbursed').length,
-    goldenNote: applications.filter(a => a.microfinance_company === 'GoldenNote').length,
-    ksheet: applications.filter(a => a.microfinance_company === 'Ksheet').length
+    goldenKnot: applications.filter(a => a.microfinance_company === 'Golden Knot').length,
+    cashIt: applications.filter(a => a.microfinance_company === 'CashIt').length
+  };
+
+  // Financial statistics
+  const financialStats = {
+    totalProductValue: applications.reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    approvedValue: applications
+      .filter(a => a.application_stage === 'approved' || a.application_stage === 'disbursed' || a.application_stage === 'completed')
+      .reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    pendingValue: applications
+      .filter(a => a.application_stage !== 'approved' && a.application_stage !== 'disbursed' && a.application_stage !== 'completed' && a.application_stage !== 'rejected')
+      .reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    disbursedValue: applications
+      .filter(a => a.application_stage === 'disbursed' || a.application_stage === 'completed')
+      .reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    goldenKnotValue: applications
+      .filter(a => a.microfinance_company === 'Golden Knot')
+      .reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    cashItValue: applications
+      .filter(a => a.microfinance_company === 'CashIt')
+      .reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0),
+    avgLoanAmount: applications.length > 0 
+      ? applications.reduce((sum, a) => sum + (parseFloat(a.product_price) || 0), 0) / applications.length 
+      : 0,
+    conversionRate: applications.length > 0
+      ? (applications.filter(a => a.application_stage === 'approved' || a.application_stage === 'disbursed' || a.application_stage === 'completed').length / applications.length) * 100
+      : 0
   };
 
   // Form Modal Component
@@ -660,8 +687,93 @@ How can we assist you today?`;
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      {/* Financial Overview Section */}
+      <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-xl p-6 text-white">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+          <div>
+            <h2 className="text-2xl font-black">Civil Servants 0% Deposit Financing</h2>
+            <p className="text-red-100 text-sm mt-1">Financial Overview & Business Growth Tracking</p>
+          </div>
+          <div className="flex items-center gap-2 bg-white/10 rounded-xl px-4 py-2">
+            <DollarSign className="w-5 h-5" />
+            <span className="text-sm font-semibold">Conversion Rate:</span>
+            <span className="text-xl font-black">{financialStats.conversionRate.toFixed(1)}%</span>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+            <div className="text-red-100 text-xs font-semibold mb-1">Total Pipeline Value</div>
+            <div className="text-2xl font-black">${financialStats.totalProductValue.toLocaleString()}</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+            <div className="text-red-100 text-xs font-semibold mb-1">Approved Value</div>
+            <div className="text-2xl font-black text-green-300">${financialStats.approvedValue.toLocaleString()}</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+            <div className="text-red-100 text-xs font-semibold mb-1">Pending Value</div>
+            <div className="text-2xl font-black text-yellow-300">${financialStats.pendingValue.toLocaleString()}</div>
+          </div>
+          <div className="bg-white/10 backdrop-blur rounded-xl p-4">
+            <div className="text-red-100 text-xs font-semibold mb-1">Disbursed Value</div>
+            <div className="text-2xl font-black text-emerald-300">${financialStats.disbursedValue.toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* MFI Partner Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-amber-50 to-yellow-100 rounded-2xl shadow-lg border-2 border-amber-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center">
+                <Building className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-amber-800">Golden Knot</h3>
+                <p className="text-xs text-amber-600 font-medium">Microfinance Partner</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-black text-amber-700">{stats.goldenKnot}</div>
+              <div className="text-xs font-semibold text-amber-600">Applications</div>
+            </div>
+          </div>
+          <div className="bg-white/60 rounded-xl p-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-semibold text-amber-700">Total Value</span>
+              <span className="text-xl font-black text-amber-800">${financialStats.goldenKnotValue.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-2xl shadow-lg border-2 border-emerald-200 p-5">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center">
+                <Banknote className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-emerald-800">CashIt</h3>
+                <p className="text-xs text-emerald-600 font-medium">Microfinance Partner</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-black text-emerald-700">{stats.cashIt}</div>
+              <div className="text-xs font-semibold text-emerald-600">Applications</div>
+            </div>
+          </div>
+          <div className="bg-white/60 rounded-xl p-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-semibold text-emerald-700">Total Value</span>
+              <span className="text-xl font-black text-emerald-800">${financialStats.cashItValue.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Application Stats Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 p-4">
           <div className="flex items-center gap-3 mb-2">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
@@ -699,7 +811,7 @@ How can we assist you today?`;
             </div>
           </div>
           <div className="text-2xl font-black text-gray-900">{stats.submitted}</div>
-          <div className="text-xs font-semibold text-gray-500">Submitted</div>
+          <div className="text-xs font-semibold text-gray-500">Submitted to MFI</div>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 p-4">
@@ -711,17 +823,6 @@ How can we assist you today?`;
           <div className="text-2xl font-black text-gray-900">{stats.approved}</div>
           <div className="text-xs font-semibold text-gray-500">Approved</div>
         </div>
-
-        {/* MFI Stats */}
-        <div className="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-2xl shadow-lg border-2 border-amber-200 p-4">
-          <div className="text-2xl font-black text-amber-700">{stats.goldenNote}</div>
-          <div className="text-xs font-bold text-amber-600">GoldenNote</div>
-        </div>
-
-        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl shadow-lg border-2 border-purple-200 p-4">
-          <div className="text-2xl font-black text-purple-700">{stats.ksheet}</div>
-          <div className="text-xs font-bold text-purple-600">Ksheet</div>
-        </div>
       </div>
 
       {/* Applications Table */}
@@ -730,7 +831,7 @@ How can we assist you today?`;
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h2 className="text-2xl font-black text-gray-900">Civil Servants - 0% Deposit Financing</h2>
-              <p className="text-sm text-gray-600 font-medium">Track and manage client applications with GoldenNote & Ksheet</p>
+              <p className="text-sm text-gray-600 font-medium">Track and manage client applications with Golden Knot & CashIt</p>
             </div>
             <div className="flex gap-2">
               <button
@@ -778,8 +879,8 @@ How can we assist you today?`;
                 className="px-3 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold text-sm"
               >
                 <option value="all">All MFI</option>
-                <option value="GoldenNote">GoldenNote</option>
-                <option value="Ksheet">Ksheet</option>
+                <option value="Golden Knot">Golden Knot</option>
+                <option value="CashIt">CashIt</option>
               </select>
               <select
                 value={statusFilter}
@@ -848,9 +949,9 @@ How can we assist you today?`;
                       <td className="px-3 py-3">
                         {app.microfinance_company ? (
                           <span className={`px-2 py-1 rounded-full text-xs font-bold ${
-                            app.microfinance_company === 'GoldenNote' 
+                            app.microfinance_company === 'Golden Knot' 
                               ? 'bg-amber-100 text-amber-700' 
-                              : 'bg-purple-100 text-purple-700'
+                              : 'bg-emerald-100 text-emerald-700'
                           }`}>
                             {app.microfinance_company}
                           </span>
