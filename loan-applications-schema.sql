@@ -159,6 +159,11 @@ BEGIN
     END IF;
 END $$;
 
+-- Fix NOT NULL constraints for optional fields (run this if you get constraint errors)
+ALTER TABLE loan_applications ALTER COLUMN date_of_birth DROP NOT NULL;
+ALTER TABLE loan_applications ALTER COLUMN gender DROP NOT NULL;
+ALTER TABLE loan_applications ALTER COLUMN email DROP NOT NULL;
+
 -- Verify the table structure
 SELECT 
   column_name, 
