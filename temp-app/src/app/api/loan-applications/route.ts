@@ -5,6 +5,24 @@ import { sendApplicationConfirmationEmail, sendAdminNotificationEmail, sendAppli
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
+// Microfinance companies we work with
+export const MICROFINANCE_COMPANIES = ['GoldenNote', 'Ksheet'] as const;
+export type MicrofinanceCompany = typeof MICROFINANCE_COMPANIES[number];
+
+// Application stages for tracking
+export const APPLICATION_STAGES = [
+  'inquiry',           // Initial inquiry received
+  'documents_pending', // Waiting for documents
+  'documents_received',// Documents received, being processed
+  'submitted_to_mfi',  // Submitted to microfinance institution
+  'under_review',      // MFI is reviewing
+  'approved',          // Approved by MFI
+  'rejected',          // Rejected by MFI
+  'disbursed',         // Loan disbursed, product delivered
+  'completed'          // Fully paid off
+] as const;
+export type ApplicationStage = typeof APPLICATION_STAGES[number];
+
 export async function GET(request: Request) {
   try {
     const supabase = createClient(supabaseUrl, supabaseServiceKey, {
@@ -52,10 +70,11 @@ export async function POST(request: Request) {
 
     console.log('Creating loan application:', applicationData);
 
-    // Generate application number
-    const applicationNumber = `LA-${Date.now().toString().slice(-8)}`;
+    // Generate application number with prefix based on source
+    const prefix = applicationData.source === 'admin' ? 'CS' : 'LA'; // CS = Civil Servant (manual), LA = Loan Application (online)
+    const applicationNumber = applicationData.application_number || `${prefix}-${Date.now().toString().slice(-8)}`;
 
-    // Create application record
+    // Create application record with new fields for microfinance tracking
     const { data: newApplication, error } = await supabase
       .from('loan_applications')
       .insert({
@@ -72,21 +91,32 @@ export async function POST(request: Request) {
         employment_status: applicationData.employment_status,
         payroll_number: applicationData.payroll_number,
         years_of_service: applicationData.years_of_service || null,
-        // Salary fields removed - set to 0 for backwards compatibility
-        gross_salary: 0,
-        net_salary: 0,
+        // Salary fields
+        gross_salary: applicationData.gross_salary || 0,
+        net_salary: applicationData.net_salary || 0,
         bank_name: applicationData.bank_name,
         account_number: applicationData.account_number,
         product_id: applicationData.product_id ? parseInt(applicationData.product_id) : null,
         product_name: applicationData.product_name,
-        product_price: parseFloat(applicationData.product_price),
+        product_price: applicationData.product_price ? parseFloat(applicationData.product_price) : 0,
         loan_term: parseInt(applicationData.loan_term || '6'),
         // Store document URLs from Supabase Storage
         national_id_document_url: applicationData.national_id_document_url,
         payslip_document_url: applicationData.payslip_document_url,
         proof_of_residence_document_url: applicationData.proof_of_residence_document_url,
         data_sharing_consent: applicationData.data_sharing_consent,
-        status: 'pending'
+        status: applicationData.status || 'pending',
+        // NEW: Microfinance tracking fields
+        microfinance_company: applicationData.microfinance_company || null, // 'GoldenNote' or 'Ksheet'
+        application_stage: applicationData.application_stage || 'inquiry',
+        source: applicationData.source || 'online', // 'online' or 'admin' (manual entry)
+        inquiry_date: applicationData.inquiry_date || new Date().toISOString(),
+        documents_submitted_date: applicationData.documents_submitted_date || null,
+        mfi_submission_date: applicationData.mfi_submission_date || null,
+        approval_date: applicationData.approval_date || null,
+        disbursement_date: applicationData.disbursement_date || null,
+        notes: applicationData.notes || null,
+        created_by: applicationData.created_by || null
       })
       .select()
       .single();
@@ -146,32 +176,60 @@ export async function PATCH(request: Request) {
       }
     });
 
-    const { id, status, admin_notes, reviewed_by } = await request.json();
+    const updateData = await request.json();
+    const { id, ...fieldsToUpdate } = updateData;
+
+    // Build update object dynamically
+    const updateObject: any = {
+      updated_at: new Date().toISOString()
+    };
+
+    // Map allowed fields
+    const allowedFields = [
+      'status', 'admin_notes', 'reviewed_by', 'full_name', 'national_id',
+      'date_of_birth', 'gender', 'email', 'phone', 'home_address',
+      'employer', 'job_title', 'employment_status', 'payroll_number',
+      'years_of_service', 'gross_salary', 'net_salary', 'bank_name',
+      'account_number', 'product_id', 'product_name', 'product_price',
+      'loan_term', 'microfinance_company', 'application_stage', 'notes',
+      'documents_submitted_date', 'mfi_submission_date', 'approval_date',
+      'disbursement_date'
+    ];
+
+    allowedFields.forEach(field => {
+      if (fieldsToUpdate[field] !== undefined) {
+        updateObject[field] = fieldsToUpdate[field];
+      }
+    });
+
+    // Set reviewed_at if status is being updated
+    if (fieldsToUpdate.status) {
+      updateObject.reviewed_at = new Date().toISOString();
+    }
+
+    // Set approval_date if status changed to approved
+    if (fieldsToUpdate.status === 'approved' || fieldsToUpdate.application_stage === 'approved') {
+      updateObject.approval_date = updateObject.approval_date || new Date().toISOString();
+    }
 
     const { data, error } = await supabase
       .from('loan_applications')
-      .update({
-        status,
-        admin_notes,
-        reviewed_by,
-        reviewed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
+      .update(updateObject)
       .eq('id', id)
       .select()
       .single();
 
     if (error) throw error;
 
-    // Send status update email to applicant
-    if (data && data.email) {
+    // Send status update email to applicant if status changed
+    if (data && data.email && fieldsToUpdate.status) {
       try {
         await sendApplicationStatusUpdateEmail({
           email: data.email,
           full_name: data.full_name,
           application_number: data.application_number,
-          status: status,
-          admin_notes: admin_notes
+          status: fieldsToUpdate.status,
+          admin_notes: fieldsToUpdate.admin_notes || ''
         });
         console.log('Status update email sent to applicant');
       } catch (emailError) {
