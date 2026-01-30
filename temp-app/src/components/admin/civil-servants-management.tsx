@@ -421,269 +421,13 @@ How can we assist you today?`;
       : 0
   };
 
-  // Form Modal Component
-  const FormModal = ({ isEdit = false }: { isEdit?: boolean }) => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 text-white p-6 rounded-t-2xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-black">{isEdit ? 'Edit Client Application' : 'Add New Client'}</h2>
-              <p className="text-red-100 text-sm mt-1">Civil Servant 0% Deposit Financing</p>
-            </div>
-            <button
-              onClick={() => {
-                isEdit ? setShowEditModal(false) : setShowAddModal(false);
-                setFormData(emptyFormData);
-                setSelectedApplication(null);
-              }}
-              className="p-2 hover:bg-white/20 rounded-full transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-
-        <form onSubmit={isEdit ? handleUpdateApplication : handleCreateApplication} className="p-6 space-y-6">
-          {/* Microfinance Company Selection */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border-2 border-blue-200">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Microfinance Company *</label>
-            <div className="grid grid-cols-2 gap-3">
-              {MICROFINANCE_COMPANIES.map(company => (
-                <button
-                  key={company}
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, microfinance_company: company }))}
-                  className={`p-4 rounded-xl border-2 font-bold text-lg transition-all ${
-                    formData.microfinance_company === company
-                      ? 'border-blue-500 bg-blue-500 text-white shadow-lg'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300'
-                  }`}
-                >
-                  {company}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Application Stage */}
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Application Stage</label>
-            <select
-              name="application_stage"
-              value={formData.application_stage}
-              onChange={handleInputChange}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold"
-            >
-              {Object.entries(APPLICATION_STAGES).map(([key, { label }]) => (
-                <option key={key} value={key}>{label}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Personal Information */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-red-600" />
-              Personal Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name *</label>
-                <input
-                  type="text"
-                  name="full_name"
-                  value={formData.full_name}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="John Doe"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">National ID</label>
-                <input
-                  type="text"
-                  name="national_id"
-                  value={formData.national_id}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="63-123456A78"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number *</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="0771234567"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="john@example.com"
-                />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Home Address</label>
-                <input
-                  type="text"
-                  name="home_address"
-                  value={formData.home_address}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="123 Main Street, Harare"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Employment Information */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-red-600" />
-              Employment Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Employer / Ministry *</label>
-                <input
-                  type="text"
-                  name="employer"
-                  value={formData.employer}
-                  onChange={handleInputChange}
-                  required
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="Ministry of Education"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Job Title</label>
-                <input
-                  type="text"
-                  name="job_title"
-                  value={formData.job_title}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="Teacher"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Payroll / EC Number</label>
-                <input
-                  type="text"
-                  name="payroll_number"
-                  value={formData.payroll_number}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="EC12345678"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Gross Salary (USD)</label>
-                <input
-                  type="number"
-                  name="gross_salary"
-                  value={formData.gross_salary}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Net Salary (USD)</label>
-                <input
-                  type="number"
-                  name="net_salary"
-                  value={formData.net_salary}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="400"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Product Information */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-red-600" />
-              Product Information
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Product Name</label>
-                <input
-                  type="text"
-                  name="product_name"
-                  value={formData.product_name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="HP EliteBook 840 G5"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Product Price (USD)</label>
-                <input
-                  type="number"
-                  name="product_price"
-                  value={formData.product_price}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
-                  placeholder="350"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Notes */}
-          <div className="border-t pt-6">
-            <label className="block text-sm font-bold text-gray-700 mb-2">Notes / Comments</label>
-            <textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleInputChange}
-              rows={3}
-              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none resize-none"
-              placeholder="Any additional notes about this application..."
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex gap-3 pt-4">
-            <button
-              type="button"
-              onClick={() => {
-                isEdit ? setShowEditModal(false) : setShowAddModal(false);
-                setFormData(emptyFormData);
-                setSelectedApplication(null);
-              }}
-              className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting || !formData.full_name || !formData.phone || !formData.employer}
-              className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {submitting ? 'Saving...' : isEdit ? 'Update Application' : 'Create Application'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  // Close modal helper
+  const closeModal = () => {
+    setShowAddModal(false);
+    setShowEditModal(false);
+    setFormData(emptyFormData);
+    setSelectedApplication(null);
+  };
 
   return (
     <div className="space-y-6">
@@ -1028,9 +772,345 @@ How can we assist you today?`;
         </div>
       </div>
 
-      {/* Modals */}
-      {showAddModal && <FormModal isEdit={false} />}
-      {showEditModal && <FormModal isEdit={true} />}
+      {/* Add/Edit Client Modal - Inline to prevent focus loss */}
+      {(showAddModal || showEditModal) && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={(e) => e.target === e.currentTarget && closeModal()}>
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-red-600 via-red-600 to-red-700 text-white p-6 flex-shrink-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <User className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black">{showEditModal ? 'Edit Client Application' : 'Add New Client'}</h2>
+                    <p className="text-red-100 text-sm mt-0.5">Civil Servant 0% Deposit Financing Program</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="p-2.5 hover:bg-white/20 rounded-xl transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            {/* Form Content - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-6">
+              <form id="clientForm" onSubmit={showEditModal ? handleUpdateApplication : handleCreateApplication} className="space-y-8">
+                
+                {/* Microfinance Partner Selection */}
+                <div className="bg-gradient-to-br from-slate-50 to-gray-100 p-6 rounded-2xl border border-gray-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Building className="w-5 h-5 text-red-600" />
+                    <label className="text-base font-bold text-gray-800">Select Microfinance Partner *</label>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, microfinance_company: 'Golden Knot' }))}
+                      className={`p-5 rounded-2xl border-2 font-bold text-lg transition-all flex flex-col items-center gap-2 ${
+                        formData.microfinance_company === 'Golden Knot'
+                          ? 'border-amber-500 bg-gradient-to-br from-amber-400 to-yellow-500 text-white shadow-lg shadow-amber-200 scale-[1.02]'
+                          : 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50'
+                      }`}
+                    >
+                      <Banknote className="w-8 h-8" />
+                      <span>Golden Knot</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, microfinance_company: 'CashIt' }))}
+                      className={`p-5 rounded-2xl border-2 font-bold text-lg transition-all flex flex-col items-center gap-2 ${
+                        formData.microfinance_company === 'CashIt'
+                          ? 'border-emerald-500 bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg shadow-emerald-200 scale-[1.02]'
+                          : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300 hover:bg-emerald-50'
+                      }`}
+                    >
+                      <DollarSign className="w-8 h-8" />
+                      <span>CashIt</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Application Stage */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="w-5 h-5 text-red-600" />
+                    <label className="text-base font-bold text-gray-800">Application Stage</label>
+                  </div>
+                  <select
+                    name="application_stage"
+                    value={formData.application_stage}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-semibold bg-white text-gray-800 cursor-pointer"
+                  >
+                    {Object.entries(APPLICATION_STAGES).map(([key, { label }]) => (
+                      <option key={key} value={key}>{label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Personal Information Section */}
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Personal Information</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name *</label>
+                      <input
+                        type="text"
+                        name="full_name"
+                        value={formData.full_name}
+                        onChange={handleInputChange}
+                        required
+                        autoComplete="off"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white transition-all"
+                        placeholder="Enter client's full name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">National ID</label>
+                      <input
+                        type="text"
+                        name="national_id"
+                        value={formData.national_id}
+                        onChange={handleInputChange}
+                        autoComplete="off"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white transition-all"
+                        placeholder="63-123456A78"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                      <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="tel"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          required
+                          autoComplete="off"
+                          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white transition-all"
+                          placeholder="0771234567"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          autoComplete="off"
+                          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white transition-all"
+                          placeholder="client@email.com"
+                        />
+                      </div>
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Home Address</label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          name="home_address"
+                          value={formData.home_address}
+                          onChange={handleInputChange}
+                          autoComplete="off"
+                          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white transition-all"
+                          placeholder="123 Main Street, Harare"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Employment Information Section */}
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                      <Briefcase className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Employment Details</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Employer / Ministry *</label>
+                      <input
+                        type="text"
+                        name="employer"
+                        value={formData.employer}
+                        onChange={handleInputChange}
+                        required
+                        autoComplete="off"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white transition-all"
+                        placeholder="Ministry of Education"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Job Title / Position</label>
+                      <input
+                        type="text"
+                        name="job_title"
+                        value={formData.job_title}
+                        onChange={handleInputChange}
+                        autoComplete="off"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white transition-all"
+                        placeholder="Teacher / Nurse / Clerk"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Payroll / EC Number</label>
+                      <div className="relative">
+                        <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          name="payroll_number"
+                          value={formData.payroll_number}
+                          onChange={handleInputChange}
+                          autoComplete="off"
+                          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white transition-all"
+                          placeholder="EC12345678"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Gross Salary</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                          <input
+                            type="number"
+                            name="gross_salary"
+                            value={formData.gross_salary}
+                            onChange={handleInputChange}
+                            autoComplete="off"
+                            className="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white transition-all"
+                            placeholder="500"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Net Salary</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
+                          <input
+                            type="number"
+                            name="net_salary"
+                            value={formData.net_salary}
+                            onChange={handleInputChange}
+                            autoComplete="off"
+                            className="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none bg-white transition-all"
+                            placeholder="400"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Product Information Section */}
+                <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-100">
+                  <div className="flex items-center gap-2 mb-5">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                      <CreditCard className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900">Product Information</h3>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Product Name</label>
+                      <input
+                        type="text"
+                        name="product_name"
+                        value={formData.product_name}
+                        onChange={handleInputChange}
+                        autoComplete="off"
+                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-white transition-all"
+                        placeholder="HP EliteBook 840 G5 / Dell Latitude"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Product Price (USD)</label>
+                      <div className="relative">
+                        <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="number"
+                          name="product_price"
+                          value={formData.product_price}
+                          onChange={handleInputChange}
+                          autoComplete="off"
+                          className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none bg-white transition-all"
+                          placeholder="350"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notes Section */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText className="w-5 h-5 text-red-600" />
+                    <label className="text-base font-bold text-gray-800">Notes / Comments</label>
+                  </div>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    rows={3}
+                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none resize-none bg-white transition-all"
+                    placeholder="Any additional notes about this client or application..."
+                  />
+                </div>
+              </form>
+            </div>
+
+            {/* Footer with Actions */}
+            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200 flex-shrink-0">
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="flex-1 px-6 py-3.5 border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-100 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  form="clientForm"
+                  disabled={submitting || !formData.full_name || !formData.phone || !formData.employer}
+                  className="flex-1 px-6 py-3.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold rounded-xl hover:from-red-700 hover:to-red-800 transition-all shadow-lg shadow-red-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2"
+                >
+                  {submitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-5 h-5" />
+                      {showEditModal ? 'Update Application' : 'Create Application'}
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       
       {showDetailModal && selectedApplication && (
         <CivilServantDetailModal
